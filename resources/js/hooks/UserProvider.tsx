@@ -46,7 +46,6 @@ export function UserProvider({
 
         if (username === "admin" && password === "admin") {
             setUser("admin");
-            navigate("/dashboard");
 
             return;
         }

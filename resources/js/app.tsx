@@ -4,8 +4,6 @@ import ReactDOM from "react-dom/client";
 import Root from "./src/root";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { ThemeProvider } from "./components/ui/theme-provider";
-import Navbar from "./components/ui/Navbar";
-import Footer from "./components/ui/Footer";
 import { Toaster } from "./components/ui/sonner";
 
 const element = document.getElementById("root");

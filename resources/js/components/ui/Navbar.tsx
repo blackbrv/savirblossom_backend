@@ -10,11 +10,23 @@ import React from "react";
 import { AvailableTheme, Theme, useTheme } from "./theme-provider";
 import { CircleUserRound } from "lucide-react";
 import { useUser } from "@/hooks/UserProvider";
+import { useNavigate } from "react-router-dom";
 
 const NavigationList = [
+    { title: "Home", value: "/dashboard" },
     {
-        title: "Dashboard",
-        value: "/dashboard",
+        title: "Bouquet",
+        value: "/bouquet",
+        submenu: [
+            {
+                title: "Bouquets",
+                value: "/dashboard/bouquet",
+            },
+            {
+                title: "Categories",
+                value: "/dashboard/categories",
+            },
+        ],
     },
 ];
 
@@ -23,6 +35,7 @@ export default function Navbar({
 }: {
     children?: React.ReactNode | React.ReactNode[];
 }) {
+    const navigate = useNavigate();
     const { theme, setTheme } = useTheme();
     const { user, logout } = useUser();
 
@@ -35,9 +48,43 @@ export default function Navbar({
                             NavigationList.map((item, index) => {
                                 return (
                                     <MenubarMenu key={index}>
-                                        <MenubarTrigger>
+                                        <MenubarTrigger
+                                            onClick={(e) => {
+                                                if (!item.submenu) {
+                                                    navigate(item.value);
+                                                }
+                                            }}
+                                        >
                                             {item.title}
-                                        </MenubarTrigger>
+                                        </MenubarTrigger>{" "}
+                                        {item.submenu && (
+                                            <MenubarPortal>
+                                                <MenubarContent>
+                                                    {item.submenu.map(
+                                                        (submenu, index) => (
+                                                            <MenubarItem
+                                                                asChild
+                                                                key={index}
+                                                                textValue={
+                                                                    submenu.value
+                                                                }
+                                                            >
+                                                                <a
+                                                                    className="w-full hover:cursor-pointer"
+                                                                    href={
+                                                                        submenu.value
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        submenu.title
+                                                                    }
+                                                                </a>
+                                                            </MenubarItem>
+                                                        ),
+                                                    )}
+                                                </MenubarContent>
+                                            </MenubarPortal>
+                                        )}
                                     </MenubarMenu>
                                 );
                             })}
@@ -49,14 +96,18 @@ export default function Navbar({
                             <MenubarPortal>
                                 <MenubarContent>
                                     {AvailableTheme.map((item, index) => (
-                                        <MenubarItem
-                                            key={index}
-                                            onClick={(e) => {
-                                                setTheme(item.value as Theme);
-                                                window.location.reload();
-                                            }}
-                                        >
-                                            {item.title}
+                                        <MenubarItem asChild key={index}>
+                                            <button
+                                                className="w-full"
+                                                onClick={(e) => {
+                                                    setTheme(
+                                                        item.value as Theme,
+                                                    );
+                                                    window.location.reload();
+                                                }}
+                                            >
+                                                {item.title}
+                                            </button>
                                         </MenubarItem>
                                     ))}
                                 </MenubarContent>
