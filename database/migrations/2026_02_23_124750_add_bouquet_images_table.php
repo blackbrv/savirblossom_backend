@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bouquets', function (Blueprint $table) {
+        Schema::create('bouquet_images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
-            $table->integer('stock')->default(0);
+            $table->foreignId('bouquet_id')->constrained()->onDelete('cascade');
+            $table->string('src');
+            $table->string('alt_text');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bouquets');
+        Schema::dropIfExists('bouquet_images');
     }
 };

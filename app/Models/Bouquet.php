@@ -11,7 +11,6 @@ class Bouquet extends Model
         'description',
         'price',
         'stock',
-        'galleries',
         'category_id',
         'published',
     ];
@@ -19,8 +18,14 @@ class Bouquet extends Model
     protected $hidden = ['category_id'];
 
     protected $casts = [
-        'galleries' => 'array',
+        'price' => 'decimal:2',
+        'published' => 'boolean',
     ];
+
+    public function galleries()
+    {
+        return $this->hasMany(BouquetImage::class);
+    }
 
     public function category()
     {

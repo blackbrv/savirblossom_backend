@@ -17,11 +17,16 @@ class BouquetController extends Controller
     {
 
         $perPage = min($request->get('per_page', 10), 50);
-
-        $query = Bouquet::with('category')->published();
+        $query = Bouquet::with(['category', 'galleries']);
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
+        }
+
+        $isUnfilterred = filter_var($request->input('unfilterred'), FILTER_VALIDATE_BOOLEAN);
+
+        if (! $isUnfilterred) {
+            $query->published();
         }
 
         $bouquets = $query->paginate($perPage);
@@ -42,9 +47,8 @@ class BouquetController extends Controller
             'category_id' => 'required|exist:bouquet_categories,id',
 
             'galleries' => 'nullable|array',
-            'galleries.*.id' => 'required_with:galleries|integer',
             'galleries.*.src' => 'required_with:galleries|string',
-            'galleries.*.alt' => 'nullable|string',
+            'galleries.*.alt_text' => 'nullable|string',
         ]);
 
         $validated['galleries'] ??= null;
@@ -85,7 +89,7 @@ class BouquetController extends Controller
     public function show(string $id)
     {
         try {
-            $bouquet = Bouquet::with('category')->findOrFail($id);
+            $bouquet = Bouquet::with(['category', 'galleries'])->findOrFail($id);
 
             return response()->json([
                 'data' => $bouquet,
@@ -117,13 +121,35 @@ class BouquetController extends Controller
             'price' => 'sometimes|required|numeric',
             'stock' => 'sometimes|required|integer',
             'category_id' => 'sometimes|required|exists:bouquet_categories,id',
+
+            'galleries' => 'nullable|array',
+            'galleries.*.src' => 'required_with:galleries|string',
+            'galleries.*.alt_text' => 'nullable|string',
+
+            'published' => 'sometimes|required|boolean',
         ]);
 
         $bouquet->update($validated);
 
+        if ($request->has('galleries')) {
+            foreach ($request->galleries as $imageData) {
+                if (isset($imageData['id'])) {
+                    $bouquet->galleries()->where('id', $imageData['id'])->update([
+                        'src' => $imageData['src'],
+                        'alt_text' => $imageData['alt_text'] ?? null,
+                    ]);
+                } else {
+                    $bouquet->galleries()->create([
+                        'src' => $imageData['src'],
+                        'alt_text' => $imageData['alt_text'] ?? null,
+                    ]);
+                }
+            }
+        }
+
         return response()->json([
             'message' => "Bouquet {$id} Updated successfully",
-            'data' => $bouquet->fresh()->load('category'),
+            'data' => $bouquet->fresh()->load(['category', 'galleries']),
         ]);
     }
 

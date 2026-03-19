@@ -4,7 +4,12 @@ import DashboardHome from "./pages/Dashboard/DashboardHome";
 import { UserProvider } from "@/hooks/UserProvider";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-import DashboardBouquet from "./pages/Dashboard/DashboardBouquet";
+import Bouquets from "./pages/Dashboard/Bouquet/Bouquets";
+import BouquetDetails from "./pages/Dashboard/Bouquet/BouquetDetails";
+import BouquetEdit from "./pages/Dashboard/Bouquet/BouquetEdit";
+import Categories from "./pages/Dashboard/Categories";
+import CategoriesCreate from "./pages/Dashboard/CategoriesCreate";
+import CategoriesEdit from "./pages/Dashboard/CategoriesEdit";
 
 export default function Root() {
     return (
@@ -21,11 +26,27 @@ export default function Root() {
                         <Route path="/dashboard" element={<DashboardHome />} />
                         <Route
                             path="/dashboard/bouquet"
-                            element={<DashboardBouquet />}
+                            element={<Bouquets />}
+                        />
+                        <Route
+                            path="/dashboard/bouquet/:id"
+                            element={<BouquetDetails />}
+                        />
+                        <Route
+                            path="/dashboard/bouquet/:id/edit"
+                            element={<BouquetEdit />}
                         />
                         <Route
                             path="/dashboard/categories"
-                            element={<DashboardHome />}
+                            element={<Categories />}
+                        />
+                        <Route
+                            path="/dashboard/categories/create"
+                            element={<CategoriesCreate />}
+                        />
+                        <Route
+                            path="/dashboard/categories/:id/edit"
+                            element={<CategoriesEdit />}
                         />
                     </Routes>
                     <Footer />
