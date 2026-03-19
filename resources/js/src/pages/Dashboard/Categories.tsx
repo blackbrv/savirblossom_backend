@@ -1,6 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { categoryColumns } from "@/lib/columns";
 import {
     Pagination,
@@ -17,6 +24,7 @@ import FilterDropdown from "@/src/components/ui/FilterDropdown";
 
 export default function Categories() {
     const [page, setPage] = React.useState(1);
+    const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
     const [debouncedSearch, setDebouncedSearch] = React.useState("");
     const [publishedFilter, setPublishedFilter] = React.useState<
@@ -34,6 +42,7 @@ export default function Categories() {
 
     const { data, isLoading } = useBouquetCategories({
         page,
+        perPage,
         unfilterred: true,
         search: debouncedSearch || undefined,
         published: publishedFilter,
@@ -138,55 +147,86 @@ export default function Categories() {
                     columns={categoryColumns}
                     data={categories}
                     loading={isLoading}
-                    rowCount={10}
+                    rowCount={perPage}
                 />
 
-                {lastPage > 1 && (
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    onClick={() =>
-                                        setPage((p) => Math.max(1, p - 1))
-                                    }
-                                    className={
-                                        currentPage === 1
-                                            ? "pointer-events-none opacity-50"
-                                            : "cursor-pointer"
-                                    }
-                                />
-                            </PaginationItem>
-                            {Array.from(
-                                { length: lastPage },
-                                (_, i) => i + 1,
-                            ).map((pageNum) => (
-                                <PaginationItem key={pageNum}>
-                                    <PaginationLink
-                                        isActive={pageNum === currentPage}
-                                        onClick={() => setPage(pageNum)}
-                                        className="cursor-pointer"
-                                    >
-                                        {pageNum}
-                                    </PaginationLink>
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">
+                            Per page:
+                        </span>
+                        <Select
+                            value={perPage.toString()}
+                            onValueChange={(val) => {
+                                setPerPage(Number(val));
+                                setPage(1);
+                            }}
+                        >
+                            <SelectTrigger className="w-20">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(
+                                    (num) => (
+                                        <SelectItem
+                                            key={num}
+                                            value={num.toString()}
+                                        >
+                                            {num}
+                                        </SelectItem>
+                                    ),
+                                )}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {lastPage > 1 && (
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        onClick={() =>
+                                            setPage((p) => Math.max(1, p - 1))
+                                        }
+                                        className={
+                                            currentPage === 1
+                                                ? "pointer-events-none opacity-50"
+                                                : "cursor-pointer"
+                                        }
+                                    />
                                 </PaginationItem>
-                            ))}
-                            <PaginationItem>
-                                <PaginationNext
-                                    onClick={() =>
-                                        setPage((p) =>
-                                            Math.min(lastPage, p + 1),
-                                        )
-                                    }
-                                    className={
-                                        currentPage === lastPage
-                                            ? "pointer-events-none opacity-50"
-                                            : "cursor-pointer"
-                                    }
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-                )}
+                                {Array.from(
+                                    { length: lastPage },
+                                    (_, i) => i + 1,
+                                ).map((pageNum) => (
+                                    <PaginationItem key={pageNum}>
+                                        <PaginationLink
+                                            isActive={pageNum === currentPage}
+                                            onClick={() => setPage(pageNum)}
+                                            className="cursor-pointer"
+                                        >
+                                            {pageNum}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+                                <PaginationItem>
+                                    <PaginationNext
+                                        onClick={() =>
+                                            setPage((p) =>
+                                                Math.min(lastPage, p + 1),
+                                            )
+                                        }
+                                        className={
+                                            currentPage === lastPage
+                                                ? "pointer-events-none opacity-50"
+                                                : "cursor-pointer"
+                                        }
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    )}
+                </div>
             </section>
         </main>
     );
