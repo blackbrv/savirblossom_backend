@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bouquet_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->text('description')->nullable();
-            $table->timestamps();
+        Schema::table('bouquet_categories', function (Blueprint $table) {
+            $table->boolean('published')->default(false)->after('description');
         });
     }
 
@@ -24,7 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bouquet_categories');
-        Schema::dropIfExists('bouquets_categories');
+        Schema::table('bouquet_categories', function (Blueprint $table) {
+            $table->dropColumn('published');
+        });
     }
 };

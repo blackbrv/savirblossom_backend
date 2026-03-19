@@ -13,14 +13,21 @@ class BouquetCategoriesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $categories = BouquetCategories::all();
+        $perPage = min($request->get('per_page', 10), 50);
+        $query = BouquetCategories::query();
 
-        return response()->json([
-            'data' => $categories,
-        ]);
+        $isUnfilterred = filter_var($request->input('unfilterred'), FILTER_VALIDATE_BOOLEAN);
+
+        if (! $isUnfilterred) {
+            $query->published();
+        }
+
+        $categories = $query->paginate($perPage);
+
+        return response()->json($categories);
 
     }
 
@@ -35,7 +42,10 @@ class BouquetCategoriesController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $categories = BouquetCategories::create($validated);
+        $categories = BouquetCategories::create([
+            ...$validated,
+            'published' => false,
+        ]);
 
         return response()->json([
             'message' => "Bouquet categories {$categories->name} created",
@@ -78,9 +88,10 @@ class BouquetCategoriesController extends Controller
                     'required',
                     'string',
                     'max:255',
-                    Rule::unique('bouquets', 'name')->ignore($id),
+                    Rule::unique('bouquet_categories', 'name')->ignore($id),
                 ],
                 'description' => 'nullable|string',
+                'published' => 'sometimes|boolean',
             ]);
 
             $categories->update($validated);
@@ -103,6 +114,17 @@ class BouquetCategoriesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $category = BouquetCategories::findOrFail($id);
+            $category->delete();
+
+            return response()->json([
+                'message' => "Category {$id} deleted successfully",
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => "Category {$id} not found",
+            ], 404);
+        }
     }
 }
