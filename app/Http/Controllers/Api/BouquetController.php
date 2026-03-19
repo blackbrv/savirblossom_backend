@@ -29,6 +29,34 @@ class BouquetController extends Controller
             $query->published();
         }
 
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
+            });
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->input('min_price'));
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->input('max_price'));
+        }
+
+        if ($request->filled('min_stock')) {
+            $query->where('stock', '>=', $request->input('min_stock'));
+        }
+
+        if ($request->filled('max_stock')) {
+            $query->where('stock', '<=', $request->input('max_stock'));
+        }
+
+        if ($request->boolean('in_stock')) {
+            $query->where('stock', '>', 0);
+        }
+
         $bouquets = $query->paginate($perPage);
 
         return response()->json($bouquets);

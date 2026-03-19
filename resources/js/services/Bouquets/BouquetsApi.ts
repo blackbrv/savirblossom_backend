@@ -29,29 +29,76 @@ export type GetBouquetsResponse = {
     category: BouquetCategoriesType;
 };
 
+export type GetBouquetsPaginatedResponse = {
+    current_page: number;
+    data: GetBouquetsResponse[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: Array<{
+        url: string | null;
+        label: string;
+        page: number | null;
+        active: boolean;
+    }>;
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+};
+
 type GetBouquetsType = {
     page?: number;
     perPage?: number;
     categoryId?: number;
+    search?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    minStock?: number;
+    maxStock?: number;
+    inStock?: boolean;
 };
 
-async function GetBouquets({ page, perPage, categoryId }: GetBouquetsType) {
+async function GetBouquets({
+    page,
+    perPage,
+    categoryId,
+    search,
+    minPrice,
+    maxPrice,
+    minStock,
+    maxStock,
+    inStock,
+}: GetBouquetsType) {
     const searchParams = new URLSearchParams();
 
-    const params: GetBouquetsType & { unfilterred: string } = {
+    const params = {
         unfilterred: "true",
         page,
-        perPage,
-        categoryId,
+        per_page: perPage,
+        category_id: categoryId,
+        search,
+        min_price: minPrice,
+        max_price: maxPrice,
+        min_stock: minStock,
+        max_stock: maxStock,
+        in_stock: inStock,
     };
 
     Object.entries(params).forEach(([name, value]) => {
         if (value !== undefined && value !== null) {
-            searchParams.append(name, String(value));
+            if (typeof value === "boolean") {
+                searchParams.append(name, value ? "1" : "0");
+            } else {
+                searchParams.append(name, String(value));
+            }
         }
     });
 
-    const response: { data: GetBouquetsResponse[] } = await api(
+    const response: GetBouquetsPaginatedResponse = await api(
         `/api/bouquet?${searchParams.toString()}`,
         {
             method: "GET",
@@ -61,17 +108,45 @@ async function GetBouquets({ page, perPage, categoryId }: GetBouquetsType) {
         },
     );
 
-    return response.data;
+    return response;
 }
 
 export function useBouquets({
     page = 1,
     perPage = 10,
     categoryId = undefined,
+    search = undefined,
+    minPrice = undefined,
+    maxPrice = undefined,
+    minStock = undefined,
+    maxStock = undefined,
+    inStock = undefined,
 }: GetBouquetsType) {
     return useQuery({
-        queryKey: ["bouquets:list"],
-        queryFn: () => GetBouquets({ page, perPage, categoryId }),
+        queryKey: [
+            "bouquets:list",
+            page,
+            perPage,
+            categoryId,
+            search,
+            minPrice,
+            maxPrice,
+            minStock,
+            maxStock,
+            inStock,
+        ],
+        queryFn: () =>
+            GetBouquets({
+                page,
+                perPage,
+                categoryId,
+                search,
+                minPrice,
+                maxPrice,
+                minStock,
+                maxStock,
+                inStock,
+            }),
     });
 }
 
@@ -100,6 +175,8 @@ type GetCategoriesParams = {
     page?: number;
     perPage?: number;
     unfilterred?: boolean;
+    search?: string;
+    published?: boolean;
 };
 
 export type GetCategoriesResponse = {
@@ -126,11 +203,21 @@ async function GetCategories({
     page = 1,
     perPage = 10,
     unfilterred = false,
+    search,
+    published,
 }: GetCategoriesParams) {
     const searchParams = new URLSearchParams();
     searchParams.append("page", String(page));
     searchParams.append("per_page", String(perPage));
     searchParams.append("unfilterred", String(unfilterred));
+
+    if (search) {
+        searchParams.append("search", search);
+    }
+
+    if (published !== undefined) {
+        searchParams.append("published", published ? "1" : "0");
+    }
 
     const response: GetCategoriesResponse = await api(
         `/api/bouquet/categories?${searchParams.toString()}`,
@@ -149,10 +236,20 @@ export function useBouquetCategories({
     page = 1,
     perPage = 10,
     unfilterred = false,
+    search = undefined,
+    published = undefined,
 }: GetCategoriesParams = {}) {
     return useQuery({
-        queryKey: ["bouquet-categories:list", page, perPage, unfilterred],
-        queryFn: () => GetCategories({ page, perPage, unfilterred }),
+        queryKey: [
+            "bouquet-categories:list",
+            page,
+            perPage,
+            unfilterred,
+            search,
+            published,
+        ],
+        queryFn: () =>
+            GetCategories({ page, perPage, unfilterred, search, published }),
     });
 }
 

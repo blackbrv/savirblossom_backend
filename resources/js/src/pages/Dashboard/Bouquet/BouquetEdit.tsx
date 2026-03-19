@@ -373,14 +373,18 @@ export default function BouquetEdit() {
                                             <SelectValue placeholder="Select category" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {categories?.map((category) => (
-                                                <SelectItem
-                                                    key={category.id}
-                                                    value={String(category.id)}
-                                                >
-                                                    {category.name}
-                                                </SelectItem>
-                                            ))}
+                                            {categories?.data?.map(
+                                                (category) => (
+                                                    <SelectItem
+                                                        key={category.id}
+                                                        value={String(
+                                                            category.id,
+                                                        )}
+                                                    >
+                                                        {category.name}
+                                                    </SelectItem>
+                                                ),
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>

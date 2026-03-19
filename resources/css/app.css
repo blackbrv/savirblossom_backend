@@ -221,3 +221,23 @@ button,
 .desktop-tablet__body-small__regular {
     @apply font-sans text-xs leading-[150%] font-light tracking-[1%];
 }
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+
+    /* Hide number input spinners */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}

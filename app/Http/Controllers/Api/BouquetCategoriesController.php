@@ -25,6 +25,18 @@ class BouquetCategoriesController extends Controller
             $query->published();
         }
 
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
+            });
+        }
+
+        if ($request->has('published')) {
+            $query->where('published', $request->boolean('published'));
+        }
+
         $categories = $query->paginate($perPage);
 
         return response()->json($categories);
