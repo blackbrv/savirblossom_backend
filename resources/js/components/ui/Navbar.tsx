@@ -11,28 +11,7 @@ import { AvailableTheme, Theme, useTheme } from "./theme-provider";
 import { CircleUserRound } from "lucide-react";
 import { useUser } from "@/hooks/UserProvider";
 import { useNavigate } from "react-router-dom";
-
-const NavigationList = [
-    { title: "Home", value: "/dashboard" },
-    {
-        title: "Bouquet",
-        value: "/bouquet",
-        submenu: [
-            {
-                title: "Bouquets",
-                value: "/dashboard/bouquet",
-            },
-            {
-                title: "Categories",
-                value: "/dashboard/categories",
-            },
-        ],
-    },
-    {
-        title: "Customers",
-        value: "/dashboard/customers",
-    },
-];
+import { NavigationList } from "@/constants/NavbarConfig";
 
 export default function Navbar({
     children,
