@@ -7,6 +7,7 @@ import Footer from "@/components/ui/Footer";
 import Bouquets from "./pages/Dashboard/Bouquet/Bouquets";
 import BouquetDetails from "./pages/Dashboard/Bouquet/BouquetDetails";
 import BouquetEdit from "./pages/Dashboard/Bouquet/BouquetEdit";
+import BouquetCreate from "./pages/Dashboard/Bouquet/BouquetCreate";
 import Categories from "./pages/Dashboard/Categories";
 import CategoriesCreate from "./pages/Dashboard/CategoriesCreate";
 import CategoriesEdit from "./pages/Dashboard/CategoriesEdit";
@@ -27,6 +28,10 @@ export default function Root() {
                         <Route
                             path="/dashboard/bouquet"
                             element={<Bouquets />}
+                        />
+                        <Route
+                            path="/dashboard/bouquet/create"
+                            element={<BouquetCreate />}
                         />
                         <Route
                             path="/dashboard/bouquet/:id"

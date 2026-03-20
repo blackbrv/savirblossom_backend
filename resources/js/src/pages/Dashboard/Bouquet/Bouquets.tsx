@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,6 +30,7 @@ import FilterDropdown from "@/src/components/ui/FilterDropdown";
 import { truncateNumber } from "@/lib/utils";
 
 export default function Bouquets() {
+    const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
@@ -123,7 +125,10 @@ export default function Bouquets() {
             </h3>
             <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg">
                 <div className="flex gap-3 items-center justify-between">
-                    <Button className="capitalize">
+                    <Button
+                        className="capitalize"
+                        onClick={() => navigate("/dashboard/bouquet/create")}
+                    >
                         <Plus className="text-primary-foreground" />
                         Create new bouquet
                     </Button>

@@ -253,6 +253,16 @@ export function useBouquetCategories({
     });
 }
 
+type BouquetCreateData = {
+    name: string;
+    description: string;
+    price: string;
+    stock: number;
+    category_id: number;
+    published: boolean;
+    galleries?: { src: string; alt_text?: string }[];
+};
+
 type BouquetUpdateData = {
     name: string;
     description: string;
@@ -261,6 +271,37 @@ type BouquetUpdateData = {
     category_id: number;
     published: boolean;
 };
+
+type CreateBouquetResponse = {
+    message: string;
+    data: GetBouquetsResponse;
+};
+
+async function createBouquet(
+    data: BouquetCreateData,
+): Promise<CreateBouquetResponse> {
+    const response = await api<CreateBouquetResponse>("/api/bouquet/create", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    return response;
+}
+
+export function useCreateBouquet() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: BouquetCreateData) => createBouquet(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["bouquets:list"] });
+        },
+    });
+}
 
 async function updateBouquet(id: number, data: BouquetUpdateData) {
     const response = await api(`/api/bouquet/update/${id}`, {
