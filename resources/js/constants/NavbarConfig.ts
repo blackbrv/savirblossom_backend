@@ -19,7 +19,7 @@ export const NavigationList = [
         value: "/dashboard/customers",
     },
     {
-        title: "Order",
-        value: "/dashboard/ordedr",
+        title: "Orders",
+        value: "/dashboard/orders",
     },
 ];

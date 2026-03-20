@@ -15,6 +15,10 @@ import Customers from "./pages/Dashboard/Customers";
 import CustomerCreate from "./pages/Dashboard/Customers/CustomerCreate";
 import CustomerDetails from "./pages/Dashboard/Customers/CustomerDetails";
 import CustomerEdit from "./pages/Dashboard/Customers/CustomerEdit";
+import Orders from "./pages/Dashboard/Orders/Orders";
+import OrderCreate from "./pages/Dashboard/Orders/OrderCreate";
+import OrderDetails from "./pages/Dashboard/Orders/OrderDetails";
+import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
 
 export default function Root() {
     return (
@@ -72,6 +76,19 @@ export default function Root() {
                         <Route
                             path="/dashboard/categories/:id/edit"
                             element={<CategoriesEdit />}
+                        />
+                        <Route path="/dashboard/orders" element={<Orders />} />
+                        <Route
+                            path="/dashboard/orders/create"
+                            element={<OrderCreate />}
+                        />
+                        <Route
+                            path="/dashboard/orders/:id"
+                            element={<OrderDetails />}
+                        />
+                        <Route
+                            path="/dashboard/orders/:id/edit"
+                            element={<OrderEdit />}
                         />
                     </Routes>
                     <Footer />

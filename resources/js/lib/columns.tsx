@@ -10,6 +10,7 @@ import {
     CustomerType,
     useDeleteCustomer,
 } from "@/services/Customers/CustomersApi";
+import { OrderType, useDeleteOrder } from "@/services/Orders/OrdersApi";
 import DeleteConfirmationDialog from "@/src/components/ui/DeleteConfirmationDialog";
 import { priceFormatter } from "@/utils/utility";
 import { ColumnDef } from "@tanstack/react-table";
@@ -380,6 +381,195 @@ export const customerColumns: ColumnDef<CustomerType>[] = [
                             className="gap-1"
                         >
                             <a href={`/dashboard/customers/${id}/edit`}>
+                                <Pencil className="text-primary" />
+                                Edit
+                            </a>
+                        </Button>
+
+                        <Button
+                            variant={"link"}
+                            size={"icon"}
+                            className="gap-1"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setIsDialogOpen(true);
+                            }}
+                        >
+                            <Trash className="text-primary" />
+                            Delete
+                        </Button>
+                    </div>
+                </>
+            );
+        },
+    },
+];
+
+const statusColors: Record<string, { bg: string; text: string }> = {
+    pending: {
+        bg: "bg-yellow-100 dark:bg-yellow-900",
+        text: "text-yellow-800 dark:text-yellow-200",
+    },
+    confirmed: {
+        bg: "bg-blue-100 dark:bg-blue-900",
+        text: "text-blue-800 dark:text-blue-200",
+    },
+    processing: {
+        bg: "bg-purple-100 dark:bg-purple-900",
+        text: "text-purple-800 dark:text-purple-200",
+    },
+    shipped: {
+        bg: "bg-indigo-100 dark:bg-indigo-900",
+        text: "text-indigo-800 dark:text-indigo-200",
+    },
+    delivered: {
+        bg: "bg-green-100 dark:bg-green-900",
+        text: "text-green-800 dark:text-green-200",
+    },
+    cancelled: {
+        bg: "bg-red-100 dark:bg-red-900",
+        text: "text-red-800 dark:text-red-200",
+    },
+    paid: {
+        bg: "bg-green-100 dark:bg-green-900",
+        text: "text-green-800 dark:text-green-200",
+    },
+    unpaid: {
+        bg: "bg-yellow-100 dark:bg-yellow-900",
+        text: "text-yellow-800 dark:text-yellow-200",
+    },
+};
+
+export const orderColumns: ColumnDef<OrderType>[] = [
+    {
+        accessorKey: "id",
+        header: "Id",
+    },
+    {
+        accessorKey: "customer",
+        header: "Customer",
+        cell: ({ getValue }) => {
+            const customer = getValue() as OrderType["customer"];
+            return customer ? (
+                customer.username
+            ) : (
+                <span className="text-muted-foreground italic">Guest</span>
+            );
+        },
+    },
+    {
+        accessorKey: "items",
+        header: "Items",
+        cell: ({ getValue }) => {
+            const items = getValue() as OrderType["items"];
+            return items?.length || 0;
+        },
+    },
+    {
+        accessorKey: "total",
+        header: "Total",
+        cell: ({ getValue }) => {
+            const value = getValue() as string;
+            return priceFormatter(parseInt(value));
+        },
+    },
+    {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ getValue }) => {
+            const status = getValue() as OrderType["status"];
+            const colors = statusColors[status] || {
+                bg: "bg-gray-100 dark:bg-gray-800",
+                text: "text-gray-800 dark:text-gray-200",
+            };
+            return (
+                <span
+                    className={`px-2 py-1 rounded text-xs font-medium capitalize ${colors.bg} ${colors.text}`}
+                >
+                    {status}
+                </span>
+            );
+        },
+    },
+    {
+        accessorKey: "invoice.status",
+        header: "Payment",
+        cell: ({ row }) => {
+            const invoice = row.original.invoice;
+            if (!invoice) {
+                return (
+                    <span className="text-muted-foreground italic">
+                        No invoice
+                    </span>
+                );
+            }
+            const paymentStatus = invoice.status;
+            const colors = statusColors[paymentStatus] || {
+                bg: "bg-gray-100 dark:bg-gray-800",
+                text: "text-gray-800 dark:text-gray-200",
+            };
+            return (
+                <span
+                    className={`px-2 py-1 rounded text-xs font-medium capitalize ${colors.bg} ${colors.text}`}
+                >
+                    {paymentStatus}
+                </span>
+            );
+        },
+    },
+    {
+        accessorKey: "created_at",
+        header: "Date",
+        cell: ({ getValue }) => {
+            const value = getValue() as string;
+            return new Date(value).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            });
+        },
+    },
+    {
+        accessorKey: "id",
+        header: "Actions",
+        cell: ({ getValue, row }) => {
+            const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+            const deleteOrderMutation = useDeleteOrder();
+            const id = getValue();
+            const orderId = row.original.id;
+            return (
+                <>
+                    <DeleteConfirmationDialog
+                        title="Delete Order"
+                        description={`Are you sure you want to delete Order #${orderId}? This action cannot be undone.`}
+                        open={isDialogOpen}
+                        onOpenChange={setIsDialogOpen}
+                        onConfirm={() => {
+                            deleteOrderMutation.mutateAsync(Number(id));
+                            setIsDialogOpen(false);
+                        }}
+                        isLoading={deleteOrderMutation.isPending}
+                    />
+                    <div className="flex gap-8 items-center">
+                        <Button
+                            asChild
+                            variant={"link"}
+                            size={"icon"}
+                            className="gap-1"
+                        >
+                            <a href={`/dashboard/orders/${id}`}>
+                                <Eye className="text-primary" />
+                                Preview
+                            </a>
+                        </Button>
+
+                        <Button
+                            asChild
+                            variant={"link"}
+                            size={"icon"}
+                            className="gap-1"
+                        >
+                            <a href={`/dashboard/orders/${id}/edit`}>
                                 <Pencil className="text-primary" />
                                 Edit
                             </a>
