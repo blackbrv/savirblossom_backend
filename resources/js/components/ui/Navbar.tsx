@@ -28,6 +28,10 @@ const NavigationList = [
             },
         ],
     },
+    {
+        title: "Customers",
+        value: "/dashboard/customers",
+    },
 ];
 
 export default function Navbar({
