@@ -147,7 +147,6 @@ export default function Categories() {
                     columns={categoryColumns}
                     data={categories}
                     loading={isLoading}
-                    rowCount={perPage}
                 />
 
                 <div className="flex justify-between items-center">
