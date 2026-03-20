@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,6 +24,7 @@ import DataTable from "@/src/components/ui/DataTable";
 import { X } from "lucide-react";
 
 export default function Customers() {
+    const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
@@ -67,9 +70,17 @@ export default function Customers() {
             <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg">
                 <div className="flex gap-3 items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">
-                            Customer registration is handled via API
-                        </span>
+                        <Button
+                            variant="default"
+                            size="sm"
+                            onClick={() =>
+                                navigate("/dashboard/customers/create")
+                            }
+                            className="gap-2"
+                        >
+                            <Plus className="size-4" />
+                            Create Customer
+                        </Button>
                     </div>
                     {hasActiveFilters && (
                         <Button

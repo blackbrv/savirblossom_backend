@@ -10,6 +10,7 @@ export type CustomerType = {
     profile_picture: string | null;
     provider: "email" | "google";
     google_id: string | null;
+    password_set: boolean;
     created_at: string;
     updated_at: string;
 };
@@ -181,6 +182,82 @@ export function useDeleteCustomer() {
         },
         onError: () => {
             toast.error("Failed to delete customer", {
+                position: "top-center",
+            });
+        },
+    });
+}
+
+export type CreateCustomerData = {
+    email: string;
+    username: string;
+    phone_number?: string;
+    profile_picture?: string;
+};
+
+async function createCustomer(
+    data: CreateCustomerData,
+): Promise<{ data: CustomerType }> {
+    const response = await api<{ data: CustomerType }>(`/api/customers`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    return response;
+}
+
+export function useCreateCustomer() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: CreateCustomerData) => createCustomer(data),
+        onSuccess: () => {
+            toast.success(
+                "Customer created successfully. Password setup email sent.",
+                {
+                    position: "top-center",
+                },
+            );
+            queryClient.invalidateQueries({ queryKey: ["customers:list"] });
+        },
+        onError: () => {
+            toast.error("Failed to create customer", {
+                position: "top-center",
+            });
+        },
+    });
+}
+
+async function resendSetupEmail(
+    customerId: number,
+): Promise<{ message: string }> {
+    const response = await api<{ message: string }>(
+        `/api/customers/${customerId}/resend-setup-email`,
+        {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+            },
+        },
+    );
+
+    return response;
+}
+
+export function useResendSetupEmail() {
+    return useMutation({
+        mutationFn: (customerId: number) => resendSetupEmail(customerId),
+        onSuccess: () => {
+            toast.success("Password setup email sent successfully", {
+                position: "top-center",
+            });
+        },
+        onError: () => {
+            toast.error("Failed to send password setup email", {
                 position: "top-center",
             });
         },

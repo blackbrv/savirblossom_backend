@@ -1,10 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Pencil, User } from "lucide-react";
+import { ArrowLeft, Mail, Pencil, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CustomerType } from "@/services/Customers/CustomersApi";
+import {
+    CustomerType,
+    useResendSetupEmail,
+} from "@/services/Customers/CustomersApi";
 
 type CustomerDetailViewProps = {
     data?: CustomerType;
@@ -16,10 +19,17 @@ export default function CustomerDetailView({
     isLoading,
 }: CustomerDetailViewProps) {
     const navigate = useNavigate();
+    const resendEmailMutation = useResendSetupEmail();
 
     const handleEdit = React.useCallback(() => {
         navigate(`/dashboard/customers/${data?.id}/edit`);
     }, [navigate, data?.id]);
+
+    const handleResendSetupEmail = React.useCallback(() => {
+        if (data?.id) {
+            resendEmailMutation.mutate(data.id);
+        }
+    }, [data?.id, resendEmailMutation]);
 
     if (isLoading) {
         return (
@@ -72,6 +82,9 @@ export default function CustomerDetailView({
                     <TabsList className="w-fit p-1">
                         <TabsTrigger value="details" className="px-4 py-2">
                             Details
+                        </TabsTrigger>
+                        <TabsTrigger value="orders" className="px-4 py-2">
+                            Orders
                         </TabsTrigger>
                         <TabsTrigger value="account" className="px-4 py-2">
                             Account
@@ -142,11 +155,73 @@ export default function CustomerDetailView({
                         </div>
                     </TabsContent>
 
+                    <TabsContent value="orders" className="flex-1 p-6">
+                        <div className="flex items-center justify-center h-64">
+                            <div className="text-center space-y-2">
+                                <p className="text-muted-foreground">
+                                    Orders will be available soon
+                                </p>
+                            </div>
+                        </div>
+                    </TabsContent>
+
                     <TabsContent
                         value="account"
                         className="flex-1 p-6 space-y-6"
                     >
                         <div className="space-y-6">
+                            {!data.password_set && (
+                                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                                    <div className="flex items-start gap-3">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-2">
+                                                <Badge
+                                                    variant="outline"
+                                                    className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                                >
+                                                    Password Not Set
+                                                </Badge>
+                                            </div>
+                                            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-2">
+                                                This account requires setup. The
+                                                customer needs to set up their
+                                                password before they can log in.
+                                            </p>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={handleResendSetupEmail}
+                                                disabled={
+                                                    resendEmailMutation.isPending
+                                                }
+                                                className="mt-3 gap-2"
+                                            >
+                                                <Mail className="size-4" />
+                                                {resendEmailMutation.isPending
+                                                    ? "Sending..."
+                                                    : "Resend Setup Email"}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {data.password_set && (
+                                <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                                    <div className="flex items-center gap-2">
+                                        <Badge
+                                            variant="outline"
+                                            className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                        >
+                                            Account Ready
+                                        </Badge>
+                                        <span className="text-sm text-green-700 dark:text-green-300">
+                                            Password is set
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="space-y-2">
                                 <span className="text-sm text-muted-foreground">
                                     Account Created

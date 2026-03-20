@@ -3,14 +3,45 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
+    public function store(CreateCustomerRequest $request): JsonResponse
+    {
+        $customer = Customer::create([
+            'email' => $request->email,
+            'username' => $request->username,
+            'phone_number' => $request->phone_number,
+            'profile_picture' => $request->profile_picture,
+            'provider' => 'email',
+            'password_set' => false,
+        ]);
+
+        $token = Str::random(64);
+
+        \DB::table('password_setup_tokens')->updateOrInsert(
+            ['email' => $customer->email],
+            [
+                'token' => bcrypt($token),
+                'created_at' => now(),
+            ]
+        );
+
+        $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
+        $setupUrl = "{$frontendUrl}/setup-password?token={$token}&email=".urlencode($customer->email);
+
+        $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
+
+        return response()->json(['data' => $customer], 201);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = min((int) $request->input('per_page', 15), 50);

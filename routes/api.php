@@ -23,6 +23,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/google/callback', [AuthController::class, 'googleCallback'])->name('auth.google.callback');
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('auth.logout');
     Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum')->name('auth.me');
+    Route::post('/password/setup', [PasswordSetupController::class, 'send'])->name('auth.password.setup');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -34,10 +35,12 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('customers')->group(function () {
+    Route::post('/', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/', [CustomerController::class, 'index'])->name('customers.list');
     Route::get('/{id}', [CustomerController::class, 'show'])->whereNumber('id')->name('customers.show');
     Route::put('/{id}', [CustomerController::class, 'update'])->whereNumber('id')->name('customers.update');
     Route::delete('/{id}', [CustomerController::class, 'destroy'])->whereNumber('id')->name('customers.delete');
+    Route::post('/{id}/resend-setup-email', [PasswordSetupController::class, 'resend'])->whereNumber('id')->name('customers.resend-setup-email');
 });
 
 Route::prefix('bouquet')->group(function () {
