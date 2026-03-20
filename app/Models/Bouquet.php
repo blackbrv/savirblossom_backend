@@ -32,6 +32,11 @@ class Bouquet extends Model
         return $this->belongsTo(BouquetCategories::class, 'category_id');
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function scopePublished($query)
     {
         return $query->where('published', true);

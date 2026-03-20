@@ -6,7 +6,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import {
     ColumnDef,
@@ -19,27 +18,12 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     loading?: boolean;
-    rowCount?: number;
 }
-
-const skeletonWidths = [
-    "w-10",
-    "w-16",
-    "w-full",
-    "w-full",
-    "w-24",
-    "w-20",
-    "w-20",
-    "w-24",
-    "w-24",
-    "w-32",
-];
 
 export default function DataTable<TData, TValue>({
     columns,
     data,
     loading = false,
-    rowCount = 10,
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,

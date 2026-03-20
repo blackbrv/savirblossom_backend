@@ -283,7 +283,6 @@ export default function Bouquets() {
                     columns={bouquetColumns}
                     data={bouquets as GetBouquetsResponse[]}
                     loading={isLoading}
-                    rowCount={perPage}
                 />
 
                 <div className="flex justify-between items-center">

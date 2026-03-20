@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { api } from "../api";
 
 export type BouquetCategoriesType = {
@@ -523,9 +524,56 @@ export function useDeleteCategory() {
     return useMutation({
         mutationFn: (id: number) => deleteCategory(id),
         onSuccess: () => {
+            toast.success("Category deleted successfully", {
+                position: "top-center",
+            });
             queryClient.invalidateQueries({
                 queryKey: ["bouquet-categories:list"],
             });
         },
+        onError: () => {
+            toast.error("Failed to delete category", {
+                position: "top-center",
+            });
+        },
     });
 }
+
+type DeleteBouquetResponse = {
+    message: string;
+    data: GetBouquetsResponse;
+};
+
+async function deleteBouquet(id: number): Promise<DeleteBouquetResponse> {
+    const response: DeleteBouquetResponse = await api(
+        `/api/bouquet/${id}/delete`,
+        {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+            },
+        },
+    );
+
+    return response;
+}
+
+export const useDeleteBouquet = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: number) => deleteBouquet(id),
+        onSuccess: () => {
+            toast.success("Bouquet deleted successfully", {
+                position: "top-center",
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["bouquets:list"],
+            });
+        },
+        onError: () => {
+            toast.error("Failed to delete bouquet", {
+                position: "top-center",
+            });
+        },
+    });
+};
