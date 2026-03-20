@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\BouquetCategoriesController;
 use App\Http\Controllers\Api\BouquetController;
 use App\Http\Controllers\Api\BouquetImagesController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PasswordSetupController;
 use Illuminate\Http\Request;
@@ -78,4 +80,11 @@ Route::prefix('bouquet/categories')->group(function () {
     Route::post('/create', [BouquetCategoriesController::class, 'store'])->name('bouquet-categories.create');
     Route::post('/update/{id}', [BouquetCategoriesController::class, 'update'])->name('bouquet-categories.update');
     Route::post('/delete/{id}', [BouquetCategoriesController::class, 'destroy'])->whereNumber('id')->name('bouquet-categories.delete');
+});
+
+Route::prefix('dashboard')->group(function () {
+    Route::get('/stats', [DashboardController::class, 'stats'])->name('dashboard.stats');
+    Route::get('/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
+    Route::get('/ongoing-orders', [DashboardController::class, 'ongoingOrders'])->name('dashboard.ongoing-orders');
+    Route::get('/bouquet-sales', [DashboardController::class, 'bouquetSales'])->name('dashboard.bouquet-sales');
 });
