@@ -11,6 +11,9 @@ import BouquetCreate from "./pages/Dashboard/Bouquet/BouquetCreate";
 import Categories from "./pages/Dashboard/Categories";
 import CategoriesCreate from "./pages/Dashboard/CategoriesCreate";
 import CategoriesEdit from "./pages/Dashboard/CategoriesEdit";
+import Customers from "./pages/Dashboard/Customers";
+import CustomerDetails from "./pages/Dashboard/Customers/CustomerDetails";
+import CustomerEdit from "./pages/Dashboard/Customers/CustomerEdit";
 
 export default function Root() {
     return (
@@ -48,6 +51,18 @@ export default function Root() {
                         <Route
                             path="/dashboard/categories/create"
                             element={<CategoriesCreate />}
+                        />
+                        <Route
+                            path="/dashboard/customers"
+                            element={<Customers />}
+                        />
+                        <Route
+                            path="/dashboard/customers/:id"
+                            element={<CustomerDetails />}
+                        />
+                        <Route
+                            path="/dashboard/customers/:id/edit"
+                            element={<CustomerEdit />}
                         />
                         <Route
                             path="/dashboard/categories/:id/edit"
