@@ -1,0 +1,188 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { api } from "../api";
+
+export type CustomerType = {
+    id: number;
+    email: string;
+    username: string;
+    phone_number: string | null;
+    profile_picture: string | null;
+    provider: "email" | "google";
+    google_id: string | null;
+    created_at: string;
+    updated_at: string;
+};
+
+export type GetCustomersPaginatedResponse = {
+    current_page: number;
+    data: CustomerType[];
+    first_page_url: string;
+    from: number | null;
+    last_page: number;
+    last_page_url: string;
+    links: Array<{
+        url: string | null;
+        label: string;
+        page: number | null;
+        active: boolean;
+    }>;
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number | null;
+    total: number;
+};
+
+type GetCustomersParams = {
+    page?: number;
+    perPage?: number;
+    search?: string;
+    provider?: string;
+};
+
+async function GetCustomers({
+    page = 1,
+    perPage = 10,
+    search,
+    provider,
+}: GetCustomersParams): Promise<GetCustomersPaginatedResponse> {
+    const searchParams = new URLSearchParams();
+
+    const params = {
+        page,
+        per_page: perPage,
+        search,
+        provider,
+    };
+
+    Object.entries(params).forEach(([name, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+            searchParams.append(name, String(value));
+        }
+    });
+
+    const response: GetCustomersPaginatedResponse = await api(
+        `/api/customers?${searchParams.toString()}`,
+        {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+            },
+        },
+    );
+
+    return response;
+}
+
+export function useCustomers({
+    page = 1,
+    perPage = 10,
+    search = undefined,
+    provider = undefined,
+}: GetCustomersParams = {}) {
+    return useQuery({
+        queryKey: ["customers:list", page, perPage, search, provider],
+        queryFn: () =>
+            GetCustomers({
+                page,
+                perPage,
+                search,
+                provider,
+            }),
+    });
+}
+
+async function getCustomerById(id: number): Promise<{ data: CustomerType }> {
+    const response = await api<{ data: CustomerType }>(`/api/customers/${id}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+        },
+    });
+
+    return response;
+}
+
+export function useCustomerById({ id }: { id: number }) {
+    return useQuery({
+        queryKey: ["customer:details", id],
+        queryFn: () => getCustomerById(id),
+    });
+}
+
+export type UpdateCustomerData = {
+    username?: string;
+    phone_number?: string;
+    profile_picture?: string;
+};
+
+async function updateCustomer(
+    id: number,
+    data: UpdateCustomerData,
+): Promise<{ data: CustomerType }> {
+    const response = await api<{ data: CustomerType }>(`/api/customers/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    return response;
+}
+
+export function useUpdateCustomer() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, data }: { id: number; data: UpdateCustomerData }) =>
+            updateCustomer(id, data),
+        onSuccess: (_, variables) => {
+            toast.success("Customer updated successfully", {
+                position: "top-center",
+            });
+            queryClient.invalidateQueries({ queryKey: ["customers:list"] });
+            queryClient.invalidateQueries({
+                queryKey: ["customer:details", variables.id],
+            });
+        },
+        onError: () => {
+            toast.error("Failed to update customer", {
+                position: "top-center",
+            });
+        },
+    });
+}
+
+async function deleteCustomer(id: number): Promise<{ message: string }> {
+    const response = await api<{ message: string }>(`/api/customers/${id}`, {
+        method: "DELETE",
+        headers: {
+            Accept: "application/json",
+        },
+    });
+
+    return response;
+}
+
+export function useDeleteCustomer() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (id: number) => deleteCustomer(id),
+        onSuccess: () => {
+            toast.success("Customer deleted successfully", {
+                position: "top-center",
+            });
+            queryClient.invalidateQueries({ queryKey: ["customers:list"] });
+        },
+        onError: () => {
+            toast.error("Failed to delete customer", {
+                position: "top-center",
+            });
+        },
+    });
+}
