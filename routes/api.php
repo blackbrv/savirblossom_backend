@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BouquetController;
 use App\Http\Controllers\Api\BouquetImagesController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PasswordSetupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,20 @@ Route::prefix('customers')->group(function () {
     Route::put('/{id}', [CustomerController::class, 'update'])->whereNumber('id')->name('customers.update');
     Route::delete('/{id}', [CustomerController::class, 'destroy'])->whereNumber('id')->name('customers.delete');
     Route::post('/{id}/resend-setup-email', [PasswordSetupController::class, 'resend'])->whereNumber('id')->name('customers.resend-setup-email');
+});
+
+Route::prefix('orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('orders.list');
+    Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/{id}', [OrderController::class, 'show'])->whereNumber('id')->name('orders.show');
+    Route::put('/{id}', [OrderController::class, 'update'])->whereNumber('id')->name('orders.update');
+    Route::delete('/{id}', [OrderController::class, 'destroy'])->whereNumber('id')->name('orders.destroy');
+    Route::post('/{id}/mark-paid', [OrderController::class, 'markInvoicePaid'])->whereNumber('id')->name('orders.mark-paid');
+});
+
+Route::prefix('invoices')->group(function () {
+    Route::get('/', [InvoiceController::class, 'index'])->name('invoices.list');
+    Route::get('/{id}', [InvoiceController::class, 'show'])->whereNumber('id')->name('invoices.show');
 });
 
 Route::prefix('bouquet')->group(function () {
