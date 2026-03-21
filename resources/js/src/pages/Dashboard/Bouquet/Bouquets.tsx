@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ import {
     useBouquetCategories,
     useBulkPublish,
 } from "@/services/Bouquets/BouquetsApi";
-import DataTable from "@/src/components/ui/DataTable";
+import DataTable, { DataTableRef } from "@/src/components/ui/DataTable";
 import { Plus, X } from "lucide-react";
 import { RowSelectionState } from "@tanstack/react-table";
 import FilterDropdown from "@/src/components/ui/FilterDropdown";
@@ -57,6 +57,7 @@ export default function Bouquets() {
         {},
     );
     const bulkPublishMutation = useBulkPublish();
+    const tableRef = useRef<DataTableRef>(null);
 
     const { data: categoriesData } = useBouquetCategories({
         perPage: 100,
@@ -128,7 +129,7 @@ export default function Bouquets() {
     const handleBulkPublish = () => {
         if (selectedIds.length === 0) return;
         bulkPublishMutation.mutate({ ids: selectedIds, published: true });
-        setRowSelection({});
+        tableRef.current?.resetRowSelection();
     };
 
     return (
@@ -302,6 +303,7 @@ export default function Bouquets() {
                 </div>
 
                 <DataTable
+                    ref={tableRef}
                     columns={bouquetColumns}
                     data={bouquets as GetBouquetsResponse[]}
                     loading={isLoading}

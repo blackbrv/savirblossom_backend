@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 
 import {
     Table,
@@ -17,6 +17,10 @@ import {
     RowSelectionState,
 } from "@tanstack/react-table";
 
+export interface DataTableRef {
+    resetRowSelection: () => void;
+}
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
@@ -24,12 +28,15 @@ interface DataTableProps<TData, TValue> {
     onSelectionChange?: (selection: RowSelectionState) => void;
 }
 
-export default function DataTable<TData, TValue>({
-    columns,
-    data,
-    loading = false,
-    onSelectionChange,
-}: DataTableProps<TData, TValue>) {
+function DataTableInner<TData, TValue>(
+    {
+        columns,
+        data,
+        loading = false,
+        onSelectionChange,
+    }: DataTableProps<TData, TValue>,
+    ref: React.Ref<DataTableRef>,
+) {
     const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
         {},
     );
@@ -47,6 +54,15 @@ export default function DataTable<TData, TValue>({
             onSelectionChange?.(newSelection);
         },
     });
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            resetRowSelection: () => table.resetRowSelection(),
+        }),
+        [table],
+    );
+
     return (
         <div className="overflow-hidden rounded-md border">
             <Table>
@@ -110,3 +126,7 @@ export default function DataTable<TData, TValue>({
         </div>
     );
 }
+
+const DataTable = forwardRef(DataTableInner);
+
+export default DataTable;
