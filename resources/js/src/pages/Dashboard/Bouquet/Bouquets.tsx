@@ -27,7 +27,7 @@ import {
 } from "@/services/Bouquets/BouquetsApi";
 import DataTable, { DataTableRef } from "@/src/components/ui/DataTable";
 import { Plus, X } from "lucide-react";
-import { RowSelectionState } from "@tanstack/react-table";
+import { ColumnDef, RowSelectionState } from "@tanstack/react-table";
 import FilterDropdown from "@/src/components/ui/FilterDropdown";
 import { truncateNumber } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -304,7 +304,7 @@ export default function Bouquets() {
 
                 <DataTable
                     ref={tableRef}
-                    columns={bouquetColumns}
+                    columns={bouquetColumns as ColumnDef<unknown, unknown>[]}
                     data={bouquets as GetBouquetsResponse[]}
                     loading={isLoading}
                     onSelectionChange={setRowSelection}

@@ -22,6 +22,7 @@ import DataTable from "@/src/components/ui/DataTable";
 import { Plus, X } from "lucide-react";
 import FilterDropdown from "@/src/components/ui/FilterDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
+import { ColumnDef } from "@tanstack/react-table";
 
 export default function Categories() {
     const [page, setPage] = React.useState(1);
@@ -140,7 +141,7 @@ export default function Categories() {
                 </div>
 
                 <DataTable
-                    columns={categoryColumns}
+                    columns={categoryColumns as ColumnDef<unknown, unknown>[]}
                     data={categories}
                     loading={isLoading}
                 />

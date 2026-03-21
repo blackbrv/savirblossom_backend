@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
     BouquetCategoriesType,
@@ -18,7 +17,9 @@ export const selectColumn: ColumnDef<unknown> = {
                 table.getIsAllPageRowsSelected() ||
                 (table.getIsSomePageRowsSelected() && "indeterminate")
             }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+            }
             aria-label="Select all"
         />
     ),
@@ -37,7 +38,13 @@ function createBouquetActionsColumn() {
     return {
         accessorKey: "id",
         header: "Actions",
-        cell: ({ getValue, row }: { getValue: () => unknown; row: { original: GetBouquetsResponse } }) => {
+        cell: ({
+            getValue,
+            row,
+        }: {
+            getValue: () => unknown;
+            row: { original: GetBouquetsResponse };
+        }) => {
             const deleteBouquetMutation = useDeleteBouquet();
             const id = getValue() as number;
             const { name } = row.original;
@@ -59,7 +66,13 @@ function createCategoryActionsColumn() {
     return {
         accessorKey: "id",
         header: "Actions",
-        cell: ({ getValue, row }: { getValue: () => unknown; row: { original: BouquetCategoriesType } }) => {
+        cell: ({
+            getValue,
+            row,
+        }: {
+            getValue: () => unknown;
+            row: { original: BouquetCategoriesType };
+        }) => {
             const deleteCategoryMutation = useDeleteCategory();
             const id = getValue() as number;
             const { name } = row.original;
