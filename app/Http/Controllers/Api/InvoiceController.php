@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
 
@@ -14,7 +15,7 @@ class InvoiceController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return response()->json($invoices);
+        return response()->json(new PaginatedResourceCollection($invoices));
     }
 
     public function show(string $id): JsonResponse

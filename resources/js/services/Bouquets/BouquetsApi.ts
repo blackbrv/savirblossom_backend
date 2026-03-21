@@ -30,25 +30,26 @@ export type GetBouquetsResponse = {
     category: BouquetCategoriesType;
 };
 
-export type GetBouquetsPaginatedResponse = {
+export type PaginatedMeta = {
     current_page: number;
-    data: GetBouquetsResponse[];
-    first_page_url: string;
-    from: number;
+    from: number | null;
     last_page: number;
-    last_page_url: string;
-    links: Array<{
-        url: string | null;
-        label: string;
-        page: number | null;
-        active: boolean;
-    }>;
-    next_page_url: string | null;
-    path: string;
     per_page: number;
-    prev_page_url: string | null;
-    to: number;
+    to: number | null;
     total: number;
+};
+
+export type PaginatedLinks = {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+};
+
+export type GetBouquetsPaginatedResponse = {
+    data: GetBouquetsResponse[];
+    links: PaginatedLinks;
+    meta: PaginatedMeta;
 };
 
 type GetBouquetsType = {
@@ -181,23 +182,9 @@ type GetCategoriesParams = {
 };
 
 export type GetCategoriesResponse = {
-    current_page: number;
     data: BouquetCategoriesType[];
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    last_page_url: string;
-    links: Array<{
-        url: string | null;
-        label: string;
-        active: boolean;
-    }>;
-    next_page_url: string | null;
-    path: string;
-    per_page: number;
-    prev_page_url: string | null;
-    to: number;
-    total: number;
+    links: PaginatedLinks;
+    meta: PaginatedMeta;
 };
 
 async function GetCategories({

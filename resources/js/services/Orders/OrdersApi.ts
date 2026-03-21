@@ -52,25 +52,26 @@ export type OrderType = {
     updated_at: string;
 };
 
-export type GetOrdersPaginatedResponse = {
+export type PaginatedLinks = {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+};
+
+export type PaginatedMeta = {
     current_page: number;
-    data: OrderType[];
-    first_page_url: string;
     from: number | null;
     last_page: number;
-    last_page_url: string;
-    links: Array<{
-        url: string | null;
-        label: string;
-        page: number | null;
-        active: boolean;
-    }>;
-    next_page_url: string | null;
-    path: string;
     per_page: number;
-    prev_page_url: string | null;
     to: number | null;
     total: number;
+};
+
+export type GetOrdersPaginatedResponse = {
+    data: OrderType[];
+    links: PaginatedLinks;
+    meta: PaginatedMeta;
 };
 
 type GetOrdersParams = {

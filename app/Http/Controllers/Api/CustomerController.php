@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -64,7 +65,7 @@ class CustomerController extends Controller
 
         $customers = $query->paginate($perPage);
 
-        return response()->json($customers);
+        return response()->json(new PaginatedResourceCollection($customers));
     }
 
     public function show(string $id): JsonResponse

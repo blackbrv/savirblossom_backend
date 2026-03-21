@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Bouquet;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -32,8 +33,8 @@ class BouquetController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('description', 'like', '%'.$search.'%');
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 
@@ -59,7 +60,7 @@ class BouquetController extends Controller
 
         $bouquets = $query->paginate($perPage);
 
-        return response()->json($bouquets);
+        return response()->json(new PaginatedResourceCollection($bouquets));
     }
 
     /**
@@ -108,7 +109,7 @@ class BouquetController extends Controller
         }
 
         return response()->json([
-            'message' => count($validated['bouquets']).' bouquets created successfully',
+            'message' => count($validated['bouquets']) . ' bouquets created successfully',
         ], 201);
     }
 
@@ -127,7 +128,7 @@ class BouquetController extends Controller
             return response()->json([
                 'message' => 'Some bouquet IDs do not exist',
                 'errors' => [
-                    'ids' => ['IDs not found: '.implode(', ', $missingIds)],
+                    'ids' => ['IDs not found: ' . implode(', ', $missingIds)],
                 ],
             ], 422);
         }
@@ -137,7 +138,7 @@ class BouquetController extends Controller
         ]);
 
         return response()->json([
-            'message' => count($validated['ids']).' bouquets updated successfully',
+            'message' => count($validated['ids']) . ' bouquets updated successfully',
         ], 201);
     }
 

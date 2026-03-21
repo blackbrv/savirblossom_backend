@@ -47,8 +47,8 @@ export default function Categories() {
     });
 
     const categories = data?.data ?? [];
-    const currentPage = data?.current_page ?? 1;
-    const lastPage = data?.last_page ?? 1;
+    const currentPage = data?.meta?.current_page ?? 1;
+    const lastPage = data?.meta?.last_page ?? 1;
 
     const clearFilters = () => {
         setSearch("");

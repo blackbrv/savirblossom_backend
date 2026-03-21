@@ -15,25 +15,26 @@ export type CustomerType = {
     updated_at: string;
 };
 
-export type GetCustomersPaginatedResponse = {
+export type PaginatedLinks = {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+};
+
+export type PaginatedMeta = {
     current_page: number;
-    data: CustomerType[];
-    first_page_url: string;
     from: number | null;
     last_page: number;
-    last_page_url: string;
-    links: Array<{
-        url: string | null;
-        label: string;
-        page: number | null;
-        active: boolean;
-    }>;
-    next_page_url: string | null;
-    path: string;
     per_page: number;
-    prev_page_url: string | null;
     to: number | null;
     total: number;
+};
+
+export type GetCustomersPaginatedResponse = {
+    data: CustomerType[];
+    links: PaginatedLinks;
+    meta: PaginatedMeta;
 };
 
 type GetCustomersParams = {

@@ -48,8 +48,8 @@ export default function CustomerDetailView({
     });
 
     const orders = ordersData?.data ?? [];
-    const currentPage = ordersData?.current_page ?? 1;
-    const lastPage = ordersData?.last_page ?? 1;
+    const currentPage = ordersData?.meta?.current_page ?? 1;
+    const lastPage = ordersData?.meta?.last_page ?? 1;
 
     const handleEdit = React.useCallback(() => {
         navigate(`/dashboard/customers/${data?.id}/edit`);

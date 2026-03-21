@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\BouquetCategories;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -28,8 +29,8 @@ class BouquetCategoriesController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('description', 'like', '%'.$search.'%');
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 
@@ -39,7 +40,7 @@ class BouquetCategoriesController extends Controller
 
         $categories = $query->paginate($perPage);
 
-        return response()->json($categories);
+        return response()->json(new PaginatedResourceCollection($categories));
 
     }
 

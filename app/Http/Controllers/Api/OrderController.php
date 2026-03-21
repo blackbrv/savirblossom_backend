@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Bouquet;
 use App\Models\Invoice;
 use App\Models\Order;
@@ -59,7 +60,7 @@ class OrderController extends Controller
 
         $orders = $query->orderBy('created_at', 'desc')->paginate($perPage);
 
-        return response()->json($orders);
+        return response()->json(new PaginatedResourceCollection($orders));
     }
 
     public function store(Request $request): JsonResponse

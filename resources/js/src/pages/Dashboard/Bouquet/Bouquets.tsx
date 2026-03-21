@@ -83,8 +83,9 @@ export default function Bouquets() {
     });
 
     const bouquets = data?.data ?? [];
-    const currentPage = data?.current_page ?? 1;
-    const lastPage = data?.last_page ?? 1;
+    console.log({ bouquets, raw: data });
+    const currentPage = data?.meta?.current_page ?? 1;
+    const lastPage = data?.meta?.last_page ?? 1;
 
     const handleFilterChange =
         (setter: React.Dispatch<React.SetStateAction<number | undefined>>) =>
