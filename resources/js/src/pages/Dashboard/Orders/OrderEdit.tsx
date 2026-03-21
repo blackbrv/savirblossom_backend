@@ -217,7 +217,9 @@ export default function OrderEdit() {
                             <Label htmlFor="status">Status</Label>
                             <Select
                                 value={selectedStatus}
-                                onValueChange={(val) => setValue("status", val)}
+                                onValueChange={(val) =>
+                                    val && setValue("status", val)
+                                }
                             >
                                 <SelectTrigger id="status">
                                     <SelectValue />
@@ -315,11 +317,13 @@ export default function OrderEdit() {
                                                         onValueChange={(
                                                             val,
                                                         ) => {
-                                                            updateItem(
-                                                                index,
-                                                                "bouquet_id",
-                                                                Number(val),
-                                                            );
+                                                            if (val) {
+                                                                updateItem(
+                                                                    index,
+                                                                    "bouquet_id",
+                                                                    Number(val),
+                                                                );
+                                                            }
                                                         }}
                                                     >
                                                         <SelectTrigger

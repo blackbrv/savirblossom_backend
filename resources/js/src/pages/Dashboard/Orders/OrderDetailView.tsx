@@ -12,38 +12,12 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteConfirmationDialog from "@/src/components/ui/DeleteConfirmationDialog";
+import { StatusBadge } from "@/src/components/ui/StatusBadge";
 import { priceFormatter } from "@/utils/utility";
 
 type OrderDetailViewProps = {
     data?: OrderType;
     isLoading?: boolean;
-};
-
-const statusColors: Record<string, { bg: string; text: string }> = {
-    pending: {
-        bg: "bg-yellow-100 dark:bg-yellow-900",
-        text: "text-yellow-800 dark:text-yellow-200",
-    },
-    confirmed: {
-        bg: "bg-blue-100 dark:bg-blue-900",
-        text: "text-blue-800 dark:text-blue-200",
-    },
-    processing: {
-        bg: "bg-purple-100 dark:bg-purple-900",
-        text: "text-purple-800 dark:text-purple-200",
-    },
-    shipped: {
-        bg: "bg-indigo-100 dark:bg-indigo-900",
-        text: "text-indigo-800 dark:text-indigo-200",
-    },
-    delivered: {
-        bg: "bg-green-100 dark:bg-green-900",
-        text: "text-green-800 dark:text-green-200",
-    },
-    cancelled: {
-        bg: "bg-red-100 dark:bg-red-900",
-        text: "text-red-800 dark:text-red-200",
-    },
 };
 
 export default function OrderDetailView({
@@ -94,18 +68,6 @@ export default function OrderDetailView({
             </div>
         );
     }
-
-    const orderStatusColors = statusColors[data.status] || {
-        bg: "bg-gray-100 dark:bg-gray-800",
-        text: "text-gray-800 dark:text-gray-200",
-    };
-
-    const invoiceStatusColors = statusColors[
-        data.invoice?.status || "unpaid"
-    ] || {
-        bg: "bg-yellow-100 dark:bg-yellow-900",
-        text: "text-yellow-800 dark:text-yellow-200",
-    };
 
     return (
         <main className="h-screen flex flex-col gap-8 justify-center p-6">
@@ -187,12 +149,7 @@ export default function OrderDetailView({
                                     Status
                                 </span>
                                 <div>
-                                    <Badge
-                                        variant="outline"
-                                        className={`${orderStatusColors.bg} ${orderStatusColors.text} capitalize`}
-                                    >
-                                        {data.status}
-                                    </Badge>
+                                    <StatusBadge status={data.status} />
                                 </div>
                             </div>
 
@@ -319,12 +276,9 @@ export default function OrderDetailView({
                                         <h4 className="font-semibold text-lg">
                                             Invoice Details
                                         </h4>
-                                        <Badge
-                                            variant="outline"
-                                            className={`${invoiceStatusColors.bg} ${invoiceStatusColors.text} capitalize`}
-                                        >
-                                            {data.invoice.status}
-                                        </Badge>
+                                        <StatusBadge
+                                            status={data.invoice.status}
+                                        />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">

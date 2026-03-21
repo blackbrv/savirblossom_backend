@@ -93,8 +93,6 @@ export default function BouquetEdit() {
 
     const published = watch("published");
 
-    console.log(watch("category_id"));
-
     React.useEffect(() => {
         if (data) {
             reset({

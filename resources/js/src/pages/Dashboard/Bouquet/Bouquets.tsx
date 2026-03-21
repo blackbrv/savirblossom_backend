@@ -28,13 +28,13 @@ import DataTable from "@/src/components/ui/DataTable";
 import { Plus, X } from "lucide-react";
 import FilterDropdown from "@/src/components/ui/FilterDropdown";
 import { truncateNumber } from "@/lib/utils";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function Bouquets() {
     const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
-    const [debouncedSearch, setDebouncedSearch] = React.useState("");
     const [categoryId, setCategoryId] = React.useState<number | undefined>(
         undefined,
     );
@@ -57,14 +57,11 @@ export default function Bouquets() {
         unfilterred: true,
     });
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(search);
-            setPage(1);
-        }, 400);
+    const debouncedSearch = useDebounce(search, 400);
 
-        return () => clearTimeout(timer);
-    }, [search]);
+    React.useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch]);
 
     const { data, isLoading } = useBouquets({
         page,
@@ -99,7 +96,6 @@ export default function Bouquets() {
 
     const clearFilters = () => {
         setSearch("");
-        setDebouncedSearch("");
         setCategoryId(undefined);
         setMinPrice(undefined);
         setMaxPrice(undefined);

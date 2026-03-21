@@ -21,24 +21,21 @@ import { useBouquetCategories } from "@/services/Bouquets/BouquetsApi";
 import DataTable from "@/src/components/ui/DataTable";
 import { Plus, X } from "lucide-react";
 import FilterDropdown from "@/src/components/ui/FilterDropdown";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function Categories() {
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
-    const [debouncedSearch, setDebouncedSearch] = React.useState("");
     const [publishedFilter, setPublishedFilter] = React.useState<
         boolean | undefined
     >(undefined);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(search);
-            setPage(1);
-        }, 400);
+    const debouncedSearch = useDebounce(search, 400);
 
-        return () => clearTimeout(timer);
-    }, [search]);
+    React.useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch, publishedFilter]);
 
     const { data, isLoading } = useBouquetCategories({
         page,
@@ -54,7 +51,6 @@ export default function Categories() {
 
     const clearFilters = () => {
         setSearch("");
-        setDebouncedSearch("");
         setPublishedFilter(undefined);
         setPage(1);
     };

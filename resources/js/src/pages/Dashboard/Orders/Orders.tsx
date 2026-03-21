@@ -21,13 +21,13 @@ import {
 import { orderColumns } from "@/lib/columns";
 import { useOrders, OrderType } from "@/services/Orders/OrdersApi";
 import DataTable from "@/src/components/ui/DataTable";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function Orders() {
     const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
-    const [debouncedSearch, setDebouncedSearch] = React.useState("");
     const [statusFilter, setStatusFilter] = React.useState<string | undefined>(
         undefined,
     );
@@ -39,14 +39,11 @@ export default function Orders() {
     );
     const [dateTo, setDateTo] = React.useState<string | undefined>(undefined);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(search);
-            setPage(1);
-        }, 400);
+    const debouncedSearch = useDebounce(search, 400);
 
-        return () => clearTimeout(timer);
-    }, [search]);
+    React.useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch, statusFilter, paymentStatusFilter, dateFrom, dateTo]);
 
     const { data, isLoading } = useOrders({
         page,
@@ -68,7 +65,6 @@ export default function Orders() {
 
     const clearFilters = () => {
         setSearch("");
-        setDebouncedSearch("");
         setStatusFilter(undefined);
         setPaymentStatusFilter(undefined);
         setDateFrom(undefined);

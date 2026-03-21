@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,26 +21,22 @@ import {
 } from "@/components/ui/pagination";
 import { useCustomers, CustomerType } from "@/services/Customers/CustomersApi";
 import DataTable from "@/src/components/ui/DataTable";
-import { X } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function Customers() {
     const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
-    const [debouncedSearch, setDebouncedSearch] = React.useState("");
     const [providerFilter, setProviderFilter] = React.useState<
         string | undefined
     >(undefined);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(search);
-            setPage(1);
-        }, 400);
+    const debouncedSearch = useDebounce(search, 400);
 
-        return () => clearTimeout(timer);
-    }, [search]);
+    React.useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch, providerFilter]);
 
     const { data, isLoading } = useCustomers({
         page,
@@ -55,7 +51,6 @@ export default function Customers() {
 
     const clearFilters = () => {
         setSearch("");
-        setDebouncedSearch("");
         setProviderFilter(undefined);
         setPage(1);
     };
