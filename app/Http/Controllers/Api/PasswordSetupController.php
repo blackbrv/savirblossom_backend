@@ -44,7 +44,7 @@ class PasswordSetupController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $setupUrl = "{$frontendUrl}/setup-password?token={$token}&email=".urlencode($customer->email);
+        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
 
@@ -85,7 +85,7 @@ class PasswordSetupController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $resetUrl = "{$frontendUrl}/reset-password?token={$token}&email=".urlencode($customer->email);
+        $resetUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($resetUrl, $customer->username));
 
@@ -178,7 +178,7 @@ class PasswordSetupController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $setupUrl = "{$frontendUrl}/setup-password?token={$token}&email=".urlencode($customer->email);
+        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
 

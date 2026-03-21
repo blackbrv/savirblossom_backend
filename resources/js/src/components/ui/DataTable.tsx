@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
     Table,
     TableBody,
@@ -12,23 +14,38 @@ import {
     flexRender,
     getCoreRowModel,
     useReactTable,
+    RowSelectionState,
 } from "@tanstack/react-table";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     loading?: boolean;
+    onSelectionChange?: (selection: RowSelectionState) => void;
 }
 
 export default function DataTable<TData, TValue>({
     columns,
     data,
     loading = false,
+    onSelectionChange,
 }: DataTableProps<TData, TValue>) {
+    const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
+        {},
+    );
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        state: { rowSelection },
+        enableRowSelection: true,
+        onRowSelectionChange: (updater) => {
+            const newSelection =
+                typeof updater === "function" ? updater(rowSelection) : updater;
+            setRowSelection(newSelection);
+            onSelectionChange?.(newSelection);
+        },
     });
     return (
         <div className="overflow-hidden rounded-md border">

@@ -23,9 +23,11 @@ import {
     GetBouquetsResponse,
     useBouquets,
     useBouquetCategories,
+    useBulkPublish,
 } from "@/services/Bouquets/BouquetsApi";
 import DataTable from "@/src/components/ui/DataTable";
 import { Plus, X } from "lucide-react";
+import { RowSelectionState } from "@tanstack/react-table";
 import FilterDropdown from "@/src/components/ui/FilterDropdown";
 import { truncateNumber } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -51,6 +53,10 @@ export default function Bouquets() {
         undefined,
     );
     const [inStockOnly, setInStockOnly] = React.useState(false);
+    const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
+        {},
+    );
+    const bulkPublishMutation = useBulkPublish();
 
     const { data: categoriesData } = useBouquetCategories({
         perPage: 100,
@@ -114,6 +120,17 @@ export default function Bouquets() {
         maxStock !== undefined ||
         inStockOnly;
 
+    const selectedIds = Object.keys(rowSelection)
+        .filter((key) => rowSelection[key])
+        .map((key) => bouquets[parseInt(key)]?.id)
+        .filter((id): id is number => id !== undefined);
+
+    const handleBulkPublish = () => {
+        if (selectedIds.length === 0) return;
+        bulkPublishMutation.mutate({ ids: selectedIds, published: true });
+        setRowSelection({});
+    };
+
     return (
         <main className="h-screen mx-auto flex flex-col gap-8 justify-center p-6">
             <h3 className="desktop-tablet__heading__h3 text-primary">
@@ -128,6 +145,15 @@ export default function Bouquets() {
                         <Plus className="text-primary-foreground" />
                         Create new bouquet
                     </Button>
+                    {selectedIds.length > 0 && (
+                        <Button
+                            variant="default"
+                            onClick={handleBulkPublish}
+                            disabled={bulkPublishMutation.isPending}
+                        >
+                            Publish Selected ({selectedIds.length})
+                        </Button>
+                    )}
                     {hasActiveFilters && (
                         <Button
                             variant="outline"
@@ -279,6 +305,7 @@ export default function Bouquets() {
                     columns={bouquetColumns}
                     data={bouquets as GetBouquetsResponse[]}
                     loading={isLoading}
+                    onSelectionChange={setRowSelection}
                 />
 
                 <div className="flex justify-between items-center">

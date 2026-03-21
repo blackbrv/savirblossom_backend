@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BouquetCategoriesController;
 use App\Http\Controllers\Api\BouquetController;
 use App\Http\Controllers\Api\BouquetImagesController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\InvoiceController;
@@ -64,6 +65,8 @@ Route::prefix('invoices')->group(function () {
 
 Route::prefix('bouquet')->group(function () {
     Route::get('/', [BouquetController::class, 'index'])->name('bouquet.list');
+    Route::post('/bulk', [BouquetController::class, 'bulkStore'])->name('bouquet.bulk');
+    Route::post('/bulk/publish', [BouquetController::class, 'bulkPublish'])->name('bouquet.bulk.publish');
     Route::get('/{id}', [BouquetController::class, 'show'])->whereNumber('id')->name('bouquet.id');
     Route::post('/create', [BouquetController::class, 'store'])->name('bouquet.create');
     Route::post('/update/{id}', [BouquetController::class, 'update'])->name('bouquet.update');

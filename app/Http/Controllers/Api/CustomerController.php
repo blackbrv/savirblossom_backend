@@ -9,6 +9,7 @@ use App\Models\Customer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -26,7 +27,7 @@ class CustomerController extends Controller
 
         $token = Str::random(64);
 
-        \DB::table('password_setup_tokens')->updateOrInsert(
+        DB::table('password_setup_tokens')->updateOrInsert(
             ['email' => $customer->email],
             [
                 'token' => bcrypt($token),
@@ -35,7 +36,7 @@ class CustomerController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $setupUrl = "{$frontendUrl}/setup-password?token={$token}&email=".urlencode($customer->email);
+        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
 

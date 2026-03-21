@@ -89,6 +89,58 @@ class BouquetController extends Controller
         ], 201);
     }
 
+    public function bulkStore(Request $request)
+    {
+        $validated = $request->validate([
+            'bouquets' => 'required|array|max:50',
+            'bouquets.*.name' => 'required|string|max:255|unique:bouquets,name',
+            'bouquets.*.description' => 'nullable|string',
+            'bouquets.*.price' => 'required|numeric|min:10000|max:150000',
+            'bouquets.*.stock' => 'required|integer|min:1|max:99',
+            'bouquets.*.category_id' => 'required|exists:bouquet_categories,id',
+        ]);
+
+        foreach ($validated['bouquets'] as $bouquetData) {
+            Bouquet::create([
+                ...$bouquetData,
+                'published' => true,
+            ]);
+        }
+
+        return response()->json([
+            'message' => count($validated['bouquets']).' bouquets created successfully',
+        ], 201);
+    }
+
+    public function bulkPublish(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+            'published' => 'required|boolean',
+        ]);
+
+        $existingIds = Bouquet::whereIn('id', $validated['ids'])->pluck('id')->toArray();
+        $missingIds = array_diff($validated['ids'], $existingIds);
+
+        if (count($missingIds) > 0) {
+            return response()->json([
+                'message' => 'Some bouquet IDs do not exist',
+                'errors' => [
+                    'ids' => ['IDs not found: '.implode(', ', $missingIds)],
+                ],
+            ], 422);
+        }
+
+        Bouquet::whereIn('id', $validated['ids'])->update([
+            'published' => $validated['published'],
+        ]);
+
+        return response()->json([
+            'message' => count($validated['ids']).' bouquets updated successfully',
+        ], 201);
+    }
+
     public function togglePublish(string $id)
     {
         try {

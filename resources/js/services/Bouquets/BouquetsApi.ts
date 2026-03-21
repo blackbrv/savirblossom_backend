@@ -577,3 +577,56 @@ export const useDeleteBouquet = () => {
         },
     });
 };
+
+type BulkPublishResponse = {
+    message: string;
+};
+
+async function bulkPublish(
+    ids: number[],
+    published: boolean,
+): Promise<BulkPublishResponse> {
+    const response = await api<BulkPublishResponse>(
+        "/api/bouquet/bulk/publish",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({ ids, published }),
+        },
+    );
+
+    return response;
+}
+
+export function useBulkPublish() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({
+            ids,
+            published,
+        }: {
+            ids: number[];
+            published: boolean;
+        }) => bulkPublish(ids, published),
+        onSuccess: (_, variables) => {
+            toast.success(
+                `${variables.ids.length} bouquet(s) ${variables.published ? "published" : "unpublished"} successfully`,
+                {
+                    position: "top-center",
+                },
+            );
+            queryClient.invalidateQueries({
+                queryKey: ["bouquets:list"],
+            });
+        },
+        onError: () => {
+            toast.error("Failed to update bouquets", {
+                position: "top-center",
+            });
+        },
+    });
+}
