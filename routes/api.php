@@ -26,7 +26,9 @@ Route::prefix('auth')->group(function () {
     Route::post('/google/callback', [AuthController::class, 'googleCallback'])->name('auth.google.callback');
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('auth.logout');
     Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum')->name('auth.me');
-    Route::post('/password/setup', [PasswordSetupController::class, 'send'])->name('auth.password.setup');
+    Route::post('/password/setup', [PasswordSetupController::class, 'sendSetup'])->name('auth.password.setup');
+    Route::post('/password/reset', [PasswordSetupController::class, 'sendReset'])->name('auth.password.reset');
+    Route::post('/password/confirm', [PasswordSetupController::class, 'confirm'])->name('auth.password.confirm');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -87,4 +89,13 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
     Route::get('/ongoing-orders', [DashboardController::class, 'ongoingOrders'])->name('dashboard.ongoing-orders');
     Route::get('/bouquet-sales', [DashboardController::class, 'bouquetSales'])->name('dashboard.bouquet-sales');
+});
+
+Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.list');
+    Route::post('/', [CartController::class, 'store'])->name('cart.add');
+    Route::put('/{id}', [CartController::class, 'update'])->whereNumber('id')->name('cart.update');
+    Route::delete('/{id}', [CartController::class, 'destroy'])->whereNumber('id')->name('cart.remove');
+    Route::delete('/', [CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 });
