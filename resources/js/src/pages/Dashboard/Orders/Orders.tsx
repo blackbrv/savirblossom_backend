@@ -22,6 +22,7 @@ import { orderColumns } from "@/lib/columns";
 import { useOrders, OrderType } from "@/services/Orders/OrdersApi";
 import DataTable from "@/src/components/ui/DataTable";
 import { useDebounce } from "@/hooks/useDebounce";
+import { ColumnDef } from "@tanstack/react-table";
 
 export default function Orders() {
     const navigate = useNavigate();
@@ -225,7 +226,7 @@ export default function Orders() {
                 </div>
 
                 <DataTable
-                    columns={orderColumns}
+                    columns={orderColumns as ColumnDef<unknown, unknown>[]}
                     data={orders as OrderType[]}
                     loading={isLoading}
                 />

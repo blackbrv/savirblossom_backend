@@ -26,6 +26,7 @@ import {
 import { orderColumns } from "@/lib/columns";
 import { useOrders, OrderType } from "@/services/Orders/OrdersApi";
 import DataTable from "@/src/components/ui/DataTable";
+import { ColumnDef } from "@tanstack/react-table";
 
 type CustomerDetailViewProps = {
     data?: CustomerType;
@@ -219,7 +220,9 @@ export default function CustomerDetailView({
                         </div>
 
                         <DataTable
-                            columns={orderColumns}
+                            columns={
+                                orderColumns as ColumnDef<unknown, unknown>[]
+                            }
                             data={orders as OrderType[]}
                             loading={isOrdersLoading}
                         />

@@ -22,6 +22,7 @@ import {
 import { useCustomers, CustomerType } from "@/services/Customers/CustomersApi";
 import DataTable from "@/src/components/ui/DataTable";
 import { useDebounce } from "@/hooks/useDebounce";
+import { ColumnDef } from "@tanstack/react-table";
 
 export default function Customers() {
     const navigate = useNavigate();
@@ -125,7 +126,7 @@ export default function Customers() {
                 </div>
 
                 <DataTable
-                    columns={customerColumns}
+                    columns={customerColumns as ColumnDef<unknown, unknown>[]}
                     data={customers as CustomerType[]}
                     loading={isLoading}
                 />
