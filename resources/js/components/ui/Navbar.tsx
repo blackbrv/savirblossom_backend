@@ -86,7 +86,6 @@ export default function Navbar({
                                                     setTheme(
                                                         item.value as Theme,
                                                     );
-                                                    window.location.reload();
                                                 }}
                                             >
                                                 {item.title}
