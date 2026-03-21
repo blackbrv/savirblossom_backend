@@ -5,12 +5,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-import {
-    Area,
-    AreaChart,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { Area, AreaChart, XAxis, YAxis } from "recharts";
 import {
     Select,
     SelectContent,
@@ -49,7 +44,7 @@ export function RevenueChart({
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Revenue Overview</CardTitle>
                 <Select value={period} onValueChange={onPeriodChange}>
-                    <SelectTrigger className="w-[140px]">
+                    <SelectTrigger className="w-35">
                         <SelectValue placeholder="Period" />
                     </SelectTrigger>
                     <SelectContent>
@@ -63,7 +58,7 @@ export function RevenueChart({
             </CardHeader>
             <CardContent>
                 {isLoading ? (
-                    <div className="h-[300px] flex items-center justify-center">
+                    <div className="h-75 flex items-center justify-center">
                         <span className="text-muted-foreground">
                             Loading chart...
                         </span>
@@ -76,7 +71,7 @@ export function RevenueChart({
                                 color: "hsl(var(--chart-1))",
                             },
                         }}
-                        className="h-[300px] w-full"
+                        className="h-75 w-full"
                     >
                         <AreaChart
                             data={data}
@@ -109,8 +104,8 @@ export function RevenueChart({
                                 content={
                                     <ChartTooltipContent
                                         formatter={(value) => [
+                                            "Revenue: ",
                                             priceFormatter(Number(value)),
-                                            "Revenue",
                                         ]}
                                     />
                                 }
@@ -125,7 +120,7 @@ export function RevenueChart({
                         </AreaChart>
                     </ChartContainer>
                 ) : (
-                    <div className="h-[300px] flex items-center justify-center">
+                    <div className="h-75 flex items-center justify-center">
                         <span className="text-muted-foreground">
                             No data available
                         </span>

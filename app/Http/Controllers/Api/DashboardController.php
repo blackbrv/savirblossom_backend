@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -134,7 +135,7 @@ class DashboardController extends Controller
 
         $orders = $query->orderBy('created_at', 'desc')->paginate($perPage);
 
-        return response()->json($orders);
+        return response()->json(new PaginatedResourceCollection($orders));
     }
 
     public function bouquetSales(): JsonResponse

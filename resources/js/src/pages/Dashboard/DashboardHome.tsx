@@ -35,14 +35,6 @@ import {
     CategoryPieChart,
 } from "./components";
 
-const CHART_COLORS = [
-    "var(--chart-1)",
-    "var(--chart-2)",
-    "var(--chart-3)",
-    "var(--chart-4)",
-    "var(--chart-5)",
-];
-
 type OngoingOrderType = {
     id: number;
     customer_id: number | null;
@@ -158,37 +150,6 @@ export default function DashboardHome() {
         setIsPanelOpen(true);
     };
 
-    const CustomTooltip = ({
-        active,
-        payload,
-    }: {
-        active?: boolean;
-        payload?: Array<{ payload: CategorySales }>;
-    }) => {
-        if (active && payload && payload.length > 0) {
-            const data = payload[0]?.payload;
-            if (!data) return null;
-
-            const topProductsList = data.top_products
-                .slice(0, 5)
-                .map((p) => `${p.name}: ${p.quantity}`)
-                .join(", ");
-
-            return (
-                <div className="rounded-lg border bg-background p-3 shadow-lg">
-                    <p className="font-semibold">{data.category_name}</p>
-                    <p className="text-sm text-muted-foreground">
-                        Total: {data.total_quantity.toLocaleString()} sold
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1 border-t pt-1">
-                        Top 5: {topProductsList}
-                    </p>
-                </div>
-            );
-        }
-        return null;
-    };
-
     return (
         <main className="min-h-screen">
             <div className="p-6 space-y-6">
@@ -248,7 +209,7 @@ export default function DashboardHome() {
                                 value={orderStatus}
                                 onValueChange={handleStatusChange}
                             >
-                                <SelectTrigger className="w-[140px]">
+                                <SelectTrigger className="w-35">
                                     <SelectValue placeholder="Status" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -270,7 +231,7 @@ export default function DashboardHome() {
                                 value={String(orderPerPage)}
                                 onValueChange={handlePerPageChange}
                             >
-                                <SelectTrigger className="w-[100px]">
+                                <SelectTrigger className="w-25">
                                     <SelectValue placeholder="Per page" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -295,11 +256,12 @@ export default function DashboardHome() {
                             loading={ordersLoading}
                         />
 
-                        {ordersData && ordersData.last_page > 1 && (
+                        {ordersData && ordersData.meta.last_page > 1 && (
                             <div className="mt-4 flex items-center justify-between">
                                 <p className="text-sm text-muted-foreground">
-                                    Showing {ordersData.from} to {ordersData.to}{" "}
-                                    of {ordersData.total} results
+                                    Showing {ordersData.meta.from} to{" "}
+                                    {ordersData.meta.to} of{" "}
+                                    {ordersData.meta.total} results
                                 </p>
                                 <Pagination>
                                     <PaginationContent>
@@ -321,43 +283,46 @@ export default function DashboardHome() {
                                             />
                                         </PaginationItem>
 
-                                        {ordersData.links
-                                            .filter(
-                                                (link) =>
-                                                    link.label !== "..." &&
-                                                    !isNaN(Number(link.label)),
-                                            )
-                                            .map((link, index) => (
-                                                <PaginationItem key={index}>
-                                                    <PaginationLink
-                                                        onClick={() =>
-                                                            handlePageChange(
-                                                                Number(
-                                                                    link.label,
-                                                                ),
-                                                            )
-                                                        }
-                                                        isActive={link.active}
-                                                        className="cursor-pointer"
-                                                    >
-                                                        {link.label}
-                                                    </PaginationLink>
-                                                </PaginationItem>
-                                            ))}
+                                        {Array.from(
+                                            {
+                                                length: ordersData.meta
+                                                    .last_page,
+                                            },
+                                            (_, i) => i + 1,
+                                        ).map((pageNum) => (
+                                            <PaginationItem key={pageNum}>
+                                                <PaginationLink
+                                                    onClick={() =>
+                                                        handlePageChange(
+                                                            pageNum,
+                                                        )
+                                                    }
+                                                    isActive={
+                                                        pageNum ===
+                                                        ordersData.meta
+                                                            .current_page
+                                                    }
+                                                    className="cursor-pointer"
+                                                >
+                                                    {pageNum}
+                                                </PaginationLink>
+                                            </PaginationItem>
+                                        ))}
 
                                         <PaginationItem>
                                             <PaginationNext
                                                 onClick={() =>
                                                     handlePageChange(
                                                         Math.min(
-                                                            ordersData.last_page,
+                                                            ordersData.meta
+                                                                .last_page,
                                                             orderPage + 1,
                                                         ),
                                                     )
                                                 }
                                                 className={
                                                     orderPage ===
-                                                    ordersData.last_page
+                                                    ordersData.meta.last_page
                                                         ? "pointer-events-none opacity-50"
                                                         : "cursor-pointer"
                                                 }

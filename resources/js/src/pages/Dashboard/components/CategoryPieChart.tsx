@@ -73,7 +73,7 @@ export function CategoryPieChart({
             </CardHeader>
             <CardContent>
                 {isLoading ? (
-                    <div className="h-[300px] flex items-center justify-center">
+                    <div className="h-75 flex items-center justify-center">
                         <span className="text-muted-foreground">
                             Loading chart...
                         </span>
@@ -91,7 +91,7 @@ export function CategoryPieChart({
                                 },
                             ]),
                         )}
-                        className="h-[300px] w-full"
+                        className="h-75 w-full"
                     >
                         <PieChart>
                             <Pie
@@ -129,7 +129,7 @@ export function CategoryPieChart({
                         </PieChart>
                     </ChartContainer>
                 ) : (
-                    <div className="h-[300px] flex items-center justify-center">
+                    <div className="h-75 flex items-center justify-center">
                         <span className="text-muted-foreground">
                             No data available
                         </span>
