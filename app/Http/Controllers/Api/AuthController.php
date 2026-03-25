@@ -8,7 +8,9 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Customer;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -21,14 +23,35 @@ class AuthController extends Controller
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'provider' => 'email',
+            'password_set' => true,
+            'email_verified_at' => null,
         ]);
 
-        $token = $customer->createToken('auth_token')->plainTextToken;
+        $this->sendVerificationEmail($customer);
 
         return response()->json([
             'customer' => $customer,
-            'token' => $token,
+            'message' => 'Registration successful. Please verify your email.',
         ], 201);
+    }
+
+    private function sendVerificationEmail(Customer $customer): void
+    {
+        $token = Str::random(64);
+
+        DB::table('password_setup_tokens')->updateOrInsert(
+            ['email' => $customer->email],
+            [
+                'token' => bcrypt($token),
+                'type' => 'verification',
+                'created_at' => now(),
+            ]
+        );
+
+        $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:3000'));
+        $verificationUrl = "{$frontendUrl}/verify-email?token={$token}&email=".urlencode($customer->email);
+
+        $customer->notify(new \App\Notifications\EmailVerificationNotification($verificationUrl, $customer->username));
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -60,15 +83,31 @@ class AuthController extends Controller
     {
         $googleUser = Socialite::driver('google')->stateless()->userFromToken($request->google_token);
 
+        $isNewUser = false;
         $customer = Customer::updateOrCreate(
             ['google_id' => $googleUser->id],
-            [
-                'email' => $googleUser->email,
-                'username' => $googleUser->name ?? $googleUser->email,
-                'profile_picture' => $googleUser->avatar,
-                'provider' => 'google',
-            ]
+            function ($record) use ($googleUser, &$isNewUser) {
+                if (! $record->exists) {
+                    $isNewUser = true;
+                    $record->email = $googleUser->email;
+                    $record->username = $googleUser->name ?? $googleUser->email;
+                    $record->profile_picture = $googleUser->avatar;
+                    $record->provider = 'google';
+                    $record->password_set = true;
+                    $record->email_verified_at = now();
+                }
+            }
         );
+
+        if (! $customer->email_verified_at) {
+            $customer->email_verified_at = now();
+            $customer->save();
+        }
+
+        if (! $customer->password_set) {
+            $customer->password_set = true;
+            $customer->save();
+        }
 
         $token = $customer->createToken('auth_token')->plainTextToken;
 

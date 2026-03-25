@@ -16,10 +16,14 @@ class Customer extends Authenticatable
         'email',
         'password',
         'username',
+        'full_name',
+        'birthday',
         'phone_number',
         'profile_picture',
         'provider',
         'google_id',
+        'password_set',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -30,6 +34,8 @@ class Customer extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'email_verified_at' => 'datetime',
+            'birthday' => 'date',
         ];
     }
 
@@ -41,5 +47,10 @@ class Customer extends Authenticatable
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
     }
 }

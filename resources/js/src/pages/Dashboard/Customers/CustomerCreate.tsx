@@ -23,6 +23,8 @@ export default function CustomerCreate() {
         defaultValues: {
             email: "",
             username: "",
+            full_name: "",
+            birthday: "",
             phone_number: "",
             profile_picture: "",
         },
@@ -33,6 +35,8 @@ export default function CustomerCreate() {
             const response = await createCustomerMutation.mutateAsync({
                 email: formData.email,
                 username: formData.username,
+                full_name: formData.full_name || undefined,
+                birthday: formData.birthday || undefined,
                 phone_number: formData.phone_number || undefined,
                 profile_picture: formData.profile_picture || undefined,
             });
@@ -116,6 +120,39 @@ export default function CustomerCreate() {
                                     {errors.username.message}
                                 </span>
                             )}
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="full_name">
+                                Full Name (optional)
+                            </Label>
+                            <Input
+                                id="full_name"
+                                {...register("full_name", {
+                                    maxLength: {
+                                        value: 255,
+                                        message:
+                                            "Full name must be 255 characters or less",
+                                    },
+                                })}
+                                placeholder="John Doe"
+                            />
+                            {errors.full_name && (
+                                <span className="text-sm text-destructive">
+                                    {errors.full_name.message}
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="birthday">
+                                Birthday (optional)
+                            </Label>
+                            <Input
+                                id="birthday"
+                                type="date"
+                                {...register("birthday")}
+                            />
                         </div>
 
                         <div className="space-y-2">

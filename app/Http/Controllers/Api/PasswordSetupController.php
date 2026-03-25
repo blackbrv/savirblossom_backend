@@ -44,7 +44,7 @@ class PasswordSetupController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
+        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=".urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
 
@@ -85,7 +85,7 @@ class PasswordSetupController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $resetUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
+        $resetUrl = "{$frontendUrl}/reset-password?token={$token}&email=".urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($resetUrl, $customer->username));
 
@@ -178,12 +178,121 @@ class PasswordSetupController extends Controller
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
+        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=".urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
 
         return response()->json([
             'message' => 'Password setup email sent successfully',
+        ]);
+    }
+
+    public function verify(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'token' => ['required', 'string'],
+        ]);
+
+        $tokenRecord = DB::table('password_setup_tokens')
+            ->where('email', $request->email)
+            ->where('type', 'verification')
+            ->first();
+
+        if (! $tokenRecord) {
+            return response()->json([
+                'message' => 'Invalid verification token',
+            ], 400);
+        }
+
+        if (! Hash::check($request->token, $tokenRecord->token)) {
+            return response()->json([
+                'message' => 'Invalid verification token',
+            ], 400);
+        }
+
+        $tokenCreatedAt = \Carbon\Carbon::parse($tokenRecord->created_at);
+        if ($tokenCreatedAt->addHours(24)->isPast()) {
+            DB::table('password_setup_tokens')
+                ->where('email', $request->email)
+                ->where('type', 'verification')
+                ->delete();
+
+            return response()->json([
+                'message' => 'Verification token has expired',
+            ], 400);
+        }
+
+        $customer = Customer::where('email', $request->email)->first();
+
+        if (! $customer) {
+            return response()->json([
+                'message' => 'Customer not found',
+            ], 404);
+        }
+
+        if ($customer->email_verified_at) {
+            return response()->json([
+                'message' => 'Email already verified',
+                'customer' => $customer,
+            ], 400);
+        }
+
+        $customer->email_verified_at = now();
+        $customer->save();
+
+        DB::table('password_setup_tokens')
+            ->where('email', $request->email)
+            ->where('type', 'verification')
+            ->delete();
+
+        $authToken = $customer->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Email verified successfully',
+            'customer' => $customer,
+            'token' => $authToken,
+        ]);
+    }
+
+    public function resendVerification(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $customer = Customer::where('email', $request->email)->first();
+
+        if (! $customer) {
+            return response()->json([
+                'message' => 'Customer not found',
+            ], 404);
+        }
+
+        if ($customer->email_verified_at) {
+            return response()->json([
+                'message' => 'Email already verified',
+            ], 400);
+        }
+
+        $token = Str::random(64);
+
+        DB::table('password_setup_tokens')->updateOrInsert(
+            ['email' => $customer->email],
+            [
+                'token' => bcrypt($token),
+                'type' => 'verification',
+                'created_at' => now(),
+            ]
+        );
+
+        $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:3000'));
+        $verificationUrl = "{$frontendUrl}/verify-email?token={$token}&email=".urlencode($customer->email);
+
+        $customer->notify(new \App\Notifications\EmailVerificationNotification($verificationUrl, $customer->username));
+
+        return response()->json([
+            'message' => 'Verification email sent successfully',
         ]);
     }
 }

@@ -32,6 +32,8 @@ export default function CustomerEdit() {
     } = useForm<UpdateCustomerData>({
         defaultValues: {
             username: "",
+            full_name: "",
+            birthday: "",
             phone_number: "",
             profile_picture: "",
         },
@@ -43,6 +45,8 @@ export default function CustomerEdit() {
         if (customer) {
             reset({
                 username: customer.username,
+                full_name: customer.full_name ?? "",
+                birthday: customer.birthday ?? "",
                 phone_number: customer.phone_number ?? "",
                 profile_picture: customer.profile_picture ?? "",
             });
@@ -55,6 +59,8 @@ export default function CustomerEdit() {
                 id: Number(id),
                 data: {
                     username: formData.username || undefined,
+                    full_name: formData.full_name || undefined,
+                    birthday: formData.birthday || undefined,
                     phone_number: formData.phone_number || undefined,
                     profile_picture: formData.profile_picture || undefined,
                 },
@@ -150,6 +156,35 @@ export default function CustomerEdit() {
                                             {errors.username.message}
                                         </span>
                                     )}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="full_name">Full Name</Label>
+                                    <Input
+                                        id="full_name"
+                                        {...register("full_name", {
+                                            maxLength: {
+                                                value: 255,
+                                                message:
+                                                    "Full name must be 255 characters or less",
+                                            },
+                                        })}
+                                        placeholder="John Doe"
+                                    />
+                                    {errors.full_name && (
+                                        <span className="text-sm text-destructive">
+                                            {errors.full_name.message}
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="birthday">Birthday</Label>
+                                    <Input
+                                        id="birthday"
+                                        type="date"
+                                        {...register("birthday")}
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
