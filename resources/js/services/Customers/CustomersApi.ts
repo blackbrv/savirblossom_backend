@@ -1,16 +1,21 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { api } from "../api";
+import { AddressType } from "../Addresses/AddressesApi";
 
 export type CustomerType = {
     id: number;
     email: string;
     username: string;
+    full_name: string | null;
+    birthday: string | null;
     phone_number: string | null;
     profile_picture: string | null;
     provider: "email" | "google";
     google_id: string | null;
     password_set: boolean;
+    email_verified_at: string | null;
+    addresses?: AddressType[];
     created_at: string;
     updated_at: string;
 };
@@ -116,6 +121,8 @@ export function useCustomerById({ id }: { id: number }) {
 
 export type UpdateCustomerData = {
     username?: string;
+    full_name?: string;
+    birthday?: string;
     phone_number?: string;
     profile_picture?: string;
 };
@@ -192,6 +199,8 @@ export function useDeleteCustomer() {
 export type CreateCustomerData = {
     email: string;
     username: string;
+    full_name?: string;
+    birthday?: string;
     phone_number?: string;
     profile_picture?: string;
 };
@@ -259,6 +268,38 @@ export function useResendSetupEmail() {
         },
         onError: () => {
             toast.error("Failed to send password setup email", {
+                position: "top-center",
+            });
+        },
+    });
+}
+
+async function resendVerificationEmail(
+    customerId: number,
+): Promise<{ message: string }> {
+    const response = await api<{ message: string }>(
+        `/api/customers/${customerId}/resend-verification-email`,
+        {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+            },
+        },
+    );
+
+    return response;
+}
+
+export function useResendVerificationEmail() {
+    return useMutation({
+        mutationFn: (customerId: number) => resendVerificationEmail(customerId),
+        onSuccess: () => {
+            toast.success("Verification email sent successfully", {
+                position: "top-center",
+            });
+        },
+        onError: () => {
+            toast.error("Failed to send verification email", {
                 position: "top-center",
             });
         },

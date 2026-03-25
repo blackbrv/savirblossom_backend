@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BouquetCategoriesController;
 use App\Http\Controllers\Api\BouquetController;
@@ -30,6 +31,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/password/setup', [PasswordSetupController::class, 'sendSetup'])->name('auth.password.setup');
     Route::post('/password/reset', [PasswordSetupController::class, 'sendReset'])->name('auth.password.reset');
     Route::post('/password/confirm', [PasswordSetupController::class, 'confirm'])->name('auth.password.confirm');
+    Route::post('/verify-email', [PasswordSetupController::class, 'verify'])->name('auth.verify-email');
+    Route::post('/resend-verification', [PasswordSetupController::class, 'resendVerification'])->name('auth.resend-verification');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -47,6 +50,15 @@ Route::prefix('customers')->group(function () {
     Route::put('/{id}', [CustomerController::class, 'update'])->whereNumber('id')->name('customers.update');
     Route::delete('/{id}', [CustomerController::class, 'destroy'])->whereNumber('id')->name('customers.delete');
     Route::post('/{id}/resend-setup-email', [PasswordSetupController::class, 'resend'])->whereNumber('id')->name('customers.resend-setup-email');
+    Route::post('/{id}/resend-verification-email', [CustomerController::class, 'resendVerificationEmail'])->whereNumber('id')->name('customers.resend-verification-email');
+    Route::get('/{id}/addresses', [AddressController::class, 'index'])->whereNumber('id')->name('customers.addresses.list');
+    Route::post('/{id}/addresses', [AddressController::class, 'store'])->whereNumber('id')->name('customers.addresses.store');
+});
+
+Route::prefix('addresses')->group(function () {
+    Route::put('/{id}', [AddressController::class, 'update'])->whereNumber('id')->name('addresses.update');
+    Route::delete('/{id}', [AddressController::class, 'destroy'])->whereNumber('id')->name('addresses.delete');
+    Route::post('/{id}/set-default', [AddressController::class, 'setDefault'])->whereNumber('id')->name('addresses.set-default');
 });
 
 Route::prefix('orders')->group(function () {

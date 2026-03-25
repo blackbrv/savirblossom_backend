@@ -8,7 +8,13 @@ function createOrderActionsColumn() {
     return {
         accessorKey: "id",
         header: "Actions",
-        cell: ({ getValue, row }: { getValue: () => unknown; row: { original: OrderType } }) => {
+        cell: ({
+            getValue,
+            row,
+        }: {
+            getValue: () => unknown;
+            row: { original: OrderType };
+        }) => {
             const deleteOrderMutation = useDeleteOrder();
             const id = getValue() as number;
             const orderId = row.original.id;
@@ -49,6 +55,18 @@ export const orderColumns: ColumnDef<OrderType>[] = [
         cell: ({ getValue }) => {
             const items = getValue() as OrderType["items"];
             return items?.length || 0;
+        },
+    },
+    {
+        accessorKey: "shipping_address",
+        header: "Shipping Address",
+        cell: ({ getValue }) => {
+            const address = getValue() as string;
+            return (
+                <span className="whitespace-normal break-words max-w-[200px] block">
+                    {address}
+                </span>
+            );
         },
     },
     {

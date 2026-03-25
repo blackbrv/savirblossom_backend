@@ -20,10 +20,13 @@ class CustomerController extends Controller
         $customer = Customer::create([
             'email' => $request->email,
             'username' => $request->username,
+            'full_name' => $request->full_name,
+            'birthday' => $request->birthday,
             'phone_number' => $request->phone_number,
             'profile_picture' => $request->profile_picture,
             'provider' => 'email',
             'password_set' => false,
+            'email_verified_at' => null,
         ]);
 
         $token = Str::random(64);
@@ -32,12 +35,13 @@ class CustomerController extends Controller
             ['email' => $customer->email],
             [
                 'token' => bcrypt($token),
+                'type' => 'setup',
                 'created_at' => now(),
             ]
         );
 
         $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:5173'));
-        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($customer->email);
+        $setupUrl = "{$frontendUrl}/reset-password?token={$token}&email=".urlencode($customer->email);
 
         $customer->notify(new \App\Notifications\PasswordSetupNotification($setupUrl, $customer->username));
 
@@ -98,6 +102,41 @@ class CustomerController extends Controller
             $customer->delete();
 
             return response()->json(['message' => "Customer {$id} deleted successfully"]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => "Customer {$id} not found"], 404);
+        }
+    }
+
+    public function resendVerificationEmail(string $id): JsonResponse
+    {
+        try {
+            $customer = Customer::findOrFail($id);
+
+            if ($customer->email_verified_at) {
+                return response()->json([
+                    'message' => 'Email already verified',
+                ], 400);
+            }
+
+            $token = Str::random(64);
+
+            DB::table('password_setup_tokens')->updateOrInsert(
+                ['email' => $customer->email],
+                [
+                    'token' => bcrypt($token),
+                    'type' => 'verification',
+                    'created_at' => now(),
+                ]
+            );
+
+            $frontendUrl = config('app.frontend_url', env('APP_FRONTEND_URL', 'http://localhost:3000'));
+            $verificationUrl = "{$frontendUrl}/verify-email?token={$token}&email=".urlencode($customer->email);
+
+            $customer->notify(new \App\Notifications\EmailVerificationNotification($verificationUrl, $customer->username));
+
+            return response()->json([
+                'message' => 'Verification email sent successfully',
+            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => "Customer {$id} not found"], 404);
         }
