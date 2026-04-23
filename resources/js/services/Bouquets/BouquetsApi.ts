@@ -246,7 +246,7 @@ type BouquetCreateData = {
     description: string;
     price: string;
     stock: number;
-    category_id: number;
+    category_id: number | null;
     published: boolean;
     galleries?: { src: string; alt_text?: string }[];
 };
@@ -256,7 +256,7 @@ type BouquetUpdateData = {
     description: string;
     price: string;
     stock: number;
-    category_id: number;
+    category_id: number | null;
     published: boolean;
 };
 
@@ -315,6 +315,18 @@ export function useUpdateBouquet() {
             queryClient.invalidateQueries({
                 queryKey: ["bouquet:details", variables.id],
             });
+        },
+    });
+}
+
+export function useRemoveBouquetFromCategory() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id }: { id: number }) =>
+            updateBouquet(id, { category_id: null } as BouquetUpdateData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["bouquets:list"] });
         },
     });
 }
