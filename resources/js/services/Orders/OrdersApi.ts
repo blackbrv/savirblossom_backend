@@ -45,6 +45,7 @@ export type OrderType = {
     total: string;
     shipping_address: string;
     notes: string | null;
+    send_at: string;
     items: OrderItemType[];
     customer: CustomerType | null;
     invoice: InvoiceType | null;
@@ -191,6 +192,7 @@ export type CreateOrderData = {
     items: OrderItemData[];
     shipping_address: string;
     notes?: string;
+    send_at: string;
     status?:
         | "pending"
         | "confirmed"
@@ -239,6 +241,7 @@ export type UpdateOrderData = {
     items?: OrderItemData[];
     shipping_address?: string;
     notes?: string;
+    send_at: string;
     status?:
         | "pending"
         | "confirmed"

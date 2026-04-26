@@ -159,6 +159,7 @@ class CartController extends Controller
         $validated = $request->validate([
             'shipping_address' => ['required', 'string'],
             'notes' => ['nullable', 'string'],
+            'send_at' => ['required', 'date'],
         ]);
 
         $customer = $request->user();
@@ -219,6 +220,7 @@ class CartController extends Controller
                     'total' => $total,
                     'shipping_address' => $validated['shipping_address'],
                     'notes' => $validated['notes'] ?? null,
+                    'send_at' => $validated['send_at'],
                 ]);
 
                 foreach ($orderItems as $item) {

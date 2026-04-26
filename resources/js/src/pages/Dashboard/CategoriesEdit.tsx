@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import {
     useBouquetCategories,
     useUpdateCategory,
+    useBouquets,
+    useRemoveBouquetFromCategory,
 } from "@/services/Bouquets/BouquetsApi";
 import { useParams } from "react-router";
 
@@ -28,6 +30,29 @@ export default function CategoriesEdit() {
     });
     const categories = categoriesData?.data ?? [];
     const category = categories.find((c) => c.id === Number(id));
+
+    const categoryId = Number(id);
+    const { data: bouquetsData, isLoading: bouquetsLoading } = useBouquets({
+        categoryId,
+        perPage: 100,
+    });
+    const relatedBouquets = bouquetsData?.data ?? [];
+
+    const removeBouquetMutation = useRemoveBouquetFromCategory();
+
+    const handleRemoveBouquet = async (bouquetId: number) => {
+        try {
+            await removeBouquetMutation.mutateAsync({ id: bouquetId });
+            toast.success("Bouquet removed from category", {
+                position: "top-center",
+            });
+        } catch (error) {
+            toast.error("Failed to remove bouquet from category", {
+                position: "top-center",
+            });
+            console.error(error);
+        }
+    };
 
     const updateCategoryMutation = useUpdateCategory();
 
@@ -92,7 +117,7 @@ export default function CategoriesEdit() {
     }
 
     return (
-        <main className="h-screen flex flex-col gap-8 justify-center p-6">
+        <main className="min-h-screen flex flex-col gap-8 justify-center p-6">
             <h3 className="desktop-tablet__heading__h3 text-primary">
                 Edit Category: {category.name}
             </h3>
@@ -157,6 +182,90 @@ export default function CategoriesEdit() {
                         <Label htmlFor="published">Published</Label>
                     </div>
                 </form>
+            </section>
+
+            <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg">
+                <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-medium">Related Bouquets</h4>
+                    <span className="text-sm text-muted-foreground">
+                        {relatedBouquets.length} bouquet
+                        {relatedBouquets.length !== 1 ? "s" : ""}
+                    </span>
+                </div>
+
+                {bouquetsLoading ? (
+                    <div className="flex items-center justify-center h-32">
+                        <span className="text-muted-foreground">
+                            Loading...
+                        </span>
+                    </div>
+                ) : relatedBouquets.length === 0 ? (
+                    <div className="flex items-center justify-center h-32">
+                        <span className="text-muted-foreground">
+                            No bouquets in this category
+                        </span>
+                    </div>
+                ) : (
+                    <div className="border border-border rounded-md overflow-hidden">
+                        <table className="w-full">
+                            <thead className="bg-muted/50">
+                                <tr>
+                                    <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
+                                        Name
+                                    </th>
+                                    <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
+                                        Price
+                                    </th>
+                                    <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
+                                        Stock
+                                    </th>
+                                    <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-border">
+                                {relatedBouquets.map((bouquet) => (
+                                    <tr
+                                        key={bouquet.id}
+                                        className="hover:bg-muted/30"
+                                    >
+                                        <td className="px-4 py-3">
+                                            {bouquet.name}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            {new Intl.NumberFormat("en-ID", {
+                                                style: "currency",
+                                                currency: "IDR",
+                                            }).format(parseInt(bouquet.price))}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            {bouquet.stock}
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() =>
+                                                    handleRemoveBouquet(
+                                                        bouquet.id,
+                                                    )
+                                                }
+                                                disabled={
+                                                    removeBouquetMutation.isPending
+                                                }
+                                                className="text-destructive hover:text-destructive"
+                                            >
+                                                <Trash2 className="size-4" />
+                                                Remove
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </section>
         </main>
     );

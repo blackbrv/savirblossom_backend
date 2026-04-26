@@ -33,8 +33,8 @@ class BouquetController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('description', 'like', '%' . $search . '%');
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
             });
         }
 
@@ -73,7 +73,7 @@ class BouquetController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'category_id' => 'required|exists:bouquet_categories,id',
+            'category_id' => 'nullable|exists:bouquet_categories,id',
 
             'galleries' => 'nullable|array',
             'galleries.*.src' => 'required_with:galleries|string',
@@ -109,7 +109,7 @@ class BouquetController extends Controller
         }
 
         return response()->json([
-            'message' => count($validated['bouquets']) . ' bouquets created successfully',
+            'message' => count($validated['bouquets']).' bouquets created successfully',
         ], 201);
     }
 
@@ -128,7 +128,7 @@ class BouquetController extends Controller
             return response()->json([
                 'message' => 'Some bouquet IDs do not exist',
                 'errors' => [
-                    'ids' => ['IDs not found: ' . implode(', ', $missingIds)],
+                    'ids' => ['IDs not found: '.implode(', ', $missingIds)],
                 ],
             ], 422);
         }
@@ -138,7 +138,7 @@ class BouquetController extends Controller
         ]);
 
         return response()->json([
-            'message' => count($validated['ids']) . ' bouquets updated successfully',
+            'message' => count($validated['ids']).' bouquets updated successfully',
         ], 201);
     }
 
@@ -201,7 +201,7 @@ class BouquetController extends Controller
             'description' => 'nullable|string',
             'price' => 'sometimes|required|numeric',
             'stock' => 'sometimes|required|integer',
-            'category_id' => 'sometimes|required|exists:bouquet_categories,id',
+            'category_id' => 'sometimes|nullable|exists:bouquet_categories,id',
 
             'galleries' => 'nullable|array',
             'galleries.*.src' => 'required_with:galleries|string',

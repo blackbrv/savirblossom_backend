@@ -73,6 +73,7 @@ class OrderController extends Controller
             'shipping_address' => ['required', 'string'],
             'notes' => ['nullable', 'string'],
             'status' => ['nullable', 'in:pending,confirmed,processing,shipped,delivered,cancelled'],
+            'send_at' => ['required', 'date'],
         ]);
 
         try {
@@ -98,6 +99,7 @@ class OrderController extends Controller
                     'total' => $total,
                     'shipping_address' => $validated['shipping_address'],
                     'notes' => $validated['notes'] ?? null,
+                    'send_at' => $validated['send_at'],
                 ]);
 
                 foreach ($orderItems as $item) {
@@ -147,6 +149,7 @@ class OrderController extends Controller
             'shipping_address' => ['sometimes', 'string'],
             'notes' => ['nullable', 'string'],
             'status' => ['sometimes', 'in:pending,confirmed,processing,shipped,delivered,cancelled'],
+            'send_at' => ['required', 'date'],
         ]);
 
         try {
@@ -165,6 +168,10 @@ class OrderController extends Controller
 
                 if (isset($validated['status'])) {
                     $order->status = $validated['status'];
+                }
+
+                if (isset($validated['send_at'])) {
+                    $order->send_at = $validated['send_at'];
                 }
 
                 $total = 0;
