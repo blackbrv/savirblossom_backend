@@ -37,6 +37,7 @@ type OrderFormData = {
     shipping_address: string;
     notes: string;
     status: string;
+    send_at: string;
 };
 
 const ORDER_STATUSES = [
@@ -79,6 +80,7 @@ export default function OrderEdit() {
             shipping_address: "",
             notes: "",
             status: "pending",
+            send_at: "",
         },
     });
 
@@ -98,6 +100,9 @@ export default function OrderEdit() {
                 shipping_address: order.shipping_address,
                 notes: order.notes ?? "",
                 status: order.status,
+                send_at: order.send_at
+                    ? new Date(order.send_at).toISOString().slice(0, 16)
+                    : "",
             });
         }
     }, [order, reset]);
@@ -155,6 +160,7 @@ export default function OrderEdit() {
                     shipping_address: formData.shipping_address,
                     notes: formData.notes || undefined,
                     status: formData.status as UpdateOrderData["status"],
+                    send_at: formData.send_at,
                 },
             });
 
@@ -442,6 +448,23 @@ export default function OrderEdit() {
                                 placeholder="Add any additional notes"
                                 rows={3}
                             />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="send_at">Send Date/Time *</Label>
+                            <Input
+                                id="send_at"
+                                type="datetime-local"
+                                {...register("send_at", {
+                                    required: "Send date/time is required",
+                                })}
+                                aria-invalid={!!errors.send_at}
+                            />
+                            {errors.send_at && (
+                                <span className="text-sm text-destructive">
+                                    {errors.send_at.message}
+                                </span>
+                            )}
                         </div>
 
                         <div className="p-4 bg-muted/30 rounded-lg border border-border">

@@ -31,6 +31,7 @@ type OrderFormData = {
     }>;
     shipping_address: string;
     notes: string;
+    send_at: string;
 };
 
 export default function OrderCreate() {
@@ -61,6 +62,7 @@ export default function OrderCreate() {
             items: [],
             shipping_address: "",
             notes: "",
+            send_at: "",
         },
     });
 
@@ -112,6 +114,7 @@ export default function OrderCreate() {
                 items: validItems,
                 shipping_address: formData.shipping_address,
                 notes: formData.notes || undefined,
+                send_at: formData.send_at,
             });
 
             navigate(`/dashboard/orders/${response.data.id}`);
@@ -357,6 +360,23 @@ export default function OrderCreate() {
                                 placeholder="Add any additional notes"
                                 rows={3}
                             />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="send_at">Send Date/Time *</Label>
+                            <Input
+                                id="send_at"
+                                type="datetime-local"
+                                {...register("send_at", {
+                                    required: "Send date/time is required",
+                                })}
+                                aria-invalid={!!errors.send_at}
+                            />
+                            {errors.send_at && (
+                                <span className="text-sm text-destructive">
+                                    {errors.send_at.message}
+                                </span>
+                            )}
                         </div>
 
                         <div className="p-4 bg-muted/30 rounded-lg border border-border">

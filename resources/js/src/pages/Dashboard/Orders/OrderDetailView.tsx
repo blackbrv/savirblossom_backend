@@ -162,6 +162,24 @@ export default function OrderDetailView({
                                 </p>
                             </div>
 
+                            <div className="space-y-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Send Date/Time
+                                </span>
+                                <p className="text-base">
+                                    {new Date(data.send_at).toLocaleDateString(
+                                        "en-US",
+                                        {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        },
+                                    )}
+                                </p>
+                            </div>
+
                             {data.notes && (
                                 <div className="space-y-2">
                                     <span className="text-sm text-muted-foreground">

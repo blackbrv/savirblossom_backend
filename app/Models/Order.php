@@ -18,12 +18,14 @@ class Order extends Model
         'total',
         'shipping_address',
         'notes',
+        'send_at',
     ];
 
     protected function casts(): array
     {
         return [
             'total' => 'decimal:2',
+            'send_at' => 'datetime',
         ];
     }
 
