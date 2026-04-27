@@ -32,7 +32,7 @@ export const NavigationList: NavigationListProps[] = [
         value: "/dashboard/feedback",
         submenu: [
             {
-                title: "Feedbacks",
+                title: "Feedback Responses",
                 value: "/dashboard/feedback",
             },
             {

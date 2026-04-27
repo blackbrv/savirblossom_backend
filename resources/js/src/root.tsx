@@ -22,6 +22,7 @@ import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
 import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestions";
 import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
 import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
+import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
 
 export default function Root() {
     return (
@@ -95,6 +96,10 @@ export default function Root() {
                         />
                         <Route
                             path="/dashboard/feedback"
+                            element={<FeedbackResponses />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/questions"
                             element={<FeedbackQuestions />}
                         />
                         <Route
