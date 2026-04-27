@@ -19,6 +19,9 @@ class Order extends Model
         'shipping_address',
         'notes',
         'send_at',
+        'coupon_id',
+        'discount_amount',
+        'coupon_code',
     ];
 
     protected function casts(): array

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BouquetCategoriesController;
 use App\Http\Controllers\Api\BouquetController;
 use App\Http\Controllers\Api\BouquetImagesController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\FeedbackController;
@@ -134,4 +135,17 @@ Route::prefix('feedback')->group(function () {
     Route::post('/', [FeedbackController::class, 'store'])->name('feedback.store');
     Route::get('/{id}', [FeedbackController::class, 'show'])->whereNumber('id')->name('feedback.show');
     Route::delete('/{id}', [FeedbackController::class, 'destroy'])->whereNumber('id')->name('feedback.destroy');
+});
+
+Route::prefix('coupons')->group(function () {
+    Route::get('/', [CouponController::class, 'index'])->name('coupons.list');
+    Route::post('/create', [CouponController::class, 'store'])->name('coupons.create');
+    Route::get('/{id}', [CouponController::class, 'show'])->whereNumber('id')->name('coupons.show');
+    Route::post('/update/{id}', [CouponController::class, 'update'])->whereNumber('id')->name('coupons.update');
+    Route::post('/{id}/delete', [CouponController::class, 'destroy'])->whereNumber('id')->name('coupons.delete');
+    Route::post('/{id}/toggle', [CouponController::class, 'toggle'])->whereNumber('id')->name('coupons.toggle');
+});
+
+Route::middleware('auth:sanctum')->prefix('coupons')->group(function () {
+    Route::post('/validate', [CouponController::class, 'validate'])->name('coupons.validate');
 });

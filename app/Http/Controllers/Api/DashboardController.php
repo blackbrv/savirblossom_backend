@@ -87,7 +87,7 @@ class DashboardController extends Controller
                 ->get();
 
             $data[] = [
-                'period' => $weekStart->format('M j') . ' - ' . $weekEnd->format('M j'),
+                'period' => $weekStart->format('M j').' - '.$weekEnd->format('M j'),
                 'revenue' => (int) $weekOrders->sum('total'),
                 'orders' => $weekOrders->count(),
             ];
@@ -171,7 +171,7 @@ class DashboardController extends Controller
                 ->orderBy('quantity', 'desc')
                 ->limit(5)
                 ->get()
-                ->map(fn($item) => [
+                ->map(fn ($item) => [
                     'name' => $item->name,
                     'quantity' => (int) $item->quantity,
                 ]);
