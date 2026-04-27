@@ -22,9 +22,12 @@ import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
 import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestions";
 import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
 import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
-import Discounts from "./pages/Dashboard/Discounts";
+import Discounts from "./pages/Dashboard/Discounts/Discounts";
+import DiscountCreate from "./pages/Dashboard/Discounts/DiscountCreate";
+import DiscountEdit from "./pages/Dashboard/Discounts/DiscountEdit";
 import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
 import FeedbackDetailView from "./pages/Dashboard/Feedback/FeedbackDetailView";
+import FeedbackEdit from "./pages/Dashboard/Feedback/FeedbackEdit";
 
 export default function Root() {
     return (
@@ -105,6 +108,10 @@ export default function Root() {
                             element={<FeedbackDetailView />}
                         />
                         <Route
+                            path="/dashboard/feedback/:id/edit"
+                            element={<FeedbackEdit />}
+                        />
+                        <Route
                             path="/dashboard/feedback/questions"
                             element={<FeedbackQuestions />}
                         />
@@ -119,6 +126,14 @@ export default function Root() {
                         <Route
                             path="/dashboard/discount"
                             element={<Discounts />}
+                        />
+                        <Route
+                            path="/dashboard/discount/create"
+                            element={<DiscountCreate />}
+                        />
+                        <Route
+                            path="/dashboard/discount/:id/edit"
+                            element={<DiscountEdit />}
                         />
                     </Routes>
                     <Footer />
