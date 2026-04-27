@@ -7,6 +7,7 @@ use App\Models\Bouquet;
 use App\Models\CartItem;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Services\CouponService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -160,6 +161,7 @@ class CartController extends Controller
             'shipping_address' => ['required', 'string'],
             'notes' => ['nullable', 'string'],
             'send_at' => ['required', 'date'],
+            'coupon_code' => ['nullable', 'string'],
         ]);
 
         $customer = $request->user();
@@ -170,6 +172,27 @@ class CartController extends Controller
             return response()->json([
                 'message' => 'Cart is empty',
             ], 400);
+        }
+
+        $coupon = null;
+        $discountAmount = 0;
+
+        if (! empty($validated['coupon_code'])) {
+            $couponService = app(CouponService::class);
+            $validationResult = $couponService->validate(
+                $validated['coupon_code'],
+                $customer,
+                $cartItems
+            );
+
+            if (! $validationResult->isValid) {
+                return response()->json([
+                    'message' => $validationResult->error,
+                ], 422);
+            }
+
+            $coupon = $validationResult->coupon;
+            $discountAmount = $validationResult->discount;
         }
 
         $stockErrors = [];
@@ -194,7 +217,7 @@ class CartController extends Controller
         }
 
         try {
-            $result = DB::transaction(function () use ($customer, $cartItems, $validated) {
+            $result = DB::transaction(function () use ($customer, $cartItems, $validated, $coupon, $discountAmount) {
                 $total = 0;
                 $orderItems = [];
 
@@ -214,14 +237,21 @@ class CartController extends Controller
                     $bouquet->save();
                 }
 
-                $order = Order::create([
+                $finalTotal = max(0, $total - $discountAmount);
+
+                $orderData = [
                     'customer_id' => $customer->id,
                     'status' => 'pending',
-                    'total' => $total,
+                    'total' => $finalTotal,
                     'shipping_address' => $validated['shipping_address'],
                     'notes' => $validated['notes'] ?? null,
                     'send_at' => $validated['send_at'],
-                ]);
+                    'coupon_id' => $coupon?->id,
+                    'discount_amount' => $discountAmount,
+                    'coupon_code' => $coupon?->code,
+                ];
+
+                $order = Order::create($orderData);
 
                 foreach ($orderItems as $item) {
                     $order->items()->create($item);
@@ -233,6 +263,11 @@ class CartController extends Controller
                     'total_amount' => $total,
                     'status' => 'unpaid',
                 ]);
+
+                if ($coupon) {
+                    $couponService = app(CouponService::class);
+                    $couponService->apply($coupon, $customer, $order->id, $discountAmount);
+                }
 
                 $customer->cartItems()->delete();
 

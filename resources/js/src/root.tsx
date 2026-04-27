@@ -17,8 +17,14 @@ import CustomerDetails from "./pages/Dashboard/Customers/CustomerDetails";
 import CustomerEdit from "./pages/Dashboard/Customers/CustomerEdit";
 import Orders from "./pages/Dashboard/Orders/Orders";
 import OrderCreate from "./pages/Dashboard/Orders/OrderCreate";
-import OrderDetails from "./pages/Dashboard/Orders/OrderDetails";
+import OrderDetailView from "./pages/Dashboard/Orders/OrderDetailView";
 import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
+import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestions";
+import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
+import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
+import Discounts from "./pages/Dashboard/Discounts";
+import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
+import FeedbackDetailView from "./pages/Dashboard/Feedback/FeedbackDetailView";
 
 export default function Root() {
     return (
@@ -84,11 +90,35 @@ export default function Root() {
                         />
                         <Route
                             path="/dashboard/orders/:id"
-                            element={<OrderDetails />}
+                            element={<OrderDetailView />}
                         />
                         <Route
                             path="/dashboard/orders/:id/edit"
                             element={<OrderEdit />}
+                        />
+                        <Route
+                            path="/dashboard/feedback"
+                            element={<FeedbackResponses />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/:id"
+                            element={<FeedbackDetailView />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/questions"
+                            element={<FeedbackQuestions />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/questions/create"
+                            element={<FeedbackQuestionsCreate />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/questions/:id/edit"
+                            element={<FeedbackQuestionsEdit />}
+                        />
+                        <Route
+                            path="/dashboard/discount"
+                            element={<Discounts />}
                         />
                     </Routes>
                     <Footer />

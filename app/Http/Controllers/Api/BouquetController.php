@@ -202,6 +202,7 @@ class BouquetController extends Controller
             'price' => 'sometimes|required|numeric',
             'stock' => 'sometimes|required|integer',
             'category_id' => 'sometimes|nullable|exists:bouquet_categories,id',
+            'feedback_questions_template_id' => 'sometimes|nullable|exists:feedback_questions_templates,id',
 
             'galleries' => 'nullable|array',
             'galleries.*.src' => 'required_with:galleries|string',

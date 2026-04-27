@@ -127,7 +127,17 @@ class OrderController extends Controller
         try {
             $order = Order::with(['items.bouquet', 'customer', 'invoice'])->findOrFail($id);
 
-            return response()->json(['data' => $order]);
+            $feedbackTemplate = $order->feedbackTemplate();
+            $feedbackQuestions = $feedbackTemplate ? $feedbackTemplate->questions : null;
+
+            return response()->json([
+                'data' => $order,
+                'feedback_form' => $feedbackTemplate ? [
+                    'id' => $feedbackTemplate->id,
+                    'name' => $feedbackTemplate->name,
+                    'questions' => $feedbackQuestions,
+                ] : null,
+            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => "Order {$id} not found"], 404);
         }

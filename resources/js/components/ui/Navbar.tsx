@@ -33,7 +33,10 @@ export default function Navbar({
                                     <MenubarMenu key={index}>
                                         <MenubarTrigger
                                             onClick={(e) => {
-                                                if (!item.submenu) {
+                                                if (
+                                                    !item.submenu &&
+                                                    item.value
+                                                ) {
                                                     navigate(item.value);
                                                 }
                                             }}

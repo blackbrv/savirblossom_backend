@@ -19,6 +19,9 @@ class Order extends Model
         'shipping_address',
         'notes',
         'send_at',
+        'coupon_id',
+        'discount_amount',
+        'coupon_code',
     ];
 
     protected function casts(): array
@@ -44,5 +47,25 @@ class Order extends Model
     public function invoice(): HasOne
     {
         return $this->hasOne(Invoice::class);
+    }
+
+    public function feedbackTemplate()
+    {
+        $bouquetIds = $this->items->pluck('bouquet_id')->toArray();
+
+        if (empty($bouquetIds)) {
+            return null;
+        }
+
+        $templateId = Bouquet::whereIn('id', $bouquetIds)
+            ->whereNotNull('feedback_questions_template_id')
+            ->pluck('feedback_questions_template_id')
+            ->first();
+
+        if ($templateId) {
+            return FeedbackQuestionsTemplate::find($templateId);
+        }
+
+        return FeedbackQuestionsTemplate::where('is_default', true)->first();
     }
 }

@@ -24,6 +24,7 @@ export type GetBouquetsResponse = {
     price: string;
     stock: number;
     published: boolean | number;
+    feedback_questions_template_id: number | null;
     created_at: string;
     updated_at: string;
     galleries: GalleriesType[];
@@ -258,6 +259,7 @@ type BouquetUpdateData = {
     stock: number;
     category_id: number | null;
     published: boolean;
+    feedback_questions_template_id: number | null;
 };
 
 type CreateBouquetResponse = {
