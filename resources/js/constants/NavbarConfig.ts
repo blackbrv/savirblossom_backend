@@ -45,4 +45,8 @@ export const NavigationList: NavigationListProps[] = [
         title: "Orders",
         value: "/dashboard/orders",
     },
+    {
+        title: "Discount",
+        value: "/dashboard/discount",
+    },
 ];
