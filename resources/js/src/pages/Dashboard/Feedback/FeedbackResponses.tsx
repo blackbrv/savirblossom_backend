@@ -1,6 +1,14 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -156,72 +164,58 @@ export default function FeedbackResponses() {
                 </div>
 
                 <div className="border border-border rounded-md overflow-hidden">
-                    <table className="w-full">
-                        <thead className="bg-muted/50">
-                            <tr>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground w-10">
-                                    ID
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Customer
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Order
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Bouquet
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Rating
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Date
-                                </th>
-                                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-10">ID</TableHead>
+                                <TableHead>Customer</TableHead>
+                                <TableHead>Order</TableHead>
+                                <TableHead>Bouquet</TableHead>
+                                <TableHead>Rating</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead className="text-right">
                                     Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {isLoading ? (
-                                <tr>
-                                    <td
+                                <TableRow>
+                                    <TableCell
                                         colSpan={7}
-                                        className="px-4 py-8 text-center text-muted-foreground"
+                                        className="h-24 text-center"
                                     >
                                         Loading...
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ) : responses.length === 0 ? (
-                                <tr>
-                                    <td
+                                <TableRow>
+                                    <TableCell
                                         colSpan={7}
-                                        className="px-4 py-8 text-center text-muted-foreground"
+                                        className="h-24 text-center"
                                     >
                                         No feedback responses yet
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ) : (
                                 responses.map((response) => (
                                     <React.Fragment key={response.id}>
-                                        <tr className="hover:bg-muted/30">
-                                            <td className="px-4 py-3 text-sm">
-                                                {response.id}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                        <TableRow>
+                                            <TableCell>{response.id}</TableCell>
+                                            <TableCell>
                                                 {response.customer
                                                     ? `${response.customer.username} (${response.customer.email})`
                                                     : "Guest"}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 {response.order
                                                     ? `#${response.order.id}`
                                                     : "-"}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 {response.bouquet?.name || "-"}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 {response.average_rating ? (
                                                     <div className="flex items-center gap-1">
                                                         <span className="text-yellow-500">
@@ -236,8 +230,8 @@ export default function FeedbackResponses() {
                                                 ) : (
                                                     "-"
                                                 )}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 {new Date(
                                                     response.created_at,
                                                 ).toLocaleDateString("en-US", {
@@ -245,8 +239,8 @@ export default function FeedbackResponses() {
                                                     day: "numeric",
                                                     year: "numeric",
                                                 })}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm text-right">
+                                            </TableCell>
+                                            <TableCell className="text-right">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Button
                                                         variant="ghost"
@@ -275,15 +269,15 @@ export default function FeedbackResponses() {
                                                         <Trash2 className="size-4" />
                                                     </Button>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </TableCell>
+                                        </TableRow>
                                         {expandedResponses.has(response.id) && (
-                                            <tr>
-                                                <td
+                                            <TableRow>
+                                                <TableCell
                                                     colSpan={7}
-                                                    className="px-4 py-3 bg-muted/20"
+                                                    className="bg-muted/20 p-0"
                                                 >
-                                                    <div className="pl-4 space-y-3">
+                                                    <div className="p-4 space-y-3">
                                                         <h4 className="text-sm font-medium">
                                                             Answers
                                                         </h4>
@@ -301,12 +295,6 @@ export default function FeedbackResponses() {
                                                                             }
                                                                             className="grid col-span-2 items-start gap-4 p-3 bg-background rounded border"
                                                                         >
-                                                                            {/* <span className="text-sm text-muted-foreground"> */}
-                                                                            {/*     {answer */}
-                                                                            {/*         .question */}
-                                                                            {/*         ?.question_text || */}
-                                                                            {/*         "Q"} */}
-                                                                            {/* </span> */}
                                                                             <div className="flex-1">
                                                                                 {answer.question && (
                                                                                     <p className="text-sm font-medium text-muted-foreground">
@@ -333,14 +321,14 @@ export default function FeedbackResponses() {
                                                             </p>
                                                         )}
                                                     </div>
-                                                </td>
-                                            </tr>
+                                                </TableCell>
+                                            </TableRow>
                                         )}
                                     </React.Fragment>
                                 ))
                             )}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
 
                 <div className="flex justify-between items-center">

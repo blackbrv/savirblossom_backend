@@ -2,6 +2,14 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -182,56 +190,44 @@ export default function FeedbackQuestions() {
                 </div>
 
                 <div className="border border-border rounded-md overflow-hidden">
-                    <table className="w-full">
-                        <thead className="bg-muted/50">
-                            <tr>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground w-10">
-                                    ID
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Name
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Questions
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Status
-                                </th>
-                                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">
-                                    Default
-                                </th>
-                                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-10">ID</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Questions</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Default</TableHead>
+                                <TableHead className="text-right">
                                     Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {isLoading ? (
-                                <tr>
-                                    <td
+                                <TableRow>
+                                    <TableCell
                                         colSpan={6}
-                                        className="px-4 py-8 text-center text-muted-foreground"
+                                        className="h-24 text-center"
                                     >
                                         Loading...
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ) : templates.length === 0 ? (
-                                <tr>
-                                    <td
+                                <TableRow>
+                                    <TableCell
                                         colSpan={6}
-                                        className="px-4 py-8 text-center text-muted-foreground"
+                                        className="h-24 text-center"
                                     >
                                         No templates found
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ) : (
                                 templates.map((template) => (
                                     <React.Fragment key={template.id}>
-                                        <tr className="hover:bg-muted/30">
-                                            <td className="px-4 py-3 text-sm">
-                                                {template.id}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                        <TableRow>
+                                            <TableCell>{template.id}</TableCell>
+                                            <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <button
                                                         onClick={() =>
@@ -253,11 +249,11 @@ export default function FeedbackQuestions() {
                                                         {template.name}
                                                     </span>
                                                 </div>
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 {template.questions_count ?? 0}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 <span
                                                     className={`px-2 py-1 text-xs rounded ${
                                                         template.is_active
@@ -269,15 +265,15 @@ export default function FeedbackQuestions() {
                                                         ? "Active"
                                                         : "Inactive"}
                                                 </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-sm">
+                                            </TableCell>
+                                            <TableCell>
                                                 {template.is_default && (
                                                     <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">
                                                         Default
                                                     </span>
                                                 )}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm text-right">
+                                            </TableCell>
+                                            <TableCell className="text-right">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Button
                                                         variant="ghost"
@@ -317,15 +313,15 @@ export default function FeedbackQuestions() {
                                                         <Trash2 className="size-4" />
                                                     </Button>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </TableCell>
+                                        </TableRow>
                                         {expandedTemplates.has(template.id) && (
-                                            <tr>
-                                                <td
+                                            <TableRow>
+                                                <TableCell
                                                     colSpan={6}
-                                                    className="px-4 py-3 bg-muted/20"
+                                                    className="bg-muted/20 p-0"
                                                 >
-                                                    <div className="pl-8 space-y-2">
+                                                    <div className="p-4 space-y-3">
                                                         <h4 className="text-sm font-medium">
                                                             Questions
                                                         </h4>
@@ -375,14 +371,14 @@ export default function FeedbackQuestions() {
                                                             </p>
                                                         )}
                                                     </div>
-                                                </td>
-                                            </tr>
+                                                </TableCell>
+                                            </TableRow>
                                         )}
                                     </React.Fragment>
                                 ))
                             )}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
 
                 <div className="flex justify-between items-center">
