@@ -19,6 +19,9 @@ import Orders from "./pages/Dashboard/Orders/Orders";
 import OrderCreate from "./pages/Dashboard/Orders/OrderCreate";
 import OrderDetails from "./pages/Dashboard/Orders/OrderDetails";
 import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
+import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestions";
+import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
+import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
 
 export default function Root() {
     return (
@@ -89,6 +92,18 @@ export default function Root() {
                         <Route
                             path="/dashboard/orders/:id/edit"
                             element={<OrderEdit />}
+                        />
+                        <Route
+                            path="/dashboard/feedback"
+                            element={<FeedbackQuestions />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/questions/create"
+                            element={<FeedbackQuestionsCreate />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/questions/:id/edit"
+                            element={<FeedbackQuestionsEdit />}
                         />
                     </Routes>
                     <Footer />

@@ -34,6 +34,10 @@ import {
     useDeleteGallery,
     GalleriesType,
 } from "@/services/Bouquets/BouquetsApi";
+import {
+    useFeedbackTemplates,
+    FeedbackQuestionsTemplateType,
+} from "@/services/Feedback/FeedbackQuestionsApi";
 import { useParams } from "react-router";
 
 type BouquetFormData = {
@@ -43,6 +47,7 @@ type BouquetFormData = {
     stock: number;
     category_id: number;
     published: boolean;
+    feedback_questions_template_id: number | null;
 };
 
 type GalleryFormData = {
@@ -55,6 +60,11 @@ export default function BouquetEdit() {
     const navigate = useNavigate();
     const { data, isLoading } = useBouquetDetails({ id: Number(id) });
     const { data: categories } = useBouquetCategories();
+    const { data: feedbackTemplatesData } = useFeedbackTemplates({
+        perPage: 100,
+    });
+
+    const feedbackTemplates = feedbackTemplatesData?.data ?? [];
 
     const updateBouquetMutation = useUpdateBouquet();
     const createGalleryMutation = useCreateGallery();
@@ -88,6 +98,7 @@ export default function BouquetEdit() {
             stock: 0,
             category_id: 0,
             published: false,
+            feedback_questions_template_id: null,
         },
     });
 
@@ -102,6 +113,8 @@ export default function BouquetEdit() {
                 stock: data.stock,
                 category_id: data.category.id,
                 published: data.published === 1 || data.published === true,
+                feedback_questions_template_id:
+                    data.feedback_questions_template_id ?? null,
             });
             setOriginalGalleries(data.galleries ?? []);
             setNewGalleries([]);
@@ -380,6 +393,57 @@ export default function BouquetEdit() {
                                                         )}
                                                     >
                                                         {category.name}
+                                                    </SelectItem>
+                                                ),
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="feedback-template">
+                                        Feedback Template
+                                    </Label>
+                                    <Select
+                                        value={
+                                            watch(
+                                                "feedback_questions_template_id",
+                                            )
+                                                ? String(
+                                                      watch(
+                                                          "feedback_questions_template_id",
+                                                      ),
+                                                  )
+                                                : "none"
+                                        }
+                                        onValueChange={(value) => {
+                                            setValue(
+                                                "feedback_questions_template_id",
+                                                value === "none"
+                                                    ? null
+                                                    : Number(value),
+                                                { shouldValidate: true },
+                                            );
+                                        }}
+                                    >
+                                        <SelectTrigger id="feedback-template">
+                                            <SelectValue placeholder="Select feedback template" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="none">
+                                                Use Default
+                                            </SelectItem>
+                                            {feedbackTemplates.map(
+                                                (template) => (
+                                                    <SelectItem
+                                                        key={template.id}
+                                                        value={String(
+                                                            template.id,
+                                                        )}
+                                                    >
+                                                        {template.name}
+                                                        {template.is_default &&
+                                                            " (Default)"}
                                                     </SelectItem>
                                                 ),
                                             )}
