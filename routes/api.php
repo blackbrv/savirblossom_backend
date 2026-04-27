@@ -134,6 +134,7 @@ Route::prefix('feedback')->group(function () {
     Route::get('/', [FeedbackController::class, 'index'])->name('feedback.list');
     Route::post('/', [FeedbackController::class, 'store'])->name('feedback.store');
     Route::get('/{id}', [FeedbackController::class, 'show'])->whereNumber('id')->name('feedback.show');
+    Route::put('/{id}', [FeedbackController::class, 'update'])->whereNumber('id')->name('feedback.update');
     Route::delete('/{id}', [FeedbackController::class, 'destroy'])->whereNumber('id')->name('feedback.destroy');
 });
 

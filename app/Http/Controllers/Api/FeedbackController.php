@@ -112,4 +112,46 @@ class FeedbackController extends Controller
             return response()->json(['message' => 'Feedback not found'], 404);
         }
     }
+
+    public function update(Request $request, string $id)
+    {
+        try {
+            $response = FeedbackResponse::findOrFail($id);
+
+            $validated = $request->validate([
+                'answers' => 'required|array',
+                'answers.*.id' => 'required|integer|exists:feedback_answers,id',
+                'answers.*.rating_value' => 'nullable|integer|min:1|max:5',
+                'answers.*.text_value' => 'nullable|string',
+                'answers.*.boolean_value' => 'nullable|boolean',
+                'answers.*.reason_value' => 'nullable|string',
+            ]);
+
+            foreach ($validated['answers'] as $answerData) {
+                $answer = FeedbackAnswer::where('id', $answerData['id'])
+                    ->where('feedback_response_id', $response->id)
+                    ->first();
+
+                if ($answer) {
+                    $answer->update([
+                        'rating_value' => $answerData['rating_value'] ?? $answer->rating_value,
+                        'text_value' => $answerData['text_value'] ?? $answer->text_value,
+                        'boolean_value' => $answerData['boolean_value'] ?? $answer->boolean_value,
+                        'reason_value' => $answerData['reason_value'] ?? $answer->reason_value,
+                    ]);
+                }
+            }
+
+            $response->load(['customer', 'order', 'bouquet', 'answers.question']);
+
+            return response()->json([
+                'message' => 'Feedback updated successfully',
+                'data' => $response,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Feedback not found'], 404);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
+        }
+    }
 }
