@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -33,12 +34,10 @@ import { useDebounce } from "@/hooks/useDebounce";
 import DeleteConfirmationDialog from "@/src/components/ui/DeleteConfirmationDialog";
 
 export default function FeedbackResponses() {
+    const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
-    const [expandedResponses, setExpandedResponses] = React.useState<
-        Set<number>
-    >(new Set());
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
     const [responseToDelete, setResponseToDelete] =
         React.useState<FeedbackResponseType | null>(null);
@@ -68,18 +67,6 @@ export default function FeedbackResponses() {
 
     const hasActiveFilters = search !== "";
 
-    const toggleExpand = (id: number) => {
-        setExpandedResponses((prev) => {
-            const next = new Set(prev);
-            if (next.has(id)) {
-                next.delete(id);
-            } else {
-                next.add(id);
-            }
-            return next;
-        });
-    };
-
     const handleDeleteClick = (response: FeedbackResponseType) => {
         setResponseToDelete(response);
         setDeleteDialogOpen(true);
@@ -95,49 +82,6 @@ export default function FeedbackResponses() {
                 // Error handled by mutation
             }
         }
-    };
-
-    const renderAnswer = (answer: FeedbackResponseType["answers"][0]) => {
-        if (answer.rating_value) {
-            return (
-                <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }, (_, i) => (
-                        <span
-                            key={i}
-                            className={
-                                i < answer.rating_value!
-                                    ? "text-yellow-500"
-                                    : "text-gray-300"
-                            }
-                        >
-                            ★
-                        </span>
-                    ))}
-                    <span className="ml-2 text-sm">
-                        ({answer.rating_value}/5)
-                    </span>
-                </div>
-            );
-        }
-
-        if (answer.boolean_value !== null) {
-            return (
-                <span
-                    className={
-                        answer.boolean_value ? "text-green-600" : "text-red-600"
-                    }
-                >
-                    {answer.boolean_value ? "Yes" : "No"}
-                    {answer.reason_value && ` - ${answer.reason_value}`}
-                </span>
-            );
-        }
-
-        if (answer.text_value) {
-            return <span>{answer.text_value}</span>;
-        }
-
-        return <span className="text-muted-foreground">-</span>;
     };
 
     return (
@@ -246,8 +190,8 @@ export default function FeedbackResponses() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() =>
-                                                            toggleExpand(
-                                                                response.id,
+                                                            navigate(
+                                                                `/dashboard/feedback/${response.id}`,
                                                             )
                                                         }
                                                     >
@@ -271,59 +215,6 @@ export default function FeedbackResponses() {
                                                 </div>
                                             </TableCell>
                                         </TableRow>
-                                        {expandedResponses.has(response.id) && (
-                                            <TableRow>
-                                                <TableCell
-                                                    colSpan={7}
-                                                    className="bg-muted/20 p-0"
-                                                >
-                                                    <div className="p-4 space-y-3">
-                                                        <h4 className="text-sm font-medium">
-                                                            Answers
-                                                        </h4>
-                                                        {response.answers &&
-                                                        response.answers
-                                                            .length > 0 ? (
-                                                            <div className="space-y-2">
-                                                                {response.answers.map(
-                                                                    (
-                                                                        answer,
-                                                                    ) => (
-                                                                        <div
-                                                                            key={
-                                                                                answer.id
-                                                                            }
-                                                                            className="grid col-span-2 items-start gap-4 p-3 bg-background rounded border"
-                                                                        >
-                                                                            <div className="flex-1">
-                                                                                {answer.question && (
-                                                                                    <p className="text-sm font-medium text-muted-foreground">
-                                                                                        {
-                                                                                            answer
-                                                                                                .question
-                                                                                                .question_text
-                                                                                        }
-                                                                                    </p>
-                                                                                )}
-                                                                                <div className="text-sm">
-                                                                                    {renderAnswer(
-                                                                                        answer,
-                                                                                    )}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    ),
-                                                                )}
-                                                            </div>
-                                                        ) : (
-                                                            <p className="text-sm text-muted-foreground">
-                                                                No answers yet
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
                                     </React.Fragment>
                                 ))
                             )}

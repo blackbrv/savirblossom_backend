@@ -23,6 +23,7 @@ import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuest
 import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
 import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
 import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
+import FeedbackDetailView from "./pages/Dashboard/Feedback/FeedbackDetailView";
 
 export default function Root() {
     return (
@@ -97,6 +98,10 @@ export default function Root() {
                         <Route
                             path="/dashboard/feedback"
                             element={<FeedbackResponses />}
+                        />
+                        <Route
+                            path="/dashboard/feedback/:id"
+                            element={<FeedbackDetailView />}
                         />
                         <Route
                             path="/dashboard/feedback/questions"
