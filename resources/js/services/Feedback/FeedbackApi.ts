@@ -232,3 +232,54 @@ export function useDeleteFeedback() {
         },
     });
 }
+
+type UpdateFeedbackData = {
+    answers: Array<{
+        id: number;
+        rating_value?: number;
+        text_value?: string;
+        boolean_value?: boolean;
+        reason_value?: string;
+    }>;
+};
+
+async function updateFeedback(
+    id: number,
+    data: UpdateFeedbackData,
+): Promise<{ data: FeedbackResponseType }> {
+    const response = await api<{ data: FeedbackResponseType }>(
+        `/api/feedback/${id}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify(data),
+        },
+    );
+
+    return response;
+}
+
+export function useUpdateFeedback() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, data }: { id: number; data: UpdateFeedbackData }) =>
+            updateFeedback(id, data),
+        onSuccess: (result) => {
+            toast.success("Feedback updated successfully", {
+                position: "top-center",
+            });
+            queryClient.invalidateQueries({ queryKey: ["feedback:list"] });
+            queryClient.setQueryData(["feedback:detail", result?.data?.id], result);
+        },
+        onError: (error) => {
+            toast.error("Failed to update feedback", {
+                position: "top-center",
+            });
+            console.error(error);
+        },
+    });
+}
