@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BouquetImagesController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FeedbackQuestionsTemplateController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
@@ -126,4 +127,11 @@ Route::prefix('feedback-questions-templates')->group(function () {
     Route::put('/{id}/questions/{questionId}', [FeedbackQuestionsTemplateController::class, 'updateQuestion'])->whereNumber('id')->whereNumber('questionId')->name('feedback-templates.update-question');
     Route::delete('/{id}/questions/{questionId}', [FeedbackQuestionsTemplateController::class, 'deleteQuestion'])->whereNumber('id')->whereNumber('questionId')->name('feedback-templates.delete-question');
     Route::post('/{id}/questions/reorder', [FeedbackQuestionsTemplateController::class, 'reorderQuestions'])->whereNumber('id')->name('feedback-templates.reorder');
+});
+
+Route::prefix('feedback')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index'])->name('feedback.list');
+    Route::post('/', [FeedbackController::class, 'store'])->name('feedback.store');
+    Route::get('/{id}', [FeedbackController::class, 'show'])->whereNumber('id')->name('feedback.show');
+    Route::delete('/{id}', [FeedbackController::class, 'destroy'])->whereNumber('id')->name('feedback.destroy');
 });
