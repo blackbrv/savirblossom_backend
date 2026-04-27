@@ -1,14 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import {
     Select,
     SelectContent,
@@ -24,23 +16,17 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-    useFeedbackResponses,
-    useDeleteFeedback,
-    FeedbackResponseType,
-} from "@/services/Feedback/FeedbackApi";
-import { X, Trash2, Eye } from "lucide-react";
+import DataTable from "@/src/components/ui/DataTable";
+import { useFeedbackResponses } from "@/services/Feedback/FeedbackApi";
+import { feedbackColumns } from "@/lib/columns/feedback.columns";
+import { ColumnDef } from "@tanstack/react-table";
+import { X } from "lucide-react";
 import { useDebounce } from "@/hooks/useDebounce";
-import DeleteConfirmationDialog from "@/src/components/ui/DeleteConfirmationDialog";
 
 export default function FeedbackResponses() {
-    const navigate = useNavigate();
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
     const [search, setSearch] = React.useState("");
-    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
-    const [responseToDelete, setResponseToDelete] =
-        React.useState<FeedbackResponseType | null>(null);
 
     const debouncedSearch = useDebounce(search, 400);
 
@@ -53,8 +39,6 @@ export default function FeedbackResponses() {
         perPage,
     });
 
-    const deleteMutation = useDeleteFeedback();
-
     const responses = data?.data ?? [];
     const currentPage = data?.meta?.current_page ?? 1;
     const lastPage = data?.meta?.last_page ?? 1;
@@ -66,23 +50,6 @@ export default function FeedbackResponses() {
     };
 
     const hasActiveFilters = search !== "";
-
-    const handleDeleteClick = (response: FeedbackResponseType) => {
-        setResponseToDelete(response);
-        setDeleteDialogOpen(true);
-    };
-
-    const handleDeleteConfirm = async () => {
-        if (responseToDelete) {
-            try {
-                await deleteMutation.mutateAsync(responseToDelete.id);
-                setDeleteDialogOpen(false);
-                setResponseToDelete(null);
-            } catch {
-                // Error handled by mutation
-            }
-        }
-    };
 
     return (
         <main className="h-screen mx-auto flex flex-col gap-8 justify-center p-6">
@@ -107,120 +74,28 @@ export default function FeedbackResponses() {
                     )}
                 </div>
 
-                <div className="border border-border rounded-md overflow-hidden">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-10">ID</TableHead>
-                                <TableHead>Customer</TableHead>
-                                <TableHead>Order</TableHead>
-                                <TableHead>Bouquet</TableHead>
-                                <TableHead>Rating</TableHead>
-                                <TableHead>Date</TableHead>
-                                <TableHead className="text-right">
-                                    Actions
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {isLoading ? (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={7}
-                                        className="h-24 text-center"
-                                    >
-                                        Loading...
-                                    </TableCell>
-                                </TableRow>
-                            ) : responses.length === 0 ? (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={7}
-                                        className="h-24 text-center"
-                                    >
-                                        No feedback responses yet
-                                    </TableCell>
-                                </TableRow>
-                            ) : (
-                                responses.map((response) => (
-                                    <React.Fragment key={response.id}>
-                                        <TableRow>
-                                            <TableCell>{response.id}</TableCell>
-                                            <TableCell>
-                                                {response.customer
-                                                    ? `${response.customer.username} (${response.customer.email})`
-                                                    : "Guest"}
-                                            </TableCell>
-                                            <TableCell>
-                                                {response.order
-                                                    ? `#${response.order.id}`
-                                                    : "-"}
-                                            </TableCell>
-                                            <TableCell>
-                                                {response.bouquet?.name || "-"}
-                                            </TableCell>
-                                            <TableCell>
-                                                {response.average_rating ? (
-                                                    <div className="flex items-center gap-1">
-                                                        <span className="text-yellow-500">
-                                                            ★
-                                                        </span>
-                                                        <span>
-                                                            {response.average_rating.toFixed(
-                                                                1,
-                                                            )}
-                                                        </span>
-                                                    </div>
-                                                ) : (
-                                                    "-"
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {new Date(
-                                                    response.created_at,
-                                                ).toLocaleDateString("en-US", {
-                                                    month: "short",
-                                                    day: "numeric",
-                                                    year: "numeric",
-                                                })}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `/dashboard/feedback/${response.id}`,
-                                                            )
-                                                        }
-                                                    >
-                                                        <Eye className="size-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDeleteClick(
-                                                                response,
-                                                            )
-                                                        }
-                                                        disabled={
-                                                            deleteMutation.isPending
-                                                        }
-                                                        className="text-destructive hover:text-destructive"
-                                                    >
-                                                        <Trash2 className="size-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    </React.Fragment>
-                                ))
-                            )}
-                        </TableBody>
-                    </Table>
+                <div className="flex flex-wrap justify-between items-start gap-3 p-4 bg-muted/30 rounded-lg">
+                    <div className="flex flex-wrap gap-3 items-end">
+                        <span className="text-sm text-muted-foreground">
+                            Search by customer, order, or bouquet coming soon...
+                        </span>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 w-full md:w-auto md:max-w-52">
+                        <Input
+                            placeholder="Search..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
                 </div>
+
+                <DataTable
+                    columns={feedbackColumns as ColumnDef<unknown, unknown>[]}
+                    data={responses}
+                    loading={isLoading}
+                />
 
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
@@ -303,15 +178,6 @@ export default function FeedbackResponses() {
                     )}
                 </div>
             </section>
-
-            <DeleteConfirmationDialog
-                title="Delete Feedback"
-                description={`Are you sure you want to delete this feedback response?`}
-                open={deleteDialogOpen}
-                onOpenChange={setDeleteDialogOpen}
-                onConfirm={handleDeleteConfirm}
-                isLoading={deleteMutation.isPending}
-            />
         </main>
     );
 }
