@@ -28,6 +28,7 @@ function createFeedbackActionsColumn() {
                     id={id}
                     name={name}
                     previewHref={`/dashboard/feedback/${id}`}
+                    editHref={`/dashboard/feedback/${id}/edit`}
                     onDelete={() => deleteFeedbackMutation.mutateAsync(id)}
                     isDeleting={deleteFeedbackMutation.isPending}
                 />
