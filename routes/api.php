@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BouquetImagesController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\FeedbackQuestionsTemplateController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PasswordSetupController;
@@ -113,4 +114,16 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::delete('/{id}', [CartController::class, 'destroy'])->whereNumber('id')->name('cart.remove');
     Route::delete('/', [CartController::class, 'clear'])->name('cart.clear');
     Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+});
+
+Route::prefix('feedback-questions-templates')->group(function () {
+    Route::get('/', [FeedbackQuestionsTemplateController::class, 'index'])->name('feedback-templates.list');
+    Route::post('/', [FeedbackQuestionsTemplateController::class, 'store'])->name('feedback-templates.store');
+    Route::get('/{id}', [FeedbackQuestionsTemplateController::class, 'show'])->whereNumber('id')->name('feedback-templates.show');
+    Route::put('/{id}', [FeedbackQuestionsTemplateController::class, 'update'])->whereNumber('id')->name('feedback-templates.update');
+    Route::delete('/{id}', [FeedbackQuestionsTemplateController::class, 'destroy'])->whereNumber('id')->name('feedback-templates.destroy');
+    Route::post('/{id}/questions', [FeedbackQuestionsTemplateController::class, 'addQuestion'])->whereNumber('id')->name('feedback-templates.add-question');
+    Route::put('/{id}/questions/{questionId}', [FeedbackQuestionsTemplateController::class, 'updateQuestion'])->whereNumber('id')->whereNumber('questionId')->name('feedback-templates.update-question');
+    Route::delete('/{id}/questions/{questionId}', [FeedbackQuestionsTemplateController::class, 'deleteQuestion'])->whereNumber('id')->whereNumber('questionId')->name('feedback-templates.delete-question');
+    Route::post('/{id}/questions/reorder', [FeedbackQuestionsTemplateController::class, 'reorderQuestions'])->whereNumber('id')->name('feedback-templates.reorder');
 });

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bouquet extends Model
 {
@@ -13,6 +14,7 @@ class Bouquet extends Model
         'stock',
         'category_id',
         'published',
+        'feedback_questions_template_id',
     ];
 
     protected $hidden = ['category_id'];
@@ -35,6 +37,11 @@ class Bouquet extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function feedbackTemplate(): BelongsTo
+    {
+        return $this->belongsTo(FeedbackQuestionsTemplate::class, 'feedback_questions_template_id');
     }
 
     public function scopePublished($query)
