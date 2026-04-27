@@ -97,11 +97,11 @@ export default function FeedbackDetailView() {
     }
 
     return (
-        <main className="h-screen flex flex-col gap-8 justify-center p-6">
+        <main className="min-h-screen flex flex-col gap-8 justify-center p-6">
             <h3 className="desktop-tablet__heading__h3 text-primary">
                 Feedback Details
             </h3>
-            <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg overflow-auto">
+            <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg">
                 <div className="flex gap-3 items-center justify-between">
                     <Button
                         variant="ghost"
