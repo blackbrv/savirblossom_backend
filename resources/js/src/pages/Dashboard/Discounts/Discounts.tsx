@@ -8,14 +8,10 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-    useCoupons,
-    useDeleteCoupon,
-    useToggleCoupon,
-    type CouponType,
-} from "@/services/Coupons/CouponsApi";
+import { useCoupons } from "@/services/Coupons/CouponsApi";
 import DataTable from "@/src/components/ui/DataTable";
-import { Plus, Tag, Trash2 } from "lucide-react";
+import { couponColumns } from "@/lib/columns";
+import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -24,128 +20,11 @@ export default function Discounts() {
     const [page, setPage] = React.useState(1);
     const [perPage, setPerPage] = React.useState(10);
 
-    const { data, isLoading, refetch } = useCoupons();
-    const deleteMutation = useDeleteCoupon();
-    const toggleMutation = useToggleCoupon();
+    const { data, isLoading } = useCoupons();
 
     const coupons = data?.data ?? [];
     const currentPage = 1;
     const lastPage = 1;
-
-    const handleDelete = async (id: number) => {
-        if (confirm("Are you sure you want to delete this coupon?")) {
-            try {
-                await deleteMutation.mutateAsync(id);
-                refetch();
-            } catch (error) {
-                console.error("Failed to delete coupon:", error);
-            }
-        }
-    };
-
-    const handleToggle = async (id: number) => {
-        try {
-            await toggleMutation.mutateAsync(id);
-            refetch();
-        } catch (error) {
-            console.error("Failed to toggle coupon:", error);
-        }
-    };
-
-    const columns: ColumnDef<CouponType>[] = [
-        {
-            accessorKey: "code",
-            header: "Code",
-            cell: ({ row }) => (
-                <div className="flex items-center gap-2">
-                    <Tag className="size-4 text-muted-foreground" />
-                    <span className="font-medium">{row.original.code}</span>
-                </div>
-            ),
-        },
-        {
-            accessorKey: "name",
-            header: "Name",
-        },
-        {
-            accessorKey: "discount_type",
-            header: "Type",
-            cell: ({ row }) => (
-                <span className="capitalize">
-                    {row.original.discount_type === "percentage"
-                        ? `${row.original.discount_value}%`
-                        : `$${row.original.discount_value}`}
-                </span>
-            ),
-        },
-        {
-            accessorKey: "usage_count",
-            header: "Usage",
-            cell: ({ row }) => (
-                <span>
-                    {row.original.usage_count}
-                    {row.original.usage_limit &&
-                        ` / ${row.original.usage_limit}`}
-                </span>
-            ),
-        },
-        {
-            accessorKey: "valid_until",
-            header: "Expires",
-            cell: ({ row }) =>
-                row.original.valid_until
-                    ? new Date(row.original.valid_until).toLocaleDateString()
-                    : "-",
-        },
-        {
-            accessorKey: "is_active",
-            header: "Status",
-            cell: ({ row }) => (
-                <span
-                    className={`px-2 py-1 rounded text-xs ${
-                        row.original.is_active
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                    }`}
-                >
-                    {row.original.is_active ? "Active" : "Inactive"}
-                </span>
-            ),
-        },
-        {
-            id: "actions",
-            header: "Actions",
-            cell: ({ row }) => (
-                <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                            navigate(
-                                `/dashboard/discount/${row.original.id}/edit`,
-                            )
-                        }
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleToggle(row.original.id)}
-                    >
-                        {row.original.is_active ? "Deactivate" : "Activate"}
-                    </Button>
-                    <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(row.original.id)}
-                    >
-                        <Trash2 className="size-4" />
-                    </Button>
-                </div>
-            ),
-        },
-    ];
 
     return (
         <main className="h-screen mx-auto flex flex-col gap-8 justify-center p-6">
@@ -163,7 +42,7 @@ export default function Discounts() {
                 </div>
 
                 <DataTable
-                    columns={columns as ColumnDef<unknown, unknown>[]}
+                    columns={couponColumns as ColumnDef<unknown, unknown>[]}
                     data={coupons}
                     loading={isLoading}
                 />

@@ -5,4 +5,5 @@ export {
 } from "./bouquet.columns";
 export { customerColumns } from "./customer.columns";
 export { orderColumns } from "./order.columns";
+export { couponColumns } from "./coupon.columns";
 export { ActionsCell } from "./ActionsCell";

@@ -22,7 +22,9 @@ import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
 import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestions";
 import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
 import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
+import FeedbackTemplateDetailView from "./pages/Dashboard/FeedbackQuestions/FeedbackTemplateDetailView";
 import Discounts from "./pages/Dashboard/Discounts/Discounts";
+import DiscountDetails from "./pages/Dashboard/Discounts/DiscountDetails";
 import DiscountCreate from "./pages/Dashboard/Discounts/DiscountCreate";
 import DiscountEdit from "./pages/Dashboard/Discounts/DiscountEdit";
 import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
@@ -116,6 +118,10 @@ export default function Root() {
                             element={<FeedbackQuestions />}
                         />
                         <Route
+                            path="/dashboard/feedback/questions/:id"
+                            element={<FeedbackTemplateDetailView />}
+                        />
+                        <Route
                             path="/dashboard/feedback/questions/create"
                             element={<FeedbackQuestionsCreate />}
                         />
@@ -130,6 +136,10 @@ export default function Root() {
                         <Route
                             path="/dashboard/discount/create"
                             element={<DiscountCreate />}
+                        />
+                        <Route
+                            path="/dashboard/discount/:id"
+                            element={<DiscountDetails />}
                         />
                         <Route
                             path="/dashboard/discount/:id/edit"

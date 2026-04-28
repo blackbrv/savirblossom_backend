@@ -14,11 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    useCoupon,
-    useUpdateCoupon,
-    type CreateCouponData,
-} from "@/services/Coupons/CouponsApi";
+import { useCoupon, useUpdateCoupon } from "@/services/Coupons/CouponsApi";
 
 type CouponFormData = {
     code: string;
@@ -110,41 +106,41 @@ export default function DiscountEdit() {
 
     if (isFetching) {
         return (
-            <main className="h-screen mx-auto flex flex-col gap-8 justify-center p-6">
-                <div className="flex items-center gap-4">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => navigate("/dashboard/discount")}
-                    >
-                        <ArrowLeft className="size-4" />
-                    </Button>
-                    <h3 className="desktop-tablet__heading__h3 text-primary">
-                        Edit Coupon
-                    </h3>
-                </div>
+            <main className="h-screen flex flex-col gap-8 justify-center p-6">
+                <h3 className="desktop-tablet__heading__h3 text-primary">
+                    Edit Coupon
+                </h3>
                 <p>Loading...</p>
             </main>
         );
     }
 
     return (
-        <main className="h-screen mx-auto flex flex-col gap-8 justify-center p-6">
-            <div className="flex items-center gap-4">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => navigate("/dashboard/discount")}
-                >
-                    <ArrowLeft className="size-4" />
-                </Button>
-                <h3 className="desktop-tablet__heading__h3 text-primary">
-                    Edit Coupon
-                </h3>
-            </div>
+        <main className="h-screen flex flex-col gap-8 justify-center p-6">
+            <h3 className="desktop-tablet__heading__h3 text-primary">
+                Edit Coupon
+            </h3>
+            <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg">
+                <div className="flex gap-3 items-center justify-between">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => navigate("/dashboard/discount")}
+                        className="gap-2"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Back to Discounts
+                    </Button>
+                    <Button
+                        type="submit"
+                        form="coupon-form"
+                        disabled={isSubmitting}
+                    >
+                        Save Changes
+                    </Button>
+                </div>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <section className="bg-background border border-border w-full h-full flex flex-col gap-6 p-6 rounded-lg">
+                <form id="coupon-form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="code">Code *</Label>
@@ -327,21 +323,8 @@ export default function DiscountEdit() {
                             <Label htmlFor="is_stackable">Stackable</Label>
                         </div>
                     </div>
-
-                    <div className="flex justify-end gap-3 pt-4 border-t">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => navigate("/dashboard/discount")}
-                        >
-                            Cancel
-                        </Button>
-                        <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "Saving..." : "Save Changes"}
-                        </Button>
-                    </div>
-                </section>
-            </form>
+                </form>
+            </section>
         </main>
     );
 }
