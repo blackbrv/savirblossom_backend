@@ -62,7 +62,7 @@ export default function FeedbackTemplateDetailView() {
     }
 
     return (
-        <main className="h-screen flex flex-col gap-8 justify-center p-6">
+        <main className="min-h-screen flex flex-col gap-8 justify-center p-6">
             <h3 className="desktop-tablet__heading__h3 text-primary">
                 Feedback Template Details
             </h3>
