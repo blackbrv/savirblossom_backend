@@ -17,6 +17,10 @@ class FeedbackController extends Controller
         $orderId = $request->input('order_id');
         $bouquetId = $request->input('bouquet_id');
         $customerId = $request->input('customer_id');
+        $rating = $request->input('rating');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
+        $search = $request->input('search');
 
         $query = FeedbackResponse::with(['customer', 'order', 'bouquet', 'answers.question']);
 
@@ -30,6 +34,33 @@ class FeedbackController extends Controller
 
         if ($customerId) {
             $query->where('customer_id', $customerId);
+        }
+
+        if ($rating) {
+            $query->whereHas('answers', function ($q) use ($rating) {
+                $q->where('rating_value', $rating);
+            });
+        }
+
+        if ($dateFrom) {
+            $query->where('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $query->where('created_at', '<=', $dateTo . ' 23:59:59');
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('customer', function ($cq) use ($search) {
+                    $cq->where('username', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+                ->orWhereHas('bouquet', function ($bq) use ($search) {
+                    $bq->where('name', 'like', "%{$search}%");
+                })
+                ->orWhere('id', 'like', "%{$search}%");
+            });
         }
 
         $responses = $query->orderBy('created_at', 'desc')

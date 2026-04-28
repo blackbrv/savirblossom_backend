@@ -73,6 +73,10 @@ type GetFeedbackResponsesParams = {
     order_id?: number;
     bouquet_id?: number;
     customer_id?: number;
+    rating?: number;
+    date_from?: string;
+    date_to?: string;
+    search?: string;
 };
 
 async function GetFeedbackResponses({
@@ -81,6 +85,10 @@ async function GetFeedbackResponses({
     order_id,
     bouquet_id,
     customer_id,
+    rating,
+    date_from,
+    date_to,
+    search,
 }: GetFeedbackResponsesParams): Promise<GetFeedbackResponsesPaginatedResponse> {
     const params = new URLSearchParams();
     params.append("page", page.toString());
@@ -88,6 +96,10 @@ async function GetFeedbackResponses({
     if (order_id) params.append("order_id", order_id.toString());
     if (bouquet_id) params.append("bouquet_id", bouquet_id.toString());
     if (customer_id) params.append("customer_id", customer_id.toString());
+    if (rating) params.append("rating", rating.toString());
+    if (date_from) params.append("date_from", date_from);
+    if (date_to) params.append("date_to", date_to);
+    if (search) params.append("search", search);
 
     const response = await api<GetFeedbackResponsesPaginatedResponse>(
         `/api/feedback?${params.toString()}`,
@@ -108,6 +120,10 @@ export function useFeedbackResponses({
     order_id,
     bouquet_id,
     customer_id,
+    rating,
+    date_from,
+    date_to,
+    search,
 }: GetFeedbackResponsesParams) {
     return useQuery({
         queryKey: [
@@ -117,6 +133,10 @@ export function useFeedbackResponses({
             order_id,
             bouquet_id,
             customer_id,
+            rating,
+            date_from,
+            date_to,
+            search,
         ],
         queryFn: () =>
             GetFeedbackResponses({
@@ -125,6 +145,10 @@ export function useFeedbackResponses({
                 order_id,
                 bouquet_id,
                 customer_id,
+                rating,
+                date_from,
+                date_to,
+                search,
             }),
     });
 }
