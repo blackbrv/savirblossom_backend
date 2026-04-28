@@ -22,7 +22,7 @@ class CouponController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'code' => ['required', 'string', 'max:50', 'unique:coupons,code'],
+            'code' => ['nullable', 'string', 'max:50', 'unique:coupons,code'],
             'name' => ['required', 'string', 'max:255'],
             'discount_type' => ['required', 'in:percentage,fixed_amount'],
             'discount_value' => ['required', 'numeric', 'min:0'],
@@ -40,8 +40,14 @@ class CouponController extends Controller
             'category_ids.*' => ['integer', 'exists:bouquet_categories,id'],
         ]);
 
+        $code = $validated['code'] ?? null;
+
+        if (empty($code)) {
+            $code = $this->generateUniqueCode();
+        }
+
         $coupon = Coupon::create([
-            'code' => strtoupper($validated['code']),
+            'code' => strtoupper($code),
             'name' => $validated['name'],
             'discount_type' => $validated['discount_type'],
             'discount_value' => $validated['discount_value'],
@@ -188,5 +194,24 @@ class CouponController extends Controller
             ],
             'discount' => $result->discount,
         ]);
+    }
+
+    private function generateUniqueCode(): string
+    {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $maxAttempts = 10;
+
+        for ($i = 0; $i < $maxAttempts; $i++) {
+            $code = 'SAVE';
+            for ($j = 0; $j < 6; $j++) {
+                $code .= $chars[random_int(0, strlen($chars) - 1)];
+            }
+
+            if (! Coupon::where('code', $code)->exists()) {
+                return $code;
+            }
+        }
+
+        return 'SAVE'.uniqid();
     }
 }

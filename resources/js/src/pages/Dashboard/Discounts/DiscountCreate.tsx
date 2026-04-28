@@ -1,6 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -14,10 +13,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    useCreateCoupon,
-    type CreateCouponData,
-} from "@/services/Coupons/CouponsApi";
+import { useCreateCoupon } from "@/services/Coupons/CouponsApi";
+
+function generateCouponCode(): string {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "SAVE";
+    for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+}
 
 type CouponFormData = {
     code: string;
@@ -69,6 +74,11 @@ export default function DiscountCreate() {
     const is_stackable = watch("is_stackable");
     const discount_type = watch("discount_type");
 
+    const handleGenerateCode = () => {
+        const newCode = generateCouponCode();
+        setValue("code", newCode);
+    };
+
     const onSubmit = async (data: CouponFormData) => {
         try {
             const response = await createCouponMutation.mutateAsync(data);
@@ -80,32 +90,51 @@ export default function DiscountCreate() {
     };
 
     return (
-        <main className="h-screen mx-auto flex flex-col gap-8 justify-center p-6">
-            <div className="flex items-center gap-4">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => navigate("/dashboard/discount")}
-                >
-                    <ArrowLeft className="size-4" />
-                </Button>
-                <h3 className="desktop-tablet__heading__h3 text-primary">
-                    Create New Coupon
-                </h3>
-            </div>
+        <main className="h-screen flex flex-col gap-8 justify-center p-6">
+            <h3 className="desktop-tablet__heading__h3 text-primary">
+                Create New Coupon
+            </h3>
+            <section className="bg-background border border-border w-full h-full flex flex-col gap-4 p-4 rounded-lg">
+                <div className="flex gap-3 items-center justify-between">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => navigate("/dashboard/discount")}
+                        className="gap-2"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Back to Discounts
+                    </Button>
+                    <Button
+                        type="submit"
+                        form="coupon-form"
+                        disabled={isSubmitting}
+                    >
+                        Create Coupon
+                    </Button>
+                </div>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <section className="bg-background border border-border w-full h-full flex flex-col gap-6 p-6 rounded-lg">
+                <form id="coupon-form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="code">Code *</Label>
-                            <Input
-                                id="code"
-                                {...register("code", {
-                                    required: "Code is required",
-                                })}
-                                placeholder="e.g., SUMMER20"
-                            />
+                            <div className="flex gap-2">
+                                <Input
+                                    id="code"
+                                    {...register("code")}
+                                    placeholder="Leave empty to auto-generate"
+                                    className="flex-1"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleGenerateCode}
+                                >
+                                    <RefreshCw className="size-4 mr-1" />
+                                    Generate
+                                </Button>
+                            </div>
                             {errors.code && (
                                 <p className="text-sm text-red-500">
                                     {errors.code.message}
@@ -278,21 +307,8 @@ export default function DiscountCreate() {
                             <Label htmlFor="is_stackable">Stackable</Label>
                         </div>
                     </div>
-
-                    <div className="flex justify-end gap-3 pt-4 border-t">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => navigate("/dashboard/discount")}
-                        >
-                            Cancel
-                        </Button>
-                        <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "Creating..." : "Create Coupon"}
-                        </Button>
-                    </div>
-                </section>
-            </form>
+                </form>
+            </section>
         </main>
     );
 }
