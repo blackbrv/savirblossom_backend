@@ -15,7 +15,9 @@ export const selectColumn: ColumnDef<unknown> = {
                 table.getIsAllPageRowsSelected() ||
                 (table.getIsSomePageRowsSelected() && "indeterminate")
             }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+            }
             aria-label="Select all"
         />
     ),
@@ -34,7 +36,13 @@ function createCustomerActionsColumn() {
     return {
         accessorKey: "id",
         header: "Actions",
-        cell: ({ getValue, row }: { getValue: () => unknown; row: { original: CustomerType } }) => {
+        cell: ({
+            getValue,
+            row,
+        }: {
+            getValue: () => unknown;
+            row: { original: CustomerType };
+        }) => {
             const deleteCustomerMutation = useDeleteCustomer();
             const id = getValue() as number;
             const { email } = row.original;
