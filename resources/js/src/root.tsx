@@ -17,12 +17,15 @@ import CustomerDetails from "./pages/Dashboard/Customers/CustomerDetails";
 import CustomerEdit from "./pages/Dashboard/Customers/CustomerEdit";
 import Orders from "./pages/Dashboard/Orders/Orders";
 import OrderCreate from "./pages/Dashboard/Orders/OrderCreate";
-import OrderDetailView from "./pages/Dashboard/Orders/OrderDetailView";
 import OrderEdit from "./pages/Dashboard/Orders/OrderEdit";
 import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestions";
 import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
 import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
 import FeedbackTemplateDetailView from "./pages/Dashboard/FeedbackQuestions/FeedbackTemplateDetailView";
+import Forms from "./pages/Dashboard/Forms/Forms";
+import FormCreate from "./pages/Dashboard/Forms/FormCreate";
+import FormEdit from "./pages/Dashboard/Forms/FormEdit";
+import FormDetailView from "./pages/Dashboard/Forms/FormDetailView";
 import Discounts from "./pages/Dashboard/Discounts/Discounts";
 import DiscountDetails from "./pages/Dashboard/Discounts/DiscountDetails";
 import DiscountCreate from "./pages/Dashboard/Discounts/DiscountCreate";
@@ -30,6 +33,7 @@ import DiscountEdit from "./pages/Dashboard/Discounts/DiscountEdit";
 import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
 import FeedbackDetailView from "./pages/Dashboard/Feedback/FeedbackDetailView";
 import FeedbackEdit from "./pages/Dashboard/Feedback/FeedbackEdit";
+import OrderDetails from "./pages/Dashboard/Orders/OrderDetails";
 
 export default function Root() {
     return (
@@ -95,7 +99,7 @@ export default function Root() {
                         />
                         <Route
                             path="/dashboard/orders/:id"
-                            element={<OrderDetailView />}
+                            element={<OrderDetails />}
                         />
                         <Route
                             path="/dashboard/orders/:id/edit"
@@ -128,6 +132,22 @@ export default function Root() {
                         <Route
                             path="/dashboard/feedback/questions/:id/edit"
                             element={<FeedbackQuestionsEdit />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder"
+                            element={<Forms />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder/create"
+                            element={<FormCreate />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder/:id"
+                            element={<FormDetailView />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder/:id/edit"
+                            element={<FormEdit />}
                         />
                         <Route
                             path="/dashboard/discount"

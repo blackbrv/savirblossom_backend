@@ -47,7 +47,7 @@ class FeedbackController extends Controller
         }
 
         if ($dateTo) {
-            $query->where('created_at', '<=', $dateTo . ' 23:59:59');
+            $query->where('created_at', '<=', $dateTo.' 23:59:59');
         }
 
         if ($search) {
@@ -56,10 +56,10 @@ class FeedbackController extends Controller
                     $cq->where('username', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                 })
-                ->orWhereHas('bouquet', function ($bq) use ($search) {
-                    $bq->where('name', 'like', "%{$search}%");
-                })
-                ->orWhere('id', 'like', "%{$search}%");
+                    ->orWhereHas('bouquet', function ($bq) use ($search) {
+                        $bq->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhere('id', 'like', "%{$search}%");
             });
         }
 

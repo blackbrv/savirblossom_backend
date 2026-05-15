@@ -8,7 +8,7 @@ import {
 } from "./menubar";
 import React from "react";
 import { AvailableTheme, Theme, useTheme } from "./theme-provider";
-import { CircleUserRound } from "lucide-react";
+import { ChevronDown, CircleUserRound } from "lucide-react";
 import { useUser } from "@/hooks/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { NavigationList } from "@/constants/NavbarConfig";
@@ -32,7 +32,9 @@ export default function Navbar({
                                 return (
                                     <MenubarMenu key={index}>
                                         <MenubarTrigger
+                                            className="group gap-1"
                                             onClick={(e) => {
+                                                e.preventDefault();
                                                 if (
                                                     !item.submenu &&
                                                     item.value
@@ -42,6 +44,13 @@ export default function Navbar({
                                             }}
                                         >
                                             {item.title}
+                                            {item.submenu &&
+                                                item.submenu.length > 0 && (
+                                                    <ChevronDown
+                                                        size={18}
+                                                        className="group-data-[state=open]:rotate-180 transition-all"
+                                                    />
+                                                )}
                                         </MenubarTrigger>{" "}
                                         {item.submenu && (
                                             <MenubarPortal>
@@ -76,8 +85,12 @@ export default function Navbar({
                             })}
 
                         <MenubarMenu>
-                            <MenubarTrigger className="capitalize">
+                            <MenubarTrigger className="capitalize group gap-1 transition-all">
                                 {theme}
+                                <ChevronDown
+                                    size={18}
+                                    className="group-data-[state=open]:rotate-180 transition-all"
+                                />
                             </MenubarTrigger>
                             <MenubarPortal>
                                 <MenubarContent>
