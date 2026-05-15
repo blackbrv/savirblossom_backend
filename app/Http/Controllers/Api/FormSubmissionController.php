@@ -12,6 +12,28 @@ use Illuminate\Support\Facades\DB;
 
 class FormSubmissionController extends Controller
 {
+    public function all(Request $request)
+    {
+        $perPage = min($request->get('per_page', 10), 50);
+
+        $submissions = FormSubmission::with(['form', 'customer', 'answers.question'])
+            ->orderBy('submitted_at', 'desc')
+            ->paginate($perPage);
+
+        $submissions->getCollection()->transform(function ($submission) {
+            $firstAnswer = $submission->answers
+                ->sortBy('question.order')
+                ->first();
+            $submission->first_question_label = $firstAnswer?->question?->label;
+            $submission->first_answer_value = $firstAnswer?->value;
+            unset($submission->answers);
+
+            return $submission;
+        });
+
+        return response()->json(new PaginatedResourceCollection($submissions));
+    }
+
     public function index(Request $request, string $formId)
     {
         try {
@@ -37,6 +59,18 @@ class FormSubmissionController extends Controller
                 ->findOrFail($id);
 
             return response()->json(['data' => $submission]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Submission not found'], 404);
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $submission = FormSubmission::findOrFail($id);
+            $submission->delete();
+
+            return response()->json(['message' => 'Submission deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Submission not found'], 404);
         }

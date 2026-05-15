@@ -48,6 +48,16 @@ export const NavigationList: NavigationListProps[] = [
     {
         title: "Form Builder",
         value: "/dashboard/form-builder",
+        submenu: [
+            {
+                title: "Forms",
+                value: "/dashboard/form-builder",
+            },
+            {
+                title: "Form Responses",
+                value: "/dashboard/form-responses",
+            },
+        ],
     },
     {
         title: "Discount",
