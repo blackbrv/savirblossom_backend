@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\FeedbackQuestionsTemplateController;
+use App\Http\Controllers\Api\FormController;
+use App\Http\Controllers\Api\FormSubmissionController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PasswordSetupController;
@@ -136,6 +138,24 @@ Route::prefix('feedback')->group(function () {
     Route::get('/{id}', [FeedbackController::class, 'show'])->whereNumber('id')->name('feedback.show');
     Route::put('/{id}', [FeedbackController::class, 'update'])->whereNumber('id')->name('feedback.update');
     Route::delete('/{id}', [FeedbackController::class, 'destroy'])->whereNumber('id')->name('feedback.destroy');
+});
+
+Route::prefix('forms')->group(function () {
+    Route::get('/', [FormController::class, 'index'])->name('forms.list');
+    Route::post('/', [FormController::class, 'store'])->name('forms.store');
+    Route::get('/{id}', [FormController::class, 'show'])->whereNumber('id')->name('forms.show');
+    Route::put('/{id}', [FormController::class, 'update'])->whereNumber('id')->name('forms.update');
+    Route::delete('/{id}', [FormController::class, 'destroy'])->whereNumber('id')->name('forms.destroy');
+    Route::post('/{id}/questions', [FormController::class, 'addQuestion'])->whereNumber('id')->name('forms.add-question');
+    Route::put('/{id}/questions/{questionId}', [FormController::class, 'updateQuestion'])->whereNumber('id')->whereNumber('questionId')->name('forms.update-question');
+    Route::delete('/{id}/questions/{questionId}', [FormController::class, 'deleteQuestion'])->whereNumber('id')->whereNumber('questionId')->name('forms.delete-question');
+    Route::post('/{id}/questions/reorder', [FormController::class, 'reorderQuestions'])->whereNumber('id')->name('forms.reorder');
+    Route::get('/{id}/submissions', [FormSubmissionController::class, 'index'])->whereNumber('id')->name('forms.submissions.list');
+    Route::middleware('auth:sanctum')->post('/{id}/submit', [FormSubmissionController::class, 'submit'])->whereNumber('id')->name('forms.submit');
+});
+
+Route::prefix('submissions')->group(function () {
+    Route::get('/{id}', [FormSubmissionController::class, 'show'])->whereNumber('id')->name('submissions.show');
 });
 
 Route::prefix('coupons')->group(function () {
