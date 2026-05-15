@@ -26,6 +26,8 @@ import Forms from "./pages/Dashboard/Forms/Forms";
 import FormCreate from "./pages/Dashboard/Forms/FormCreate";
 import FormEdit from "./pages/Dashboard/Forms/FormEdit";
 import FormDetailView from "./pages/Dashboard/Forms/FormDetailView";
+import FormResponses from "./pages/Dashboard/FormResponses/FormResponses";
+import FormResponseDetail from "./pages/Dashboard/FormResponses/FormResponseDetail";
 import Discounts from "./pages/Dashboard/Discounts/Discounts";
 import DiscountDetails from "./pages/Dashboard/Discounts/DiscountDetails";
 import DiscountCreate from "./pages/Dashboard/Discounts/DiscountCreate";
@@ -148,6 +150,14 @@ export default function Root() {
                         <Route
                             path="/dashboard/form-builder/:id/edit"
                             element={<FormEdit />}
+                        />
+                        <Route
+                            path="/dashboard/form-responses"
+                            element={<FormResponses />}
+                        />
+                        <Route
+                            path="/dashboard/form-responses/:id"
+                            element={<FormResponseDetail />}
                         />
                         <Route
                             path="/dashboard/discount"
