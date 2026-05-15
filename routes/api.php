@@ -155,7 +155,9 @@ Route::prefix('forms')->group(function () {
 });
 
 Route::prefix('submissions')->group(function () {
+    Route::get('/', [FormSubmissionController::class, 'all'])->name('submissions.all');
     Route::get('/{id}', [FormSubmissionController::class, 'show'])->whereNumber('id')->name('submissions.show');
+    Route::delete('/{id}', [FormSubmissionController::class, 'destroy'])->whereNumber('id')->name('submissions.destroy');
 });
 
 Route::prefix('coupons')->group(function () {
