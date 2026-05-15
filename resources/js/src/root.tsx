@@ -22,6 +22,10 @@ import FeedbackQuestions from "./pages/Dashboard/FeedbackQuestions/FeedbackQuest
 import FeedbackQuestionsCreate from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsCreate";
 import FeedbackQuestionsEdit from "./pages/Dashboard/FeedbackQuestions/FeedbackQuestionsEdit";
 import FeedbackTemplateDetailView from "./pages/Dashboard/FeedbackQuestions/FeedbackTemplateDetailView";
+import Forms from "./pages/Dashboard/Forms/Forms";
+import FormCreate from "./pages/Dashboard/Forms/FormCreate";
+import FormEdit from "./pages/Dashboard/Forms/FormEdit";
+import FormDetailView from "./pages/Dashboard/Forms/FormDetailView";
 import Discounts from "./pages/Dashboard/Discounts/Discounts";
 import DiscountDetails from "./pages/Dashboard/Discounts/DiscountDetails";
 import DiscountCreate from "./pages/Dashboard/Discounts/DiscountCreate";
@@ -128,6 +132,22 @@ export default function Root() {
                         <Route
                             path="/dashboard/feedback/questions/:id/edit"
                             element={<FeedbackQuestionsEdit />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder"
+                            element={<Forms />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder/create"
+                            element={<FormCreate />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder/:id"
+                            element={<FormDetailView />}
+                        />
+                        <Route
+                            path="/dashboard/form-builder/:id/edit"
+                            element={<FormEdit />}
                         />
                         <Route
                             path="/dashboard/discount"
