@@ -47,3 +47,10 @@ export function formatDateInput(
     const date = new Date(value);
     return date.toISOString().split("T")[0] ?? "";
 }
+
+export function formatDateTimeInput(
+    value: string | null | undefined,
+): string {
+    if (!value) return "";
+    return value.replace(/\.\d+/, "").replace(/Z$/, "").replace(/[+-]\d{2}:\d{2}$/, "");
+}

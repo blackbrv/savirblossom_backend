@@ -36,6 +36,16 @@ import FeedbackResponses from "./pages/Dashboard/Feedback/FeedbackResponses";
 import FeedbackDetailView from "./pages/Dashboard/Feedback/FeedbackDetailView";
 import FeedbackEdit from "./pages/Dashboard/Feedback/FeedbackEdit";
 import OrderDetails from "./pages/Dashboard/Orders/OrderDetails";
+import Subscribers from "./pages/Dashboard/Newsletter/Subscribers";
+import SubscriberDetailView from "./pages/Dashboard/Newsletter/SubscriberDetailView";
+import Promos from "./pages/Dashboard/Promos/Promos";
+import PromoCreate from "./pages/Dashboard/Promos/PromoCreate";
+import PromoDetails from "./pages/Dashboard/Promos/PromoDetails";
+import PromoEdit from "./pages/Dashboard/Promos/PromoEdit";
+import Campaigns from "./pages/Dashboard/Campaigns/Campaigns";
+import CampaignCreate from "./pages/Dashboard/Campaigns/CampaignCreate";
+import CampaignDetails from "./pages/Dashboard/Campaigns/CampaignDetails";
+import CampaignEdit from "./pages/Dashboard/Campaigns/CampaignEdit";
 
 export default function Root() {
     return (
@@ -174,6 +184,46 @@ export default function Root() {
                         <Route
                             path="/dashboard/discount/:id/edit"
                             element={<DiscountEdit />}
+                        />
+                        <Route
+                            path="/dashboard/newsletter"
+                            element={<Subscribers />}
+                        />
+                        <Route
+                            path="/dashboard/newsletter/:id"
+                            element={<SubscriberDetailView />}
+                        />
+                        <Route
+                            path="/dashboard/promos"
+                            element={<Promos />}
+                        />
+                        <Route
+                            path="/dashboard/promos/create"
+                            element={<PromoCreate />}
+                        />
+                        <Route
+                            path="/dashboard/promos/:id"
+                            element={<PromoDetails />}
+                        />
+                        <Route
+                            path="/dashboard/promos/:id/edit"
+                            element={<PromoEdit />}
+                        />
+                        <Route
+                            path="/dashboard/campaigns"
+                            element={<Campaigns />}
+                        />
+                        <Route
+                            path="/dashboard/campaigns/create"
+                            element={<CampaignCreate />}
+                        />
+                        <Route
+                            path="/dashboard/campaigns/:id"
+                            element={<CampaignDetails />}
+                        />
+                        <Route
+                            path="/dashboard/campaigns/:id/edit"
+                            element={<CampaignEdit />}
                         />
                     </Routes>
                     <Footer />

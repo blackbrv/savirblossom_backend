@@ -63,4 +63,22 @@ export const NavigationList: NavigationListProps[] = [
         title: "Discount",
         value: "/dashboard/discount",
     },
+    {
+        title: "Marketing",
+        value: "/dashboard/promos",
+        submenu: [
+            {
+                title: "Subscribers",
+                value: "/dashboard/newsletter",
+            },
+            {
+                title: "Promos",
+                value: "/dashboard/promos",
+            },
+            {
+                title: "Campaigns",
+                value: "/dashboard/campaigns",
+            },
+        ],
+    },
 ];
