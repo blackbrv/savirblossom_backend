@@ -15,7 +15,6 @@
   <img src="https://img.shields.io/badge/PHP-8.2-777BB4?style=flat-square&logo=php" alt="PHP 8.2">
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react" alt="React 19">
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript" alt="TypeScript">
-  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT License">
 </p>
 
 ---
@@ -154,9 +153,3 @@ A complete **Postman collection** with 116+ endpoints across 20 modules is avail
 
 - [Latest Collection](./API-DOCS/Latest/SavirBlossom-API.postman_collection.json)
 - [Changelog](./API-DOCS/CHANGELOG.md)
-
----
-
-## License
-
-This project is open-sourced under the [MIT license](./LICENSE).
