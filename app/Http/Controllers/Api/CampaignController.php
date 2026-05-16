@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaginatedResourceCollection;
+use App\Jobs\SendCampaignJob;
 use App\Models\Campaign;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -107,6 +108,8 @@ class CampaignController extends Controller
             'sent_count' => 0,
             'failed_count' => 0,
         ]);
+
+        SendCampaignJob::dispatch($campaign->id);
 
         return response()->json([
             'message' => 'Campaign queued successfully',
