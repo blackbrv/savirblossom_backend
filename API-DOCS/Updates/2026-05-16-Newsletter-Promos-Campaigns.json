@@ -1,0 +1,3813 @@
+{
+  "info": {
+    "_postman_id": "c6a8aa26-c5e8-4608-8fbf-8e52bcb61b53",
+    "name": "SavirBlossom API",
+    "description": "SavirBlossom Backend API Collection - Updated 2026-05-16 (Finalized bodies, complete coverage)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16141130",
+    "_meta": {
+      "version": "1.2.0",
+      "date": "2026-05-16",
+      "feature": "Newsletter-Promos-Campaigns",
+      "change_notes": [
+        "Added Newsletter module: subscribe, unsubscribe, unsubscribeByEmail",
+        "Added Newsletter Subscribers module: list, show, toggle, delete",
+        "Added Promos module: list, create, show, update, delete, publish",
+        "Added Campaigns module: list, create, show, update, delete, queue",
+        "Updated collection from 97 to 116 endpoints across 20 folders"
+      ],
+      "breaking_changes": false
+    }
+  },
+  "item": [
+    {
+      "name": "Campaigns",
+      "item": [
+        {
+          "name": "List Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "campaigns"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "campaigns",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"promo_id\": 1,\n    \"subject\": \"Summer Sale is Here!\",\n    \"email_body\": \"<h1>Check out our summer deals!</h1>\",\n    \"scheduled_at\": \"2026-06-01T10:00:00Z\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Campaign",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/:campaignId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "campaigns",
+                ":campaignId"
+              ],
+              "variable": [
+                {
+                  "key": "campaignId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/update/:campaignId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "campaigns",
+                "update",
+                ":campaignId"
+              ],
+              "variable": [
+                {
+                  "key": "campaignId",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"subject\": \"Updated Subject Line\",\n    \"email_body\": \"<h1>Updated content</h1>\",\n    \"status\": \"draft\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/:campaignId/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "campaigns",
+                ":campaignId",
+                "delete"
+              ],
+              "variable": [
+                {
+                  "key": "campaignId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Queue Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/:campaignId/queue",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "campaigns",
+                ":campaignId",
+                "queue"
+              ],
+              "variable": [
+                {
+                  "key": "campaignId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Email campaign management"
+    },
+    {
+      "name": "Newsletter",
+      "item": [
+        {
+          "name": "Subscribe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/subscribe",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "subscribe"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"subscriber@example.com\",\n    \"name\": \"John Doe\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unsubscribe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/unsubscribe",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "unsubscribe"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"unsubscribe-token-here\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unsubscribe by Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/unsubscribe/email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "unsubscribe",
+                "email"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"subscriber@example.com\"\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Public newsletter subscription management"
+    },
+    {
+      "name": "Newsletter Subscribers",
+      "item": [
+        {
+          "name": "List Subscribers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/subscribers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "subscribers"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subscriber",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/subscribers/:subscriberId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "subscribers",
+                ":subscriberId"
+              ],
+              "variable": [
+                {
+                  "key": "subscriberId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Subscriber Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/subscribers/:subscriberId/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "subscribers",
+                ":subscriberId",
+                "toggle"
+              ],
+              "variable": [
+                {
+                  "key": "subscriberId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Subscriber",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/newsletter/subscribers/:subscriberId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "newsletter",
+                "subscribers",
+                ":subscriberId"
+              ],
+              "variable": [
+                {
+                  "key": "subscriberId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Admin management of newsletter subscribers"
+    },
+    {
+      "name": "Promos",
+      "item": [
+        {
+          "name": "List Promos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/promos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "promos"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Promo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/promos/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "promos",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Summer Sale\",\n    \"description\": \"Get 20% off all bouquets this summer\",\n    \"banner_image\": \"https://example.com/banner.jpg\",\n    \"status\": \"draft\",\n    \"scheduled_at\": \"2026-06-01T00:00:00Z\",\n    \"cta_label\": \"Shop Now\",\n    \"cta_url\": \"https://example.com/shop\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Promo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/promos/:promoId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "promos",
+                ":promoId"
+              ],
+              "variable": [
+                {
+                  "key": "promoId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Promo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/promos/update/:promoId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "promos",
+                "update",
+                ":promoId"
+              ],
+              "variable": [
+                {
+                  "key": "promoId",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Summer Sale Updated\",\n    \"description\": \"Updated description\",\n    \"status\": \"published\",\n    \"cta_label\": \"Shop Now\",\n    \"cta_url\": \"https://example.com/shop\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Promo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/promos/:promoId/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "promos",
+                ":promoId",
+                "delete"
+              ],
+              "variable": [
+                {
+                  "key": "promoId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Publish Promo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/promos/:promoId/publish",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "promos",
+                ":promoId",
+                "publish"
+              ],
+              "variable": [
+                {
+                  "key": "promoId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Promotional content management"
+    },
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Ping",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ping",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ping"
+              ]
+            },
+            "description": "Check if API is working"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"customer@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"username\": \"johndoe\",\n    \"phone_number\": \"081234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new customer account"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login with email and password"
+          },
+          "response": []
+        },
+        {
+          "name": "Google Redirect",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/google/redirect",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "google",
+                "redirect"
+              ]
+            },
+            "description": "Redirect to Google OAuth"
+          },
+          "response": []
+        },
+        {
+          "name": "Google Callback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"google_token\": \"google_oauth_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/google/callback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "google",
+                "callback"
+              ]
+            },
+            "description": "Handle Google OAuth callback"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set(\"token\", \"\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Logout current user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Get currently authenticated user info"
+          },
+          "response": []
+        },
+        {
+          "name": "Password Setup (Send Email)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"customer@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/password/setup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "password",
+                "setup"
+              ]
+            },
+            "description": "Send password setup email (for NEW customers without password). Frontend URL: /setup-password?token=xxx&email=xxx"
+          },
+          "response": []
+        },
+        {
+          "name": "Password Reset (Send Email)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"customer@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/password/reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "password",
+                "reset"
+              ]
+            },
+            "description": "Send password reset email (for EXISTING customers). Frontend URL: /reset-password?token=xxx&email=xxx"
+          },
+          "response": []
+        },
+        {
+          "name": "Password Confirm (Set Password & Login)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"john@example.com\",\n    \"token\": \"XbmNzqpPyRA78Xv18rSozOJviQL060h1Ccz53iRzSWBypEGScxgpUhf8TvTRO7FM\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/password/confirm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "password",
+                "confirm"
+              ]
+            },
+            "description": "Verify token and set password. Returns auth token for auto-login."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"customer@example.com\",\n    \"token\": \"verification_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/verify-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "verify-email"
+              ]
+            },
+            "description": "Verify email address with token"
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Verification Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"customer@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/resend-verification",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "resend-verification"
+              ]
+            },
+            "description": "Resend email verification link"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "List Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers?page=1&per_page=15",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                }
+              ]
+            },
+            "description": "Get paginated list of customers"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"newcustomer@example.com\",\n    \"username\": \"newcustomer\",\n    \"full_name\": \"John Doe\",\n    \"phone_number\": \"081234567891\",\n    \"birthday\": \"1990-01-15\",\n    \"profile_picture\": \"https://example.com/avatar.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers"
+              ]
+            },
+            "description": "Create a new customer account"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get customer details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"updated_username\",\n    \"full_name\": \"John Updated\",\n    \"phone_number\": \"081234567892\",\n    \"birthday\": \"1990-06-20\",\n    \"profile_picture\": \"https://example.com/new-avatar.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update customer details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Setup Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/resend-setup-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "resend-setup-email"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Resend password setup email to customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Verification Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/resend-verification-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "resend-verification-email"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Resend email verification to customer"
+          },
+          "response": []
+        },
+        {
+          "name": "List Customer Addresses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/addresses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "addresses"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get all addresses for a customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Customer Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"label\": \"Home\",\n    \"recipient_name\": \"John Doe\",\n    \"phone_number\": \"081234567890\",\n    \"address_line1\": \"Jl. Merdeka No. 123\",\n    \"address_line2\": \"RT 01 RW 02\",\n    \"city\": \"Jakarta\",\n    \"state\": \"DKI Jakarta\",\n    \"postal_code\": \"12345\",\n    \"country\": \"Indonesia\",\n    \"is_default\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/addresses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "addresses"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Create a new address for a customer"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Addresses",
+      "item": [
+        {
+          "name": "Update Address",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"label\": \"Office\",\n    \"recipient_name\": \"Jane Doe\",\n    \"phone_number\": \"081234567891\",\n    \"address_line1\": \"Jl. Sudirman No. 456\",\n    \"address_line2\": \"Gedung B Lantai 3\",\n    \"city\": \"Jakarta\",\n    \"state\": \"DKI Jakarta\",\n    \"postal_code\": \"12345\",\n    \"country\": \"Indonesia\",\n    \"is_default\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses/:addressId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "addresses",
+                ":addressId"
+              ],
+              "variable": [
+                {
+                  "key": "addressId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update an address by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Address",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses/:addressId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "addresses",
+                ":addressId"
+              ],
+              "variable": [
+                {
+                  "key": "addressId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete an address by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Set Default Address",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses/:addressId/set-default",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "addresses",
+                ":addressId",
+                "set-default"
+              ],
+              "variable": [
+                {
+                  "key": "addressId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Set an address as the default for its customer"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bouquets",
+      "item": [
+        {
+          "name": "List Bouquets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "per_page",
+                  "value": "15",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get paginated list of bouquets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bouquet",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get bouquet details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Bouquet",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Rose Romance\",\n    \"description\": \"A beautiful bouquet of roses\",\n    \"price\": 150000,\n    \"stock\": 50,\n    \"category_id\": 1,\n    \"galleries\": [\n        {\"src\": \"https://example.com/rose1.jpg\", \"alt_text\": \"Rose bouquet front view\"},\n        {\"src\": \"https://example.com/rose2.jpg\", \"alt_text\": \"Rose bouquet side view\"}\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "create"
+              ]
+            },
+            "description": "Create a new bouquet"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Bouquet",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Rose Romance\",\n    \"description\": \"An even more beautiful bouquet of roses\",\n    \"price\": 175000,\n    \"stock\": 45,\n    \"category_id\": 1,\n    \"published\": true,\n    \"feedback_questions_template_id\": 1,\n    \"galleries\": [\n        {\"id\": 1, \"src\": \"https://example.com/updated-rose.jpg\", \"alt_text\": \"Updated image\"},\n        {\"src\": \"https://example.com/new-rose.jpg\", \"alt_text\": \"New gallery image\"}\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/update/:bouquetId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "update",
+                ":bouquetId"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update bouquet details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Bouquet",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId",
+                "delete"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a bouquet"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Publish",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId/publish",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId",
+                "publish"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Toggle bouquet published status"
+          },
+          "response": []
+        },
+        {
+          "name": "List Bouquet Galleries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId/galleries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId",
+                "galleries"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get all gallery images for a bouquet"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Gallery Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"src\": \"https://example.com/image.jpg\",\n    \"alt_text\": \"Bouquet image\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId/galleries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId",
+                "galleries"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Add a gallery image to a bouquet"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Gallery Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"src\": \"https://example.com/updated-image.jpg\",\n    \"alt_text\": \"Updated alt text\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId/galleries/:galleryId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId",
+                "galleries",
+                ":galleryId"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                },
+                {
+                  "key": "galleryId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a gallery image"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Gallery Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/:bouquetId/galleries/:galleryId/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                ":bouquetId",
+                "galleries",
+                ":galleryId",
+                "delete"
+              ],
+              "variable": [
+                {
+                  "key": "bouquetId",
+                  "value": "1"
+                },
+                {
+                  "key": "galleryId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a gallery image"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Bouquet (Bulk)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bouquets\": [\n    {\n      \"name\": \"Cherry Blossom Dreams\",\n      \"description\": \"Delicate cherry blossoms for spring vibes\",\n      \"price\": 85000,\n      \"stock\": 45,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Honeybee Garden Mix\",\n      \"description\": \"Sunflowers and wildflowers buzzing with joy\",\n      \"price\": 75000,\n      \"stock\": 30,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Midnight Orchid Collection\",\n      \"description\": \"Deep purple orchids for a mysterious elegance\",\n      \"price\": 135000,\n      \"stock\": 15,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Fresh Daisy Delight\",\n      \"description\": \"Cheerful daisies to brighten any day\",\n      \"price\": 55000,\n      \"stock\": 50,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Tulip Sunrise Bunch\",\n      \"description\": \"Warm-toned tulips greeting the morning\",\n      \"price\": 95000,\n      \"stock\": 35,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Peony Garden Romance\",\n      \"description\": \"Lush peonies in soft pink tones\",\n      \"price\": 125000,\n      \"stock\": 20,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Iris Purple Majesty\",\n      \"description\": \"Regal iris flowers in deep violet\",\n      \"price\": 110000,\n      \"stock\": 25,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Lily White Serenity\",\n      \"description\": \"Pure white lilies symbolizing peace\",\n      \"price\": 140000,\n      \"stock\": 18,\n      \"category_id\": 1\n    },\n    {\n      \"name\": \"Birthday Surprise Box\",\n      \"description\": \"Colorful blooms wrapped in joy\",\n      \"price\": 120000,\n      \"stock\": 40,\n      \"category_id\": 2\n    },\n    {\n      \"name\": \"Anniversary Rose Gift\",\n      \"description\": \"Classic roses for romantic celebrations\",\n      \"price\": 145000,\n      \"stock\": 25,\n      \"category_id\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/bulk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "bulk"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Publish Bouquets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ids\": [1, 2, 3],\n    \"published\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/bulk/publish",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "bulk",
+                "publish"
+              ]
+            },
+            "description": "Bulk publish or unpublish bouquets by IDs"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "categories"
+              ]
+            },
+            "description": "Get all bouquet categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/categories/:categoryId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "categories",
+                ":categoryId"
+              ],
+              "variable": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get category details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Gift Box\",\n    \"description\": \"Beautiful gift box arrangements\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/categories/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "categories",
+                "create"
+              ]
+            },
+            "description": "Create a new category"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Gift Box\",\n    \"description\": \"Updated description\",\n    \"published\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/categories/update/:categoryId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "categories",
+                "update",
+                ":categoryId"
+              ],
+              "variable": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a category"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bouquet/categories/delete/:categoryId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bouquet",
+                "categories",
+                "delete",
+                ":categoryId"
+              ],
+              "variable": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a category"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders?page=1&per_page=15",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                },
+                {
+                  "key": "payment_status",
+                  "value": "paid",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get paginated list of orders with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"customer_id\": 1,\n    \"items\": [\n        {\"bouquet_id\": 1, \"quantity\": 2},\n        {\"bouquet_id\": 3, \"quantity\": 1}\n    ],\n    \"shipping_address\": \"123 Flower Street, Jakarta\",\n    \"notes\": \"Wrap as gift\",\n    \"send_at\": \"2026-06-01\",\n    \"status\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Create a new order (guest or with customer_id)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:orderId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get order details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"confirmed\",\n    \"notes\": \"Order confirmed by admin\",\n    \"send_at\": \"2026-06-05\",\n    \"shipping_address\": \"456 Updated Street, Jakarta\",\n    \"items\": [\n        {\"bouquet_id\": 1, \"quantity\": 3}\n    ],\n    \"customer_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:orderId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update order details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Order",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:orderId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete an order"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Invoice Paid",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:orderId/mark-paid",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                ":orderId",
+                "mark-paid"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Mark order invoice as paid"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customer Orders (Auth Required)",
+      "item": [
+        {
+          "name": "List Customer Orders",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "orders"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get orders for a specific customer (requires auth)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Customer Order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"items\": [\n        {\"bouquet_id\": 1, \"quantity\": 1}\n    ],\n    \"shipping_address\": \"456 Flower Avenue, Bandung\",\n    \"notes\": \"Birthday surprise\",\n    \"send_at\": \"2026-06-10\",\n    \"status\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "orders"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Create order for a specific customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer Order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId/orders/:orderId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":customerId",
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                },
+                {
+                  "key": "orderId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get specific order for a customer"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "List Invoices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invoices?page=1&per_page=15",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "invoices"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                }
+              ]
+            },
+            "description": "Get paginated list of invoices"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Invoice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invoices/:invoiceId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId"
+              ],
+              "variable": [
+                {
+                  "key": "invoiceId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get invoice details by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dashboard",
+                "stats"
+              ]
+            },
+            "description": "Get dashboard statistics (total bouquets sold, revenue, customers)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chart Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/chart?period=monthly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dashboard",
+                "chart"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "monthly",
+                  "description": "Options: monthly, weekly, daily"
+                }
+              ]
+            },
+            "description": "Get sales chart data"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ongoing Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/ongoing-orders?page=1&per_page=10&status=pending",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dashboard",
+                "ongoing-orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Options: pending, confirmed, processing, shipped"
+                }
+              ]
+            },
+            "description": "Get ongoing orders (non-delivered, non-cancelled)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bouquet Sales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/bouquet-sales",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dashboard",
+                "bouquet-sales"
+              ]
+            },
+            "description": "Get sales breakdown by category with top 5 products per category"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart (Auth Required)",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cart"
+              ]
+            },
+            "description": "Get current user's cart items"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"bouquet_id\": 1,\n    \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cart"
+              ]
+            },
+            "description": "Add item to cart (increments quantity if already exists)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Cart Item",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"quantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/:cartItemId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cart",
+                ":cartItemId"
+              ],
+              "variable": [
+                {
+                  "key": "cartItemId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update cart item quantity (0 or less removes item)"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Cart Item",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/:cartItemId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cart",
+                ":cartItemId"
+              ],
+              "variable": [
+                {
+                  "key": "cartItemId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Remove a single item from cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cart"
+              ]
+            },
+            "description": "Remove all items from cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"shipping_address\": \"789 Flower Street, Jakarta 12345\",\n    \"notes\": \"Please deliver between 9 AM - 5 PM\",\n    \"send_at\": \"2026-06-01\",\n    \"coupon_code\": \"WELCOME10\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/checkout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cart",
+                "checkout"
+              ]
+            },
+            "description": "Convert cart to order (validates stock, deducts stock, creates invoice, clears cart)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Feedback Questions Templates",
+      "item": [
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates"
+              ]
+            },
+            "description": "Get all feedback question templates"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Customer Satisfaction Survey\",\n    \"description\": \"Survey for customer satisfaction after purchase\",\n    \"is_active\": true,\n    \"is_default\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates"
+              ]
+            },
+            "description": "Create a new feedback question template"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get template details with questions"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Template",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Survey Name\",\n    \"description\": \"Updated description for the survey\",\n    \"is_active\": false,\n    \"is_default\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a feedback question template"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Template",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a feedback question template"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Question to Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"question_text\": \"How satisfied are you with our service?\",\n    \"question_type\": \"star_rating\",\n    \"is_required\": true,\n    \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId/questions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId",
+                "questions"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Add a question to a template"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Question in Template",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"question_text\": \"How likely are you to recommend us?\",\n    \"question_type\": \"star_rating\",\n    \"is_required\": true,\n    \"order\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId/questions/:questionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId",
+                "questions",
+                ":questionId"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                },
+                {
+                  "key": "questionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a question within a template"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Question from Template",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId/questions/:questionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId",
+                "questions",
+                ":questionId"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                },
+                {
+                  "key": "questionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a question from a template"
+          },
+          "response": []
+        },
+        {
+          "name": "Reorder Questions in Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"order\": [3, 1, 2]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback-questions-templates/:templateId/questions/reorder",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback-questions-templates",
+                ":templateId",
+                "questions",
+                "reorder"
+              ],
+              "variable": [
+                {
+                  "key": "templateId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Reorder questions in a template by providing ordered IDs"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "List Feedback",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback"
+              ]
+            },
+            "description": "Get all feedback entries"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"customer_id\": 1,\n    \"order_id\": 1,\n    \"bouquet_id\": 1,\n    \"answers\": [\n        {\n            \"question_id\": 1,\n            \"rating_value\": 5\n        },\n        {\n            \"question_id\": 2,\n            \"text_value\": \"Very satisfied with the service and packaging\"\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback"
+              ]
+            },
+            "description": "Submit feedback for an order"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback/:feedbackId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback",
+                ":feedbackId"
+              ],
+              "variable": [
+                {
+                  "key": "feedbackId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get feedback details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Feedback",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"answers\": [\n        {\n            \"id\": 1,\n            \"rating_value\": 4\n        },\n        {\n            \"id\": 2,\n            \"text_value\": \"Good but could improve packaging\"\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback/:feedbackId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback",
+                ":feedbackId"
+              ],
+              "variable": [
+                {
+                  "key": "feedbackId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a feedback entry"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Feedback",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback/:feedbackId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "feedback",
+                ":feedbackId"
+              ],
+              "variable": [
+                {
+                  "key": "feedbackId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a feedback entry"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Forms",
+      "item": [
+        {
+          "name": "List Forms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/forms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms"
+              ]
+            },
+            "description": "Get all forms"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Custom Bouquet Order Form\",\n    \"description\": \"Form for customers to request custom bouquet orders\",\n    \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/forms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms"
+              ]
+            },
+            "description": "Create a new form"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Form",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get form details with questions"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Form",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Form Name\",\n    \"description\": \"Updated description\",\n    \"is_active\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a form"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Form",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a form"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Question to Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"label\": \"What type of bouquet are you looking for?\",\n    \"question_type\": \"select\",\n    \"is_required\": true,\n    \"order\": 1,\n    \"config\": {\n        \"placeholder\": \"Choose a type\"\n    },\n    \"options\": [\n        {\"label\": \"Roses\", \"value\": \"roses\"},\n        {\"label\": \"Tulips\", \"value\": \"tulips\"},\n        {\"label\": \"Mixed\", \"value\": \"mixed\"}\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId/questions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId",
+                "questions"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Add a question to a form"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Question in Form",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"label\": \"What is your budget range?\",\n    \"question_type\": \"select\",\n    \"is_required\": true,\n    \"order\": 2,\n    \"config\": {\n        \"placeholder\": \"Select budget\"\n    },\n    \"options\": [\n        {\"label\": \"Under 100k\", \"value\": \"budget_low\"},\n        {\"label\": \"100k - 250k\", \"value\": \"budget_mid\"},\n        {\"label\": \"Above 250k\", \"value\": \"budget_high\"}\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId/questions/:questionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId",
+                "questions",
+                ":questionId"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                },
+                {
+                  "key": "questionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a question within a form"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Question from Form",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId/questions/:questionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId",
+                "questions",
+                ":questionId"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                },
+                {
+                  "key": "questionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a question from a form"
+          },
+          "response": []
+        },
+        {
+          "name": "Reorder Questions in Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"order\": [2, 1, 3]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId/questions/reorder",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId",
+                "questions",
+                "reorder"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Reorder questions in a form by providing ordered IDs"
+          },
+          "response": []
+        },
+        {
+          "name": "List Form Submissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId/submissions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId",
+                "submissions"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get all submissions for a form"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Form",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"customer_id\": 1,\n    \"answers\": [\n        {\"question_id\": 1, \"value\": \"Roses\"},\n        {\"question_id\": 2, \"value\": \"My budget is around 200k\"}\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/forms/:formId/submit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "forms",
+                ":formId",
+                "submit"
+              ],
+              "variable": [
+                {
+                  "key": "formId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Submit answers for a form (auth required)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Submissions",
+      "item": [
+        {
+          "name": "List All Submissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/submissions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "submissions"
+              ]
+            },
+            "description": "Get paginated list of all form submissions (with form name and first answer preview)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Submission",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/submissions/:submissionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "submissions",
+                ":submissionId"
+              ],
+              "variable": [
+                {
+                  "key": "submissionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get submission details by ID with all answers"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Submission",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/submissions/:submissionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "submissions",
+                ":submissionId"
+              ],
+              "variable": [
+                {
+                  "key": "submissionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a form submission"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Coupons",
+      "item": [
+        {
+          "name": "List Coupons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons"
+              ]
+            },
+            "description": "Get all coupons"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Coupon",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"WELCOME10\",\n    \"name\": \"Welcome 10% Discount\",\n    \"discount_type\": \"percentage\",\n    \"discount_value\": 10,\n    \"min_order_value\": 50000,\n    \"usage_limit\": 100,\n    \"max_uses_per_user\": 1,\n    \"valid_from\": \"2026-05-01\",\n    \"valid_until\": \"2026-12-31\",\n    \"is_active\": true,\n    \"is_stackable\": false,\n    \"priority\": 1,\n    \"bouquet_ids\": [1, 2, 3],\n    \"category_ids\": [1]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons",
+                "create"
+              ]
+            },
+            "description": "Create a new coupon"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Coupon",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons/:couponId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons",
+                ":couponId"
+              ],
+              "variable": [
+                {
+                  "key": "couponId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get coupon details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Coupon",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"discount_value\": 15,\n    \"usage_limit\": 50,\n    \"max_uses_per_user\": 2,\n    \"is_active\": true,\n    \"is_stackable\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons/update/:couponId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons",
+                "update",
+                ":couponId"
+              ],
+              "variable": [
+                {
+                  "key": "couponId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Update a coupon"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Coupon",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons/:couponId/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons",
+                ":couponId",
+                "delete"
+              ],
+              "variable": [
+                {
+                  "key": "couponId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a coupon"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Coupon Active Status",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons/:couponId/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons",
+                ":couponId",
+                "toggle"
+              ],
+              "variable": [
+                {
+                  "key": "couponId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Toggle coupon active/inactive"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Coupon",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"WELCOME10\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/coupons/validate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "coupons",
+                "validate"
+              ]
+            },
+            "description": "Validate a coupon code and calculate discount (auth required)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
