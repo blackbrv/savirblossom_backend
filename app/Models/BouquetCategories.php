@@ -10,6 +10,7 @@ class BouquetCategories extends Model
         'name',
         'description',
         'published',
+        'color',
     ];
 
     protected $casts = [

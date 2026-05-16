@@ -53,6 +53,7 @@ class BouquetCategoriesController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:bouquet_categories,name',
             'description' => 'nullable|string',
+            'color' => 'nullable|string|max:9',
         ]);
 
         $categories = BouquetCategories::create([
@@ -105,6 +106,7 @@ class BouquetCategoriesController extends Controller
                 ],
                 'description' => 'nullable|string',
                 'published' => 'sometimes|boolean',
+                'color' => 'nullable|string|max:9',
             ]);
 
             $categories->update($validated);
