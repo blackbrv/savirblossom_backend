@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BouquetCategoriesController;
 use App\Http\Controllers\Api\BouquetController;
 use App\Http\Controllers\Api\BouquetImagesController;
+use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\CustomerController;
@@ -14,8 +15,11 @@ use App\Http\Controllers\Api\FeedbackQuestionsTemplateController;
 use App\Http\Controllers\Api\FormController;
 use App\Http\Controllers\Api\FormSubmissionController;
 use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\NewsletterController;
+use App\Http\Controllers\Api\NewsletterSubscriberController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PasswordSetupController;
+use App\Http\Controllers\Api\PromoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -171,4 +175,35 @@ Route::prefix('coupons')->group(function () {
 
 Route::middleware('auth:sanctum')->prefix('coupons')->group(function () {
     Route::post('/validate', [CouponController::class, 'validate'])->name('coupons.validate');
+});
+
+Route::prefix('newsletter')->group(function () {
+    Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+    Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+    Route::post('/unsubscribe/email', [NewsletterController::class, 'unsubscribeByEmail'])->name('newsletter.unsubscribe.email');
+});
+
+Route::prefix('newsletter/subscribers')->group(function () {
+    Route::get('/', [NewsletterSubscriberController::class, 'index'])->name('newsletter.subscribers.list');
+    Route::get('/{id}', [NewsletterSubscriberController::class, 'show'])->whereNumber('id')->name('newsletter.subscribers.show');
+    Route::post('/{id}/toggle', [NewsletterSubscriberController::class, 'toggle'])->whereNumber('id')->name('newsletter.subscribers.toggle');
+    Route::delete('/{id}', [NewsletterSubscriberController::class, 'destroy'])->whereNumber('id')->name('newsletter.subscribers.destroy');
+});
+
+Route::prefix('promos')->group(function () {
+    Route::get('/', [PromoController::class, 'index'])->name('promos.list');
+    Route::post('/create', [PromoController::class, 'store'])->name('promos.create');
+    Route::get('/{id}', [PromoController::class, 'show'])->whereNumber('id')->name('promos.show');
+    Route::post('/update/{id}', [PromoController::class, 'update'])->whereNumber('id')->name('promos.update');
+    Route::post('/{id}/delete', [PromoController::class, 'destroy'])->whereNumber('id')->name('promos.destroy');
+    Route::post('/{id}/publish', [PromoController::class, 'publish'])->whereNumber('id')->name('promos.publish');
+});
+
+Route::prefix('campaigns')->group(function () {
+    Route::get('/', [CampaignController::class, 'index'])->name('campaigns.list');
+    Route::post('/create', [CampaignController::class, 'store'])->name('campaigns.create');
+    Route::get('/{id}', [CampaignController::class, 'show'])->whereNumber('id')->name('campaigns.show');
+    Route::post('/update/{id}', [CampaignController::class, 'update'])->whereNumber('id')->name('campaigns.update');
+    Route::post('/{id}/delete', [CampaignController::class, 'destroy'])->whereNumber('id')->name('campaigns.destroy');
+    Route::post('/{id}/queue', [CampaignController::class, 'queue'])->whereNumber('id')->name('campaigns.queue');
 });

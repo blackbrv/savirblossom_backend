@@ -1,1 +1,1 @@
-export { priceFormatter, formatDate, formatDateTime, formatDateInput } from "@/hooks/useFormatters";
+export { priceFormatter, formatDate, formatDateTime, formatDateInput, formatDateTimeInput } from "@/hooks/useFormatters";
