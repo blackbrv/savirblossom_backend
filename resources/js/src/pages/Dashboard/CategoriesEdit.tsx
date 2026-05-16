@@ -20,6 +20,7 @@ type CategoryFormData = {
     name: string;
     description: string;
     published: boolean;
+    color: string;
 };
 
 export default function CategoriesEdit() {
@@ -68,10 +69,12 @@ export default function CategoriesEdit() {
             name: "",
             description: "",
             published: false,
+            color: "#000000",
         },
     });
 
     const published = watch("published");
+    const selectedColor = watch("color");
 
     React.useEffect(() => {
         if (category) {
@@ -80,6 +83,7 @@ export default function CategoriesEdit() {
                 description: category.description ?? "",
                 published:
                     category.published === 1 || category.published === true,
+                color: category.color ?? "#000000",
             });
         }
     }, [category, reset]);
@@ -92,6 +96,7 @@ export default function CategoriesEdit() {
                     name: formData.name,
                     description: formData.description || undefined,
                     published: formData.published,
+                    color: formData.color || null,
                 },
             });
 
@@ -180,6 +185,25 @@ export default function CategoriesEdit() {
                             }
                         />
                         <Label htmlFor="published">Published</Label>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="color">Color</Label>
+                        <div className="flex items-center gap-3">
+                            <input
+                                id="color"
+                                type="color"
+                                {...register("color")}
+                                className="h-10 w-16 cursor-pointer rounded border border-border"
+                            />
+                            <span
+                                className="inline-block h-8 w-8 rounded-full border border-border"
+                                style={{ backgroundColor: selectedColor }}
+                            />
+                            <span className="text-sm text-muted-foreground">
+                                {selectedColor}
+                            </span>
+                        </div>
                     </div>
                 </form>
             </section>

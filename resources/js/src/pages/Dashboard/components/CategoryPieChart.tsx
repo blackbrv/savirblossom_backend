@@ -4,19 +4,13 @@ import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { PieChart, Pie, Cell, Legend } from "recharts";
 import { CategorySales } from "@/services/Dashboard/DashboardApi";
 
-const CHART_COLORS = [
+const FALLBACK_COLORS = [
     "var(--chart-1)",
     "var(--chart-2)",
     "var(--chart-3)",
     "var(--chart-4)",
     "var(--chart-5)",
 ];
-
-interface CategoryPieChartProps {
-    data: CategorySales[];
-    isLoading: boolean;
-    onCategoryClick: (category: CategorySales) => void;
-}
 
 interface CategoryPieChartProps {
     data: CategorySales[];
@@ -85,9 +79,11 @@ export function CategoryPieChart({
                                 item.category_name,
                                 {
                                     label: item.category_name,
-                                    color: CHART_COLORS[
-                                        i % CHART_COLORS.length
-                                    ],
+                                    color:
+                                        item.color ??
+                                        FALLBACK_COLORS[
+                                            i % FALLBACK_COLORS.length
+                                        ],
                                 },
                             ]),
                         )}
@@ -109,12 +105,13 @@ export function CategoryPieChart({
                                 }}
                                 style={{ cursor: "pointer" }}
                             >
-                                {data.map((_, index) => (
+                                {data.map((item, index) => (
                                     <Cell
                                         key={`cell-${index}`}
                                         fill={
-                                            CHART_COLORS[
-                                                index % CHART_COLORS.length
+                                            item.color ??
+                                            FALLBACK_COLORS[
+                                                index % FALLBACK_COLORS.length
                                             ]
                                         }
                                     />

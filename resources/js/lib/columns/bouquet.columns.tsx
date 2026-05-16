@@ -166,6 +166,25 @@ export const categoryColumns: ColumnDef<BouquetCategoriesType>[] = [
         header: "Description",
     },
     {
+        accessorKey: "color",
+        header: "Color",
+        cell: ({ getValue }) => {
+            const color = getValue() as string | null;
+            if (!color) {
+                return <span className="text-muted-foreground">--</span>;
+            }
+            return (
+                <div className="flex items-center gap-2">
+                    <span
+                        className="inline-block h-5 w-5 rounded-full border border-border"
+                        style={{ backgroundColor: color }}
+                    />
+                    <span className="text-sm">{color}</span>
+                </div>
+            );
+        },
+    },
+    {
         accessorKey: "published",
         header: "Published",
         cell: ({ getValue }) => {

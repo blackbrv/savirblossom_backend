@@ -153,6 +153,7 @@ export type TopProduct = {
 export type CategorySales = {
     category_id: number;
     category_name: string;
+    color: string | null;
     total_quantity: number;
     total_revenue: number;
     top_products: TopProduct[];

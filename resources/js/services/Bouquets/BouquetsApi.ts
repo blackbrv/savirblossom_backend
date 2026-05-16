@@ -7,6 +7,7 @@ export type BouquetCategoriesType = {
     name: string;
     description: string;
     published: boolean | number;
+    color: string | null;
     created_at: string;
     updated_at: string;
 };
@@ -447,12 +448,14 @@ export function useDeleteGallery() {
 type CategoryCreateData = {
     name: string;
     description?: string;
+    color?: string | null;
 };
 
 type CategoryUpdateData = {
     name: string;
     description?: string;
     published: boolean;
+    color?: string | null;
 };
 
 async function createCategory(data: CategoryCreateData) {
