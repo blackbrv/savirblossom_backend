@@ -34,10 +34,7 @@ import {
     useDeleteGallery,
     GalleriesType,
 } from "@/services/Bouquets/BouquetsApi";
-import {
-    useFeedbackTemplates,
-    FeedbackQuestionsTemplateType,
-} from "@/services/Feedback/FeedbackQuestionsApi";
+import { useFeedbackTemplates } from "@/services/Feedback/FeedbackQuestionsApi";
 import { useParams } from "react-router";
 
 type BouquetFormData = {
