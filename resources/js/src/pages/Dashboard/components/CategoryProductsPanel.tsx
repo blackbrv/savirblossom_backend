@@ -8,14 +8,6 @@ import {
 import { ShoppingBag } from "lucide-react";
 import { priceFormatter } from "@/utils/utility";
 
-const CHART_COLORS = [
-    "var(--chart-1)",
-    "var(--chart-2)",
-    "var(--chart-3)",
-    "var(--chart-4)",
-    "var(--chart-5)",
-];
-
 interface TopProduct {
     name: string;
     quantity: number;
@@ -23,6 +15,7 @@ interface TopProduct {
 
 interface CategorySales {
     category_name: string;
+    color: string | null;
     total_quantity: number;
     total_revenue: number;
     top_products: TopProduct[];
@@ -39,9 +32,17 @@ export function CategoryProductsPanel({
     isOpen,
     onClose,
 }: CategoryProductsPanelProps) {
+    const categoryColor = category?.color ?? undefined;
+
     return (
         <Sheet open={isOpen} onOpenChange={onClose}>
             <SheetContent side="right" className="w-[400px]">
+                {categoryColor && (
+                    <div
+                        className="h-1 w-full"
+                        style={{ backgroundColor: categoryColor }}
+                    />
+                )}
                 <SheetHeader>
                     <SheetTitle className="flex items-center gap-2">
                         <ShoppingBag className="h-5 w-5" />
@@ -80,14 +81,11 @@ export function CategoryProductsPanel({
                                 >
                                     <div className="flex items-center gap-3">
                                         <div
-                                            className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold"
+                                            className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white"
                                             style={{
                                                 backgroundColor:
-                                                    CHART_COLORS[
-                                                        index %
-                                                            CHART_COLORS.length
-                                                    ],
-                                                color: "white",
+                                                    categoryColor ??
+                                                    `hsl(${index * 60}, 70%, 50%)`,
                                             }}
                                         >
                                             {index + 1}

@@ -149,10 +149,11 @@ class DashboardController extends Controller
             ->select(
                 'bouquet_categories.id as category_id',
                 'bouquet_categories.name as category_name',
+                'bouquet_categories.color as color',
                 DB::raw('SUM(order_items.quantity) as total_quantity'),
                 DB::raw('SUM(order_items.quantity * order_items.unit_price) as total_revenue')
             )
-            ->groupBy('bouquet_categories.id', 'bouquet_categories.name')
+            ->groupBy('bouquet_categories.id', 'bouquet_categories.name', 'bouquet_categories.color')
             ->orderBy('total_quantity', 'desc')
             ->get();
 
@@ -179,6 +180,7 @@ class DashboardController extends Controller
             return [
                 'category_id' => $category->category_id,
                 'category_name' => $category->category_name,
+                'color' => $category->color,
                 'total_quantity' => (int) $category->total_quantity,
                 'total_revenue' => (int) $category->total_revenue,
                 'top_products' => $topProducts,

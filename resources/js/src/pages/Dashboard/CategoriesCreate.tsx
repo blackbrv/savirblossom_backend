@@ -12,6 +12,7 @@ import { useCreateCategory } from "@/services/Bouquets/BouquetsApi";
 type CategoryFormData = {
     name: string;
     description: string;
+    color: string;
 };
 
 export default function CategoriesCreate() {
@@ -21,19 +22,24 @@ export default function CategoriesCreate() {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<CategoryFormData>({
         defaultValues: {
             name: "",
             description: "",
+            color: "#000000",
         },
     });
+
+    const selectedColor = watch("color");
 
     const onSubmit = async (formData: CategoryFormData) => {
         try {
             await createCategoryMutation.mutateAsync({
                 name: formData.name,
                 description: formData.description || undefined,
+                color: formData.color || null,
             });
 
             toast.success("Category created successfully", {
@@ -102,6 +108,25 @@ export default function CategoriesCreate() {
                             rows={4}
                             {...register("description")}
                         />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="color">Color</Label>
+                        <div className="flex items-center gap-3">
+                            <input
+                                id="color"
+                                type="color"
+                                {...register("color")}
+                                className="h-10 w-16 cursor-pointer rounded border border-border"
+                            />
+                            <span
+                                className="inline-block h-8 w-8 rounded-full border border-border"
+                                style={{ backgroundColor: selectedColor }}
+                            />
+                            <span className="text-sm text-muted-foreground">
+                                {selectedColor}
+                            </span>
+                        </div>
                     </div>
                 </form>
             </section>
